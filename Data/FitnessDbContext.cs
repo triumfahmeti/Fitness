@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Fitness.Models;
-using Fitness.Models.Scaffolded;
+using Fitness.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

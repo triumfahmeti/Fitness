@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Fitness.Models.Scaffolded;
+namespace Fitness.Domain.Models;
 
 public partial class Meal
 {
