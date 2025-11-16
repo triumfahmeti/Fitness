@@ -166,3 +166,4 @@ C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\refint\Fitness.dll
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.pdb
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.genruntimeconfig.cache
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\ref\Fitness.dll
+C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.sourcelink.json

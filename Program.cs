@@ -12,11 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<FitnessDbContext>(options =>
     options.UseSqlServer("Server=localhost;Database=Fitness;Trusted_Connection=True;TrustServerCertificate=True;"));
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
+    .AddEntityFrameworkStores<FitnessDbContext>()
     .AddDefaultTokenProviders();
 
 

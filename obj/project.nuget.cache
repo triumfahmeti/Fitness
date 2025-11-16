@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WCzvLZAxDbA=",
+  "dgSpecHash": "oNmF8sZwuOg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Lenovo\\Desktop\\Fitness\\Fitness.csproj",
+  "projectFilePath": "c:\\Users\\Lenovo\\Desktop\\Fitness\\Fitness.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Lenovo\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
