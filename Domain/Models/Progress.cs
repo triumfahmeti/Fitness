@@ -5,7 +5,7 @@ namespace Fitness.Domain.Models;
 
 public partial class Progress
 {
-    public int MealId { get; set; }
+    public int ProgressId { get; set; }
 
     public int ClientId { get; set; }
 

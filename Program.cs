@@ -1,12 +1,52 @@
-using Fitness.Models;
 using Microsoft.EntityFrameworkCore;
 
 using Microsoft.AspNetCore.Identity;
-using Microsoft.OpenApi.Models;
-using System.Text;
+using Fitness.Data;
+using Fitness.Domain.Models;
+using Microsoft.OpenApi.Models;              
+using Microsoft.AspNetCore.OpenApi; 
+using Fitness.Application.Abstractions.Interfaces;
+
+using Fitness.Data.Repositories;
+using Fitness.Application.Services;
+using Fitness.Domain.Interfaces;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddScoped<IExerciseService, ExerciseService>();
+builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Smis API", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Enter token in format: Bearer {token}",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -18,6 +58,9 @@ builder.Services.AddDbContext<FitnessDbContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<FitnessDbContext>()
     .AddDefaultTokenProviders();
+
+// Explicit HTTPS port to avoid redirect detection errors when running without a VS profile
+builder.Services.AddHttpsRedirection(o => o.HttpsPort = 7103);
 
 
 var app = builder.Build();
@@ -48,6 +91,15 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast");
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+// Map attribute-routed controllers
+app.MapControllers();
 
 app.Run();
 

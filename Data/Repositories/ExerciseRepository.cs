@@ -6,6 +6,7 @@ using Fitness.Domain.Interfaces;
 using Fitness.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Fitness.Data.Repositories
 {
     public class ExerciseRepository : IExerciseRepository

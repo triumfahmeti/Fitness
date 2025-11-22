@@ -51,6 +51,9 @@ C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\System.ClientModel.dll
 C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\System.CodeDom.dll
 C:\Users\Lenovo\Desktop\Fitness\bin\Debug\net9.0\System.Composition.AttributedModel.dll
@@ -150,6 +153,7 @@ C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.AssemblyInfo.cs
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.csproj.CoreCompileInputs.cache
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.sourcelink.json
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\scopedcss\bundle\Fitness.styles.css
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\staticwebassets.development.json
@@ -166,4 +170,3 @@ C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\refint\Fitness.dll
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.pdb
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.genruntimeconfig.cache
 C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\ref\Fitness.dll
-C:\Users\Lenovo\Desktop\Fitness\obj\Debug\net9.0\Fitness.sourcelink.json

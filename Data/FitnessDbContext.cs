@@ -35,6 +35,7 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Admin>(entity =>
         {
             entity.HasKey(e => e.AdminId).HasName("PK__Admin__719FE48806B48856");
@@ -132,7 +133,7 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Progress>(entity =>
         {
-            entity.HasKey(e => e.MealId).HasName("PK__Progress__ACF6A63DC633405C");
+            entity.HasKey(e => e.ProgressId).HasName("PK__Progress__ACF6A63DC633405C");
 
             entity.ToTable("Progress");
 
