@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Fitness.Data;
 using Fitness.Domain.Models;
-using Microsoft.OpenApi.Models;              
-using Microsoft.AspNetCore.OpenApi; 
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.OpenApi;
 using Fitness.Application.Abstractions.Interfaces;
 
 using Fitness.Data.Repositories;
@@ -19,6 +19,14 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+builder.Services.AddScoped<IWorkoutExerciseRepository, WorkoutExerciseRepository>();
+builder.Services.AddScoped<IWorkoutExerciseService, WorkoutExerciseService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {

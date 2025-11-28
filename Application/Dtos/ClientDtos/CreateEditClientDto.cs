@@ -1,0 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Fitness.Application.Dtos.ClientDtos
+{
+    public class CreateEditClientDto
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+        public DateOnly? Birthday { get; set; }
+        public string? Gender { get; set; }
+
+        // Client-specific data
+        public double Weight { get; set; }
+        public double Height { get; set; }
+        public ActivityLevel ActivityLevel { get; set; }
+    }
+}

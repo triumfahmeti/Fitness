@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Fitness.Domain.Enums;
 
 
 namespace Fitness.Domain.Models;
@@ -14,7 +15,7 @@ public partial class Client
 
     public double Height { get; set; }
 
-    public int ActivityLevel { get; set; }
+    public ActivityLevel ActivityLevel { get; set; }
 
     public virtual ICollection<Goal> Goals { get; set; } = new List<Goal>();
 
