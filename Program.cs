@@ -20,6 +20,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
 
+builder.Services.AddScoped<IGoalService, GoalService>();
+builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+
+builder.Services.AddScoped<IProgressRepository, ProgressRepository>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
+
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+
+
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Smis API", Version = "v1" });
