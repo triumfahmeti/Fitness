@@ -1,12 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "6G1IXWa7Z7QN/q0cBJhEbGnk/JccKg8/R4Pib5q2xvM=",
-  "Source": "Fitness",
-  "BasePath": "_content/Fitness",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
-}
+{"Version":1,"Hash":"xRDezzZQsfjnjCZ0YSlyw+rRub+EKsHVJ0IxoKtNBA0=","Source":"Fitness","BasePath":"/","Mode":"Root","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
