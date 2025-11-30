@@ -19,6 +19,13 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
+builder.Services.AddScoped<IFoodService, FoodService>();
+builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+builder.Services.AddScoped<IMealService, MealService>();
+builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<IMealFoodService, MealFoodService>();
+builder.Services.AddScoped<IMealFoodRepository, MealFoodRepository>();
+
 
 builder.Services.AddScoped<IGoalService, GoalService>();
 builder.Services.AddScoped<IGoalRepository, GoalRepository>();
