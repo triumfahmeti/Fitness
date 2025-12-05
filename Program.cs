@@ -27,6 +27,23 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IFoodService, FoodService>();
+builder.Services.AddScoped<IFoodRepository, FoodRepository>();
+builder.Services.AddScoped<IMealService, MealService>();
+builder.Services.AddScoped<IMealRepository, MealRepository>();
+builder.Services.AddScoped<IMealFoodService, MealFoodService>();
+builder.Services.AddScoped<IMealFoodRepository, MealFoodRepository>();
+
+
+builder.Services.AddScoped<IGoalService, GoalService>();
+builder.Services.AddScoped<IGoalRepository, GoalRepository>();
+
+builder.Services.AddScoped<IProgressRepository, ProgressRepository>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
+
+builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+builder.Services.AddScoped<IAdminService, AdminService>();
+
 
 builder.Services.AddSwaggerGen(option =>
 {
