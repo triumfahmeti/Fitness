@@ -1,0 +1,169 @@
+import React from "react";
+import { Link, useNavigate, Outlet } from "react-router-dom";
+import "../../style.css";
+
+export default function AdminLayout() {
+  // const navigate = useNavigate();
+
+  // const logout = () => {
+  //   navigate("/login");
+  // };
+
+  return (
+    <div className="sb-nav-fixed">
+      {/* Top Navbar */}
+      <nav className="sb-topnav navbar navbar-expand navbar-dark ">
+        <a className="navbar-brand ps-3" href="#">
+          FitLife
+        </a>
+        <ul className="navbar-nav order-1 order-lg-0 me-4 me-lg-0">
+          <li className="nav-item dropdown">
+            <a
+              className="nav-link dropdown-toggle"
+              id="navbarDropdown"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="fas fa-bars"></i>
+            </a>
+            <ul
+              className="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarDropdown"
+            >
+              <li>
+                <Link className="dropdown-item" to="/admin/profile">
+                  My Profile
+                </Link>
+              </li>
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
+              <li>
+                <Link className="dropdown-item" to="/student/transkripta">
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="dropdown-item"
+                  to="/student/regjistrimi-semestrit"
+                >
+                  Manage Foods
+                </Link>
+              </li>
+
+              <li>
+                <Link className="dropdown-item" to="/student/perzgjedh-grupin">
+                  Manage Exercises
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  className="dropdown-item"
+                  to="/student/regjistrimi-semestrit"
+                >
+                  Manage Users
+                </Link>
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+          <li className="nav-item dropdown">
+            <a
+              className="nav-link dropdown-toggle"
+              id="navbarUser"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="fas fa-user fa-fw"></i>
+            </a>
+            <ul
+              className="dropdown-menu dropdown-menu-end"
+              aria-labelledby="navbarUser"
+            >
+              <li>
+                <a className="dropdown-item" href="#">
+                  Settings
+                </a>
+              </li>
+
+              <li>
+                <hr className="dropdown-divider" />
+              </li>
+              <button
+                className="dropdown-item"
+                onClick={() => logout(navigate)}
+              >
+                Logout
+              </button>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <div id="layoutSidenav">
+        {/* Sidebar */}
+        <div id="layoutSidenav_nav">
+          <nav
+            className="sb-sidenav accordion sb-sidenav-dark"
+            id="sidenavAccordion"
+          >
+            <div className="sb-sidenav-menu">
+              <div className="nav">
+                <div className="sb-sidenav-menu-heading">Admin</div>
+                <Link to="/admin/profile" className="nav-link">
+                  <div className="sb-nav-link-icon">
+                    <i className="fa-solid fa-user"></i>
+                  </div>
+                  My Profile
+                </Link>
+                <Link to="/student/transkripta" className="nav-link">
+                  <div className="sb-nav-link-icon">
+                    <i className="fa-solid fa-bars"></i>
+                  </div>
+                  Dashboard
+                </Link>
+                <Link to="/student/regjistrimi-semestrit" className="nav-link">
+                  <div className="sb-nav-link-icon">
+                    <i className="fa-solid fa-utensils"></i>
+                  </div>
+                  Manage Foods
+                </Link>
+                <Link to="/student/perzgjedh-grupin" className="nav-link">
+                  <div className="sb-nav-link-icon">
+                    <i className="fa-solid fa-dumbbell"></i>
+                  </div>
+                  Manage Exercises
+                </Link>
+
+                <Link to="/student/provimet-e-paraqitura" className="nav-link">
+                  <div className="sb-nav-link-icon">
+                    <i className="fa-solid fa-people-group"></i>
+                  </div>
+                  Manage Users
+                </Link>
+              </div>
+            </div>
+            <div className="sb-sidenav-footer">
+              <div className="small">Logged in as:</div>
+              Start Bootstrap
+            </div>
+          </nav>
+        </div>
+
+        {/* Content area renders routed pages via Outlet */}
+        <div id="layoutSidenav_content">
+          <main className="p-4">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}

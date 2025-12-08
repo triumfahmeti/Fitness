@@ -28,9 +28,9 @@ namespace Fitness.Data.Repositories
             return await _userManager.FindByIdAsync(id);
         }
 
-        public async Task AddAsync(ApplicationUser user, string password)
+        public async Task<IdentityResult> AddAsync(ApplicationUser user, string password)
         {
-            await _userManager.CreateAsync(user, password);
+            return await _userManager.CreateAsync(user, password);
         }
 
         public async Task UpdateAsync(ApplicationUser user)

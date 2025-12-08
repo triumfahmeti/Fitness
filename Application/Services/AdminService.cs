@@ -11,34 +11,73 @@ namespace Fitness.Application.Services
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _repo;
+        private readonly IUserRepository _userRepo;
 
-        public AdminService(IAdminRepository repo)
+        public AdminService(IAdminRepository repo, IUserRepository userRepo)
         {
             _repo = repo;
+            _userRepo = userRepo;
         }
 
         public async Task<IEnumerable<AdminDto>> GetAllAsync()
         {
             var admins = await _repo.GetAllAsync();
 
-            return admins.Select(a => new AdminDto
+            var list = new List<AdminDto>();
+            foreach (var a in admins)
             {
-                AdminId = a.AdminId,
-                UserId = a.UserId
-            });
+                var dto = new AdminDto
+                {
+                    AdminId = a.AdminId,
+                    UserId = a.UserId
+                };
+
+                if (!string.IsNullOrEmpty(a.UserId))
+                {
+                    var user = await _userRepo.GetByIdAsync(a.UserId);
+                    if (user != null)
+                    {
+
+                        dto.Email = user.Email;
+                        dto.Name = user.Name;
+                        dto.Surname = user.Surname;
+                        dto.Gender = user.Gender;
+                        dto.Birthday = user.Birthday?.ToString("yyyy-MM-dd");
+                    }
+                }
+
+                list.Add(dto);
+            }
+            return list;
         }
 
-        public async Task<AdminDto> GetByIdAsync(int id)
+        public async Task<AdminDto?> GetByIdAsync(int id)
         {
             var a = await _repo.GetByIdAsync(id);
 
             if (a == null) return null;
 
-            return new AdminDto
+            var dto = new AdminDto
             {
                 AdminId = a.AdminId,
                 UserId = a.UserId
             };
+
+            if (!string.IsNullOrEmpty(a.UserId))
+            {
+                var user = await _userRepo.GetByIdAsync(a.UserId);
+                if (user != null)
+                {
+
+                    dto.Email = user.Email;
+                    dto.Name = user.Name;
+                    dto.Surname = user.Surname;
+                    dto.Gender = user.Gender;
+                    dto.Birthday = user.Birthday?.ToString("yyyy-MM-dd");
+                }
+            }
+
+            return dto;
         }
 
         public async Task<Admin> CreateAsync(CreateEditAdminDto dto)

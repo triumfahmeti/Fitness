@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fitness.Domain.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Fitness.Domain.Interfaces
 {
@@ -10,7 +11,7 @@ namespace Fitness.Domain.Interfaces
     {
         Task<IEnumerable<ApplicationUser>> GetAllAsync();
         Task<ApplicationUser> GetByIdAsync(string id);
-        Task AddAsync(ApplicationUser user, string password);
+        Task<IdentityResult> AddAsync(ApplicationUser user, string password);
         Task UpdateAsync(ApplicationUser user);
         Task DisableAsync(string id);
     }

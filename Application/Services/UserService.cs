@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.UserDtos;
 using Fitness.Domain.Interfaces;
+using Fitness.Domain.Models;
 
 namespace Fitness.Application.Services
 {
@@ -51,7 +52,7 @@ namespace Fitness.Application.Services
 
         public async Task<UserDto> CreateAsync(CreateUserDto dto)
         {
-            var user = new Domain.Models.ApplicationUser
+            var user = new ApplicationUser
             {
                 UserName = dto.Email,
                 Email = dto.Email,
@@ -60,7 +61,15 @@ namespace Fitness.Application.Services
                 Birthday = dto.Birthday,
                 Gender = dto.Gender
             };
-            await _repo.AddAsync(user, dto.Password);
+
+            var result = await _repo.AddAsync(user, dto.Password);
+
+            if (!result.Succeeded)
+            {
+                throw new Exception(
+                    string.Join("; ", result.Errors.Select(e => e.Description))
+                );
+            }
 
             return new UserDto
             {
@@ -72,6 +81,7 @@ namespace Fitness.Application.Services
                 Gender = user.Gender
             };
         }
+
 
         public async Task<UserDto> UpdateAsync(string id, UpdateUserDto dto)
         {

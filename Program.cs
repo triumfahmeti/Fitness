@@ -16,6 +16,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+// Allow frontend (Vite dev server) to call the API
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowCredentials();
+        });
+});
 
 builder.Services.AddScoped<IExerciseService, ExerciseService>();
 builder.Services.AddScoped<IExerciseRepository, ExerciseRepository>();
@@ -48,6 +60,8 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddSwaggerGen(option =>
 {
     option.SwaggerDoc("v1", new OpenApiInfo { Title = "Smis API", Version = "v1" });
+    // Ensure Swagger UI targets the correct https server URL
+    option.AddServer(new OpenApiServer { Url = "https://localhost:7103" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -96,7 +110,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+
+
 
 var summaries = new[]
 {
@@ -122,6 +137,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("AllowReactApp");
+
+app.UseHttpsRedirection();
 
 // Map attribute-routed controllers
 app.MapControllers();
