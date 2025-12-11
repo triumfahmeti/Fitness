@@ -123,19 +123,19 @@ export default function AdminLayout() {
                   </div>
                   My Profile
                 </Link>
-                <Link to="/student/transkripta" className="nav-link">
+                <Link to="/admin/dashboard" className="nav-link">
                   <div className="sb-nav-link-icon">
                     <i className="fa-solid fa-bars"></i>
                   </div>
                   Dashboard
                 </Link>
-                <Link to="/student/regjistrimi-semestrit" className="nav-link">
+                <Link to="/admin/foods" className="nav-link">
                   <div className="sb-nav-link-icon">
                     <i className="fa-solid fa-utensils"></i>
                   </div>
                   Manage Foods
                 </Link>
-                <Link to="/student/perzgjedh-grupin" className="nav-link">
+                <Link to="/admin/exercise" className="nav-link">
                   <div className="sb-nav-link-icon">
                     <i className="fa-solid fa-dumbbell"></i>
                   </div>
@@ -159,7 +159,7 @@ export default function AdminLayout() {
 
         {/* Content area renders routed pages via Outlet */}
         <div id="layoutSidenav_content">
-          <main className="p-4">
+          <main className="py-4 ">
             <Outlet />
           </main>
         </div>

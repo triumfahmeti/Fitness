@@ -6,6 +6,7 @@ namespace Fitness.Domain.Models;
 public partial class Food
 {
     public int FoodId { get; set; }
+    public string Name { get; set; } = null!;
 
     public double CaloriesPer100g { get; set; }
 

@@ -33,6 +33,7 @@ namespace Fitness.Application.Services
         {
             var food = new Food
             {
+                Name = dto.Name,
                 CaloriesPer100g = dto.CaloriesPer100g,
                 ProteinPer100g = dto.ProteinPer100g,
                 CarbsPer100g = dto.CarbsPer100g,
@@ -50,6 +51,7 @@ namespace Fitness.Application.Services
             if (food == null)
                 throw new Exception("Food not found");
 
+            food.Name = dto.Name;
             food.CaloriesPer100g = dto.CaloriesPer100g;
             food.ProteinPer100g = dto.ProteinPer100g;
             food.CarbsPer100g = dto.CarbsPer100g;

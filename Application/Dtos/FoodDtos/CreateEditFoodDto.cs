@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace Fitness.Application.Dtos.FoodDtos
 {
-   public class CreateEditFoodDto
+    public class CreateEditFoodDto
     {
+        public string Name { get; set; } = null!;
         public double CaloriesPer100g { get; set; }
         public double ProteinPer100g { get; set; }
         public double CarbsPer100g { get; set; }

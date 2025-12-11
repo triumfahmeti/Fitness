@@ -55,6 +55,7 @@ builder.Services.AddScoped<IProgressService, ProgressService>();
 
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
 
 builder.Services.AddSwaggerGen(option =>
@@ -141,6 +142,10 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowReactApp");
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+// Serve static files from wwwroot (for uploaded images)
+app.UseStaticFiles();
 
 // Map attribute-routed controllers
 app.MapControllers();
