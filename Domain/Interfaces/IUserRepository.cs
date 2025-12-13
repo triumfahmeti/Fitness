@@ -13,6 +13,6 @@ namespace Fitness.Domain.Interfaces
         Task<ApplicationUser> GetByIdAsync(string id);
         Task<IdentityResult> AddAsync(ApplicationUser user, string password);
         Task UpdateAsync(ApplicationUser user);
-        Task DisableAsync(string id);
+        Task<bool> DeleteAsync(string id);
     }
 }

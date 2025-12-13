@@ -41,30 +41,24 @@ export default function AdminLayout() {
                 <hr className="dropdown-divider" />
               </li>
               <li>
-                <Link className="dropdown-item" to="/student/transkripta">
+                <Link className="dropdown-item" to="/admin/dashboard">
                   Dashboard
                 </Link>
               </li>
               <li>
-                <Link
-                  className="dropdown-item"
-                  to="/student/regjistrimi-semestrit"
-                >
+                <Link className="dropdown-item" to="/admin/foods">
                   Manage Foods
                 </Link>
               </li>
 
               <li>
-                <Link className="dropdown-item" to="/student/perzgjedh-grupin">
+                <Link className="dropdown-item" to="/admin/exercise">
                   Manage Exercises
                 </Link>
               </li>
 
               <li>
-                <Link
-                  className="dropdown-item"
-                  to="/student/regjistrimi-semestrit"
-                >
+                <Link className="dropdown-item" to="/admin/users">
                   Manage Users
                 </Link>
               </li>
@@ -142,7 +136,7 @@ export default function AdminLayout() {
                   Manage Exercises
                 </Link>
 
-                <Link to="/student/provimet-e-paraqitura" className="nav-link">
+                <Link to="/admin/users" className="nav-link">
                   <div className="sb-nav-link-icon">
                     <i className="fa-solid fa-people-group"></i>
                   </div>

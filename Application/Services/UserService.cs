@@ -23,7 +23,7 @@ namespace Fitness.Application.Services
             var users = await _repo.GetAllAsync();
             return users.Select(u => new UserDto
             {
-                UserId = u.Id,
+                Id = u.Id,
                 Email = u.Email,
                 Name = u.Name,
                 Surname = u.Surname,
@@ -32,16 +32,16 @@ namespace Fitness.Application.Services
             });
         }
 
-        public async Task<UserDto> GetByIdAsync(string id)
+        public async Task<UserDto?> GetByIdAsync(string id)
         {
             var user = await _repo.GetByIdAsync(id);
             if (user == null)
             {
-                throw new Exception("User not found");
+                return null;
             }
             return new UserDto
             {
-                UserId = user.Id,
+                Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
@@ -73,7 +73,7 @@ namespace Fitness.Application.Services
 
             return new UserDto
             {
-                UserId = user.Id,
+                Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
@@ -83,12 +83,12 @@ namespace Fitness.Application.Services
         }
 
 
-        public async Task<UserDto> UpdateAsync(string id, UpdateUserDto dto)
+        public async Task<UserDto?> UpdateAsync(string id, UpdateUserDto dto)
         {
             var user = await _repo.GetByIdAsync(id);
             if (user == null)
             {
-                throw new Exception("User not found");
+                return null;
             }
             user.Email = dto.Email;
             user.UserName = dto.Email;
@@ -100,7 +100,7 @@ namespace Fitness.Application.Services
             await _repo.UpdateAsync(user);
             return new UserDto
             {
-                UserId = user.Id,
+                Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
@@ -109,14 +109,14 @@ namespace Fitness.Application.Services
             };
         }
 
-        public async Task DisableAsync(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var user = await _repo.GetByIdAsync(id);
             if (user == null)
             {
-                throw new Exception("User not found");
+                return false;
             }
-            await _repo.DisableAsync(id);
+            return await _repo.DeleteAsync(id);
         }
     }
 }

@@ -38,16 +38,12 @@ namespace Fitness.Data.Repositories
             await _userManager.UpdateAsync(user);
         }
 
-        public async Task DisableAsync(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return;
-
-            user.LockoutEnabled = true;
-            user.LockoutEnd = DateTimeOffset.MaxValue;
-
-            await _userManager.UpdateAsync(user);
-
+            if (user == null) return false;
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
         }
 
 

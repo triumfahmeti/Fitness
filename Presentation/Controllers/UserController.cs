@@ -30,6 +30,7 @@ namespace Fitness.Presentation.Controllers
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetByIdAsync(id);
+            if (user == null) return NotFound(new { message = "User not found" });
             return Ok(user);
         }
 
@@ -44,14 +45,16 @@ namespace Fitness.Presentation.Controllers
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto dto)
         {
             var user = await _userService.UpdateAsync(id, dto);
+            if (user == null) return NotFound(new { message = "User not found" });
             return Ok(user);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DisableUser(string id)
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            await _userService.DisableAsync(id);
-            return Ok("User disabled successfully!");
+            var ok = await _userService.DeleteAsync(id);
+            if (!ok) return NotFound(new { message = "User not found" });
+            return Ok("User deleted successfully!");
         }
     }
 }

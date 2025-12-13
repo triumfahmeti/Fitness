@@ -62,7 +62,7 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
 
             entity.HasOne(d => d.User).WithMany(p => p.Clients)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK__Client__UserId__4F7CD00D");
         });
 

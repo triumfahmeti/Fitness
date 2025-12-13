@@ -44,13 +44,21 @@ function AddFood() {
         const fd = new FormData();
         fd.append("file", form.imageFile);
         const up = await axios.post(
-          "https://localhost:7103/api/Files/upload",
+          "https://localhost:7103/api/Files/upload?subfolder=images",
           fd,
           {
             headers: { "Content-Type": "multipart/form-data" },
           }
         );
-        imageUrl = up.data?.url || null;
+        // Backend returns a plain string path, not an object
+        imageUrl = typeof up.data === "string" ? up.data : null;
+      }
+
+      // If ImageUrl is required in DB, block saving without it
+      if (!imageUrl) {
+        throw new Error(
+          "Image is required. Please upload an image before saving."
+        );
       }
 
       // 2) Create/Update Food with JSON payload

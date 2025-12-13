@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Pagination from "../Components/Pagination";
 
 export default function Exercises() {
   const [exercises, setExercises] = useState([]);
@@ -9,6 +10,8 @@ export default function Exercises() {
   const [alertType, setAlertType] = useState("danger");
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryQuery, setCategoryQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const navigate = useNavigate();
 
   // Map enum value to readable category name
@@ -95,6 +98,7 @@ export default function Exercises() {
                 onChange={(e) => setCategoryQuery(e.target.value)}
               />
             </div>
+            {/* Page size now controlled via Pagination component in table footer */}
           </div>
         </div>
       </div>
@@ -120,6 +124,7 @@ export default function Exercises() {
           <table className="table table-striped table-hover mb-0">
             <thead className="table-light">
               <tr>
+                <th style={{ width: "60px" }}>*</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th className="text-center" style={{ width: "160px" }}>
@@ -141,8 +146,8 @@ export default function Exercises() {
                   </td>
                 </tr>
               ) : (
-                exercises
-                  .filter((ex) => {
+                (() => {
+                  const filtered = exercises.filter((ex) => {
                     const name = (ex.name || "").toLowerCase();
                     const q = searchQuery.trim().toLowerCase();
                     if (q && !name.includes(q)) return false;
@@ -152,41 +157,67 @@ export default function Exercises() {
                     if (cq && !catLabel.includes(cq)) return false;
 
                     return true;
-                  })
-                  .sort((a, b) => {
+                  });
+                  const sorted = filtered.sort((a, b) => {
                     const aName = (a.name || "").toLowerCase();
                     const bName = (b.name || "").toLowerCase();
                     return aName.localeCompare(bName);
-                  })
-                  .map((ex) => (
-                    <tr key={ex.exerciseId}>
-                      <td>
-                        <Link
-                          to={`/admin/exercise/${ex.exerciseId}`}
-                          className="text-decoration-none"
-                        >
-                          {ex.name}
-                        </Link>
-                      </td>
-                      <td>{getCategoryLabel(ex)}</td>
-                      <td className="text-center">
-                        <button
-                          className="btn btn-warning btn-sm me-2"
-                          onClick={() =>
-                            navigate(`/admin/exercise/${ex.exerciseId}/edit`)
-                          }
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => deleteExercise(ex.exerciseId)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  });
+
+                  const total = sorted.length;
+                  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+                  const currentPage = Math.min(page, totalPages);
+                  const startIdx = (currentPage - 1) * pageSize;
+                  const pageItems = sorted.slice(startIdx, startIdx + pageSize);
+
+                  return (
+                    <>
+                      {pageItems.map((ex, idx) => (
+                        <tr key={ex.exerciseId}>
+                          <td>{startIdx + idx + 1}</td>
+                          <td>
+                            <Link
+                              to={`/admin/exercise/${ex.exerciseId}`}
+                              className="text-decoration-none"
+                            >
+                              {ex.name}
+                            </Link>
+                          </td>
+                          <td>{getCategoryLabel(ex)}</td>
+                          <td className="text-center">
+                            <button
+                              className="btn btn-warning btn-sm me-2"
+                              onClick={() =>
+                                navigate(
+                                  `/admin/exercise/${ex.exerciseId}/edit`
+                                )
+                              }
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => deleteExercise(ex.exerciseId)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                      <Pagination
+                        total={total}
+                        page={currentPage}
+                        pageSize={pageSize}
+                        onPageChange={(p) => setPage(p)}
+                        onPageSizeChange={(ps) => {
+                          setPageSize(ps);
+                          setPage(1);
+                        }}
+                        colSpan={4}
+                      />
+                    </>
+                  );
+                })()
               )}
             </tbody>
           </table>

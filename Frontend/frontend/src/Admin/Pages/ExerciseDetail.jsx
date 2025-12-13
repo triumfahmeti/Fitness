@@ -122,11 +122,17 @@ export default function ExerciseDetail() {
             <div className="col-12 mb-4">
               <div className="card border-0 shadow-sm">
                 <div className="card-body">
-                  <h5 className="mb-3">Video</h5>
                   <video
                     controls
                     className="w-100"
-                    style={{ borderRadius: 12 }}
+                    style={{
+                      borderRadius: 12,
+                      maxWidth: 800,
+                      width: "100%",
+                      height: "auto",
+                      display: "block",
+                      margin: "0 auto",
+                    }}
                   >
                     <source src={videoSrc} type="video/mp4" />
                     Your browser does not support the video tag.
@@ -140,11 +146,11 @@ export default function ExerciseDetail() {
           <div className="col-12">
             <div className="card border-0 shadow-sm">
               <div className="card-body p-4">
-                <h5 className="mb-3">Përshkrimi i Ushtrimit</h5>
+                <h5 className="mb-3">Exercise Description</h5>
                 {exercise.description ? (
                   <p className="mb-0">{exercise.description}</p>
                 ) : (
-                  <p className="text-muted mb-0">Nuk ka përshkrim.</p>
+                  <p className="text-muted mb-0">No description.</p>
                 )}
               </div>
             </div>

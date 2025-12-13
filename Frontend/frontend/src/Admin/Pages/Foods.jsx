@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import Pagination from "../Components/Pagination";
 
 export default function Foods() {
   const [foods, setFoods] = useState([]);
@@ -9,6 +10,8 @@ export default function Foods() {
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState("danger");
   const [searchQuery, setSearchQuery] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   // Default sort is A–Z by name; no letter selector
   const navigate = useNavigate();
 
@@ -69,6 +72,7 @@ export default function Foods() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+            {/* Page size now controlled via Pagination component in table footer */}
             <div className="col-md-6"></div>
           </div>
         </div>
@@ -95,6 +99,7 @@ export default function Foods() {
           <table className="table table-striped table-hover mb-0">
             <thead className="table-light">
               <tr>
+                <th>*</th>
                 <th>Name</th>
                 <th>Calories(100g)</th>
                 <th>Protein(100g)</th>
@@ -117,50 +122,72 @@ export default function Foods() {
                   </td>
                 </tr>
               ) : (
-                foods
-                  .filter((food) => {
+                (() => {
+                  const filtered = foods.filter((food) => {
                     const name = (food.name || "").toLowerCase();
                     const q = searchQuery.trim().toLowerCase();
                     return q ? name.includes(q) : true;
-                  })
-                  .sort((a, b) => {
+                  });
+                  const sorted = filtered.sort((a, b) => {
                     const aName = (a.name || "").toLowerCase();
                     const bName = (b.name || "").toLowerCase();
                     return aName.localeCompare(bName);
-                  })
-                  .map((food) => (
-                    <tr key={food.foodId}>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-link p-0 text-decoration-none"
-                          onClick={() =>
-                            navigate(`/admin/foods/${food.foodId}`)
-                          }
-                        >
-                          {food.name}
-                        </button>
-                      </td>
-                      <td>{food.caloriesPer100g}</td>
-                      <td>{food.proteinPer100g}</td>
-                      <td className="text-center">
-                        <button
-                          className="btn btn-warning btn-sm me-2"
-                          onClick={() =>
-                            navigate(`/admin/foods/${food.foodId}/edit`)
-                          }
-                        >
-                          Edit
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() => deleteFood(food.foodId)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  });
+                  const total = sorted.length;
+                  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+                  const currentPage = Math.min(page, totalPages);
+                  const startIdx = (currentPage - 1) * pageSize;
+                  const pageItems = sorted.slice(startIdx, startIdx + pageSize);
+                  return (
+                    <>
+                      {pageItems.map((food, idx) => (
+                        <tr key={food.foodId}>
+                          <td>{startIdx + idx + 1}</td>
+                          <td>
+                            <button
+                              type="button"
+                              className="btn btn-link p-0 text-decoration-none"
+                              onClick={() =>
+                                navigate(`/admin/foods/${food.foodId}`)
+                              }
+                            >
+                              {food.name}
+                            </button>
+                          </td>
+                          <td>{food.caloriesPer100g}</td>
+                          <td>{food.proteinPer100g}</td>
+                          <td className="text-center">
+                            <button
+                              className="btn btn-warning btn-sm me-2"
+                              onClick={() =>
+                                navigate(`/admin/foods/${food.foodId}/edit`)
+                              }
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => deleteFood(food.foodId)}
+                            >
+                              Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                      <Pagination
+                        total={total}
+                        page={currentPage}
+                        pageSize={pageSize}
+                        onPageChange={(p) => setPage(p)}
+                        onPageSizeChange={(ps) => {
+                          setPageSize(ps);
+                          setPage(1);
+                        }}
+                        colSpan={5}
+                      />
+                    </>
+                  );
+                })()
               )}
             </tbody>
           </table>
