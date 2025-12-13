@@ -55,7 +55,7 @@ function AdminProfile() {
       </div>
     );
 
-  const { userName, email, name, surname, birthday, gender } = profile;
+  const { email, name, surname, birthday, gender } = profile;
 
   return (
     <div className="bg-light">

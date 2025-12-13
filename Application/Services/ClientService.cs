@@ -31,6 +31,8 @@ namespace Fitness.Application.Services
                 Email = c.User.Email,
                 Name = c.User.Name,
                 Surname = c.User.Surname,
+                Birthday = c.User.Birthday,
+                Gender = c.User.Gender,
                 Weight = c.Weight,
                 Height = c.Height,
                 ActivityLevel = c.ActivityLevel
@@ -49,6 +51,8 @@ namespace Fitness.Application.Services
                 Email = c.User.Email,
                 Name = c.User.Name,
                 Surname = c.User.Surname,
+                Birthday = c.User.Birthday,
+                Gender = c.User.Gender,
                 Weight = c.Weight,
                 Height = c.Height,
                 ActivityLevel = c.ActivityLevel
@@ -93,6 +97,8 @@ namespace Fitness.Application.Services
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
+                Birthday = user.Birthday,
+                Gender = user.Gender,
                 Weight = client.Weight,
                 Height = client.Height,
                 ActivityLevel = client.ActivityLevel
@@ -106,7 +112,52 @@ namespace Fitness.Application.Services
             {
                 throw new Exception("Client not found");
             }
+            // Update linked ApplicationUser fields when provided
+            if (!string.IsNullOrWhiteSpace(dto.Email)
+                || dto.Name != null
+                || dto.Surname != null
+                || dto.Birthday != null
+                || dto.Gender != null)
+            {
+                // Load user via UserManager
+                var user = await _userManager.FindByIdAsync(client.UserId);
+                if (user == null)
+                {
+                    throw new Exception("Linked user not found");
+                }
 
+                if (!string.IsNullOrWhiteSpace(dto.Email))
+                {
+                    user.Email = dto.Email;
+                    user.UserName = dto.Email; // keep username aligned with email
+                }
+                else
+                {
+                    throw new Exception("Email cannot be empty");
+                }
+                if (dto.Name != null)
+                {
+                    user.Name = dto.Name;
+                }
+                if (dto.Surname != null)
+                {
+                    user.Surname = dto.Surname;
+                }
+                if (dto.Birthday != null)
+                {
+                    user.Birthday = dto.Birthday;
+                }
+                if (dto.Gender != null)
+                {
+                    user.Gender = dto.Gender;
+                }
+
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    throw new Exception("Failed to update user: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+            }
 
             client.Weight = dto.Weight;
             client.Height = dto.Height;

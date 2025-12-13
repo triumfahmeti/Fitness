@@ -10,6 +10,10 @@ import Foods from "./Admin/Pages/Foods";
 import Exercises from "./Admin/Pages/Exercises";
 import AddExercise from "./Admin/Pages/AddExercise";
 import ExerciseDetail from "./Admin/Pages/ExerciseDetail";
+import Users from "./Admin/Pages/Users";
+import UserDetail from "./Admin/Pages/UserDetail";
+import UserLayout from "./Admin/Components/UserLayout";
+import ClientProfile from "./Admin/Pages/ClientProfile";
 function App() {
   return (
     <Routes>
@@ -27,6 +31,25 @@ function App() {
         <Route path="/admin/exercise/:id" element={<ExerciseDetail />} />
         <Route path="/admin/exercise/add" element={<AddExercise />} />
         <Route path="/admin/exercise/:id/edit" element={<AddExercise />} />
+        <Route path="/admin/users" element={<Users />} />
+        <Route path="/admin/users/:id" element={<UserDetail />} />
+        <Route path="/admin/users/:id/edit" element={<UserDetail />} />
+      </Route>
+
+      {/* User layout with nested routes */}
+      <Route path="/user" element={<UserLayout />}>
+        <Route index element={<UserLayout />} />
+        <Route path="/user/dashboard" element={<Dashboard />} />
+        <Route path="/user/profile" element={<ClientProfile />} />
+        {/* Placeholder pages for user-specific sections */}
+        <Route
+          path="/user/workouts"
+          element={<div className="container py-4">My Workouts</div>}
+        />
+        <Route
+          path="/user/meals"
+          element={<div className="container py-4">My Meals</div>}
+        />
       </Route>
     </Routes>
   );

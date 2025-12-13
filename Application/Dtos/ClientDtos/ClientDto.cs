@@ -15,6 +15,10 @@ namespace Fitness.Application.Dtos.ClientDtos
         public string Email { get; set; }
         public string? Name { get; set; }
         public string? Surname { get; set; }
+        public DateOnly? Birthday { get; set; }
+
+        public string? Gender { get; set; }
+
 
 
         public double Weight { get; set; }

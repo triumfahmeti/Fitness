@@ -39,6 +39,17 @@ namespace Fitness.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateEditClientDto dto)
         {
+            // Enforce required fields only for create
+
+            if (string.IsNullOrWhiteSpace(dto.Password))
+            {
+                ModelState.AddModelError("Password", "The Password field is required.");
+            }
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
             var createdClient = await _clientService.AddAsync(dto);
             return Ok(createdClient);
         }
@@ -46,6 +57,7 @@ namespace Fitness.Presentation.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateEditClientDto dto)
         {
+            // Do not require Email/Password on update; allow partial updates
             await _clientService.UpdateAsync(id, dto);
             return Ok("Client updated successfully!");
         }
