@@ -14,5 +14,7 @@ namespace Fitness.Application.Abstractions.Interfaces
         Task<MealFood> CreateAsync(CreateEditMealFoodDto dto);
         Task<MealFood> UpdateAsync(int mealId, int foodId, CreateEditMealFoodDto dto);
         Task DeleteAsync(int mealId, int foodId);
+        Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId);
+
     }
 }

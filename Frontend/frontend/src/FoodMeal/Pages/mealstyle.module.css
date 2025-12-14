@@ -1,0 +1,91 @@
+/* Styles to make the Meal page fit properly inside UserLayout
+	 and be more proportional/responsive. Scoped to this module. */
+
+.mealPage {
+	display: flex;
+	flex-direction: column;
+	min-height: 100%;
+	padding: 1rem 1.25rem; /* spacing inside UserLayout content */
+	box-sizing: border-box;
+	background: transparent;
+}
+
+/* Constrain inner containers so content doesn't stretch under sidebar */
+.mealPage .container {
+	max-width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Header adjustments */
+.mealPage header.bg-dark.py-5 {
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	border-radius: 8px;
+}
+
+.meal-image {
+	max-width: 100%;
+	height: auto;
+	border-radius: 6px;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+/* Features section images */
+.mealPage img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* Meal cards layout - keep cards compact and consistent */
+.mealPage .card {
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.mealPage .card-body {
+	padding: 1rem;
+}
+
+.mealPage .card-title {
+	font-size: 1.05rem;
+	margin-bottom: 0.4rem;
+}
+
+.mealPage .card-text.small {
+	font-size: 0.9rem;
+}
+
+/* Modal tweaks: center and cap width on small screens */
+.mealPage .modal-dialog {
+	max-width: 820px;
+	margin: 1.75rem auto;
+}
+
+/* Footer spacing so it doesn't hug the sidebar bottom */
+.mealPage footer.bg-dark.py-4 {
+	border-radius: 6px;
+	margin-top: 1.25rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+	.mealPage .container {
+		max-width: 95%;
+	}
+	.mealPage header.bg-dark.py-5 {
+		padding-top: 1.5rem;
+		padding-bottom: 1.5rem;
+	}
+	.mealPage .col-xl-5.col-xxl-6.d-none.d-xl-block.text-center {
+		display: none !important;
+	}
+}
+
+@media (min-width: 992px) {
+	.mealPage .card-text.small {
+		font-size: 0.95rem;
+	}
+}
+

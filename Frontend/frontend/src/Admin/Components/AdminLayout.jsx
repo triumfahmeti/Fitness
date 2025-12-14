@@ -1,8 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate, Outlet } from "react-router-dom";
-import "../../style.css";
+
 
 export default function AdminLayout() {
+  useEffect(() => {
+    const id = "admin-style";
+    const href = new URL("../../style.css", import.meta.url).href;
+    if (!document.getElementById(id)) {
+      const el = document.createElement("link");
+      el.id = id;
+      el.rel = "stylesheet";
+      el.href = href;
+      document.head.appendChild(el);
+    }
+    // Keep the stylesheet loaded once appended; no cleanup on unmount
+  }, []);
   // const navigate = useNavigate();
 
   // const logout = () => {

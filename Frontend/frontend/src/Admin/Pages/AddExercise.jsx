@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+
 
 const API_BASE = "https://localhost:7103/api";
 

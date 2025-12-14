@@ -7,6 +7,7 @@ using Fitness.Application.Dtos.MealFoodDtos;
 using Fitness.Domain.Interfaces;
 using Fitness.Domain.Models;
 
+
 namespace Fitness.Application.Services
 {
     public class MealFoodService : IMealFoodService
@@ -42,7 +43,9 @@ namespace Fitness.Application.Services
             };
 
             await _repo.AddAsync(mf);
+            await _repo.RecalculateMealTotalsAsync(dto.MealId);
             return mf;
+
         }
 
         public async Task<MealFood> UpdateAsync(int mealId, int foodId, CreateEditMealFoodDto dto)
@@ -58,7 +61,9 @@ namespace Fitness.Application.Services
             mf.Fats = dto.Fats;
 
             await _repo.UpdateAsync(mf);
+            await _repo.RecalculateMealTotalsAsync(mealId);
             return mf;
+
         }
 
         public async Task DeleteAsync(int mealId, int foodId)
@@ -68,6 +73,35 @@ namespace Fitness.Application.Services
                 throw new Exception("MealFood not found");
 
             await _repo.DeleteAsync(mf);
+            await _repo.RecalculateMealTotalsAsync(mealId);
+
         }
+
+        public async Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId)
+        {
+            return await _repo.GetByMealIdAsync(mealId);
+        }
+
+        private async Task UpdateMealTotals(int mealId)
+        {
+            var mealFoods = await _repo.GetByMealIdRawAsync(mealId);
+
+            var meal = await _repo.GetMealByIdAsync(mealId);
+            if (meal == null) return;
+
+            meal.TotalCalories = mealFoods.Sum(mf => mf.Calories ?? 0);
+            meal.TotalProteins = mealFoods.Sum(mf => mf.Proteins ?? 0);
+            meal.TotalCarbs = mealFoods.Sum(mf => mf.Carbs ?? 0);
+            meal.TotalFats = mealFoods.Sum(mf => mf.Fats ?? 0);
+
+            await _repo.SaveChangesAsync();
+        }
+
+
+
+
+
+
+
     }
 }
