@@ -52,9 +52,10 @@ namespace Fitness.Presentation.Controllers
         [HttpGet("byMeal/{mealId}")]
         public async Task<IActionResult> GetByMeal(int mealId)
         {
-            var result = await _service.GetByMealIdAsync(mealId);
-            return Ok(result);
+            return Ok(await _service.GetByMealIdAsync(mealId));
         }
+
+
 
 
     }

@@ -44,12 +44,13 @@ function App() {
       {/* User layout with nested routes */}
 
       
-        <Route path="/food" element={<Food />} />
-      <Route path="/user" element={<UserLayout />}>
+       
+        <Route path="/user" element={<UserLayout />}>
         <Route index element={<UserLayout />} />
         <Route path="/user/dashboard" element={<Dashboard />} />
         <Route path="/user/profile" element={<ClientProfile />} />
         <Route path="/user/meals" element={<Meal />} />
+         <Route path="/user/food/:mealId" element={<Food />} />
         {/* Placeholder pages for user-specific sections */}
         <Route
           path="/user/workouts"

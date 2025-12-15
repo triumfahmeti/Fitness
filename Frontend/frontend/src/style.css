@@ -22238,3 +22238,7 @@ html {
   background-repeat: no-repeat;
   min-height: 15rem;
 }
+
+.carousel-item {
+  transition: transform 3s ease-in-out;
+}
