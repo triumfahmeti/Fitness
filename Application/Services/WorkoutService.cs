@@ -30,6 +30,7 @@ namespace Fitness.Application.Services
         {
             var workout = new Workout
             {
+                ClientId = dto.ClientId,
                 Title = dto.Title
             };
             await _repo.AddAsync(workout);
@@ -43,6 +44,7 @@ namespace Fitness.Application.Services
             {
                 throw new Exception("Workout not found");
             }
+            workout.ClientId = dto.ClientId;
             workout.Title = dto.Title;
             await _repo.UpdateAsync(workout);
             return workout;

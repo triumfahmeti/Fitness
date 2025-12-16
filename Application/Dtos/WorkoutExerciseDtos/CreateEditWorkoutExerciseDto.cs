@@ -14,5 +14,6 @@ namespace Fitness.Application.Dtos.WorkoutExerciseDtos
         public int? Sets { get; set; }
 
         public int? Reps { get; set; }
+
     }
 }

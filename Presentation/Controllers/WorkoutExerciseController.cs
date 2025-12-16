@@ -48,5 +48,11 @@ namespace Fitness.Presentation.Controllers
             return Ok("Deleted successfully!");
         }
 
+        // [HttpGet("byMeal/{mealId}")]
+        // public async Task<IActionResult> GetByMeal(int mealId)
+        // {
+        //     return Ok(await _service.GetByMealIdAsync(mealId));
+        // }
+
     }
 }

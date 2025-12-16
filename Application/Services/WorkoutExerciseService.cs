@@ -27,7 +27,8 @@ namespace Fitness.Application.Services
                 ExerciseId = we.ExerciseId,
                 Sets = we.Sets,
                 Reps = we.Reps,
-                ExerciseName = we.Exercise.Name
+                ExerciseName = we.Exercise.Name,
+                ImageUrl = we.Exercise.ImageUrl
             });
         }
         public async Task<WorkoutExercise> AddAsync(CreateEditWorkoutExerciseDto dto)
@@ -37,7 +38,8 @@ namespace Fitness.Application.Services
                 WorkoutId = dto.WorkoutId,
                 ExerciseId = dto.ExerciseId,
                 Sets = dto.Sets,
-                Reps = dto.Reps
+                Reps = dto.Reps,
+
             };
 
             await _repo.AddAsync(workoutExercise);
@@ -67,6 +69,11 @@ namespace Fitness.Application.Services
             }
             await _repo.DeleteAsync(workoutId, exerciseId);
         }
+
+        // public async Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId)
+        // {
+        //     return await _repo.GetByMealIdAsync(mealId);
+        // }
 
 
 
