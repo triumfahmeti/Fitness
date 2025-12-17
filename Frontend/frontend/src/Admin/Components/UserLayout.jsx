@@ -1,19 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import "../../style.css";
 
 export default function UserLayout() {
-  useEffect(() => {
-    const id = "admin-style";
-    const href = new URL("../../style.css", import.meta.url).href;
-    if (!document.getElementById(id)) {
-      const el = document.createElement("link");
-      el.id = id;
-      el.rel = "stylesheet";
-      el.href = href;
-      document.head.appendChild(el);
-    }
-    // Keep the stylesheet loaded once appended; no cleanup on unmount
-  }, []);
   return (
     <div className="sb-nav-fixed">
       {/* Top Navbar */}
@@ -131,13 +120,13 @@ export default function UserLayout() {
                 </Link>
                 <Link to="/user/progress&analytics" className="nav-link">
                   <div className="sb-nav-link-icon">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <i className="fa-solid fa-chart-line"></i>
                   </div>
                   Progress & Analytics
                 </Link>
-                <Link to="/user/goals" className="nav-link">
+                <Link to="/user/goal-progress" className="nav-link">
                   <div className="sb-nav-link-icon">
-                    <i class="fa-solid fa-crosshairs"></i>
+                    <i className="fa-solid fa-crosshairs"></i>
                   </div>
                   Goals
                 </Link>
