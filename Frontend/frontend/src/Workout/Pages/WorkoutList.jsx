@@ -15,7 +15,7 @@ function WorkoutList() {
   const [showFoodValues, setShowFoodValues] = useState(false);
   const [showAddWorkoutModal, setShowAddWorkoutModal] = useState(false);
   const [newWorkoutName, setNewWorkoutName] = useState("");
-  const CLIENT_ID = 2; // statik për momentin
+  const CLIENT_ID = 1; // statik për momentin
   const [workoutImages, setWorkoutImages] = useState({});
   const [workoutCardTotals, setWorkoutCardTotals] = useState({}); // totals për çdo workout
   const [editingExerciseId, setEditingExerciseId] = useState(null);

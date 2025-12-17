@@ -62,6 +62,23 @@ export default function GoalAndProgressPage() {
 
     if (!initial || !current || !target) return 0;
 
+    if (goal.goalType === "LOSE_WEIGHT" && current <= target) {
+  return 100; // Goal is achieved (current weight is less than or equal to target)
+}
+
+    if (goal.goalType === "LOSE_WEIGHT" && current >= initial) {
+  return 0; // Goal is achieved (current weight is less than or equal to target)
+}
+
+    if (goal.goalType === "GAIN_WEIGHT" && current >= target) {
+      return 100; // Goal is achieved (current weight is greater than or equal to target)
+    }
+
+        if (goal.goalType === "GAIN_WEIGHT" && current <= initial) {
+  return 0; // Goal is achieved (current weight is less than or equal to target)
+}
+
+
     // Calculate the total difference between initial and target
     const totalNeeded = Math.abs(target - initial);
 

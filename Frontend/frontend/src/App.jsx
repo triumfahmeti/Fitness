@@ -16,6 +16,12 @@ import UserLayout from "./Admin/Components/UserLayout";
 import ClientProfile from "./Admin/Pages/ClientProfile";
 import GoalAndProgressPage from "./Admin/Pages/GoalAndProgressPage";
 import ProgressAndAnalytics from "./Admin/Pages/ProgressAndAnalytics";
+import WorkoutList from "./Workout/Pages/WorkoutList"
+import Meal from "./FoodMeal/Pages/Meal";
+import Food from "./FoodMeal/Pages/Food";
+import Exercise from "./Exercise/Pages/Exercise";
+import ClientExercises from "./Exercise/Pages/Exercise";
+
 
 function App() {
   return (
@@ -43,11 +49,21 @@ function App() {
       {/* User layout with nested routes */}
       <Route path="/user" element={<UserLayout />}>
         <Route index element={<UserLayout />} />
-        <Route path="/user/dashboard" element={<Dashboard />} />
-        <Route path="/user/profile" element={<ClientProfile />} />
+         <Route path="/user/profile" element={<ClientProfile />} />
+        <Route path="/user/meals" element={<Meal />} />
+        <Route path="/user/food/:mealId" element={<Food />} />
+        <Route
+          path="/user/exercises/workout/:workoutId"
+          element={<ClientExercises />}
+        />
+        <Route path="/user/exercises/detail/:id" element={<ExerciseDetail />} />
+        {/* Placeholder pages for user-specific sections */}
+        <Route path="/user/workouts" element={<WorkoutList />} />
+
         <Route path="/user/goal-progress" element={<GoalAndProgressPage />} />
         <Route path="/user/progress&analytics" element={<ProgressAndAnalytics/>}>
-
+         <Route path="/user/progress&analytics" element={<ProgressAndAnalytics/>}>
+         </Route>
         </Route>
         {/* Placeholder pages for user-specific sections */}
         <Route

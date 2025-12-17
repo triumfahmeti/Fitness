@@ -14,7 +14,7 @@ function Meal() {
   const [showFoodValues, setShowFoodValues] = useState(false);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
   const [newMealName, setNewMealName] = useState("");
-  const CLIENT_ID = 2; // statik për momentin
+  const CLIENT_ID = 1; // statik për momentin
   const [mealImages, setMealImages] = useState({});
   const [editingFoodId, setEditingFoodId] = useState(null);
   const [editGrams, setEditGrams] = useState({});

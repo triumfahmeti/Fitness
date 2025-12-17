@@ -93,12 +93,8 @@ export default function UserLayout() {
             <div className="sb-sidenav-menu">
               <div className="nav">
                 <div className="sb-sidenav-menu-heading">User</div>
-                <Link to="/user/home" className="nav-link">
-                  <div className="sb-nav-link-icon">
-                    <i className="fa-solid fa-bars"></i>
-                  </div>
-                  Home
-                </Link>
+       
+              
                 <Link to="/user/profile" className="nav-link">
                   <div className="sb-nav-link-icon">
                     <i className="fa-solid fa-user"></i>
