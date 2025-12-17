@@ -25,8 +25,7 @@ public class JwtService : IJwtService
     public string GenerateAccessToken(ApplicationUser user, IList<string> roles)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["SecretKey"];
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new List<Claim>
@@ -37,7 +36,6 @@ public class JwtService : IJwtService
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        // Add roles to claims
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
@@ -66,17 +64,17 @@ public class JwtService : IJwtService
     public ClaimsPrincipal? GetPrincipalFromExpiredToken(string token)
     {
         var jwtSettings = _configuration.GetSection("JwtSettings");
-        var secretKey = jwtSettings["SecretKey"];
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!));
 
         var tokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = false, // Don't validate lifetime here
+            ValidateLifetime = false, // don't check expiry here
             ValidateIssuerSigningKey = true,
             ValidIssuer = jwtSettings["Issuer"],
             ValidAudience = jwtSettings["Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+            IssuerSigningKey = key,
             ClockSkew = TimeSpan.Zero
         };
 
@@ -85,8 +83,8 @@ public class JwtService : IJwtService
         {
             var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
 
-            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
-                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            if (securityToken is not JwtSecurityToken jwtToken ||
+                !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
                 return null;
             }
@@ -120,15 +118,12 @@ public class JwtService : IJwtService
 
     public async Task<RefreshToken?> GetRefreshTokenAsync(string token)
     {
-        return await _context.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.Token == token);
+        return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
     }
 
     public async Task RevokeRefreshTokenAsync(string token)
     {
-        var refreshToken = await _context.RefreshTokens
-            .FirstOrDefaultAsync(rt => rt.Token == token);
-
+        var refreshToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == token);
         if (refreshToken != null)
         {
             refreshToken.IsRevoked = true;

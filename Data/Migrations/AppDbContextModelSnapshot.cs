@@ -382,9 +382,11 @@ namespace Fitness.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -641,6 +643,17 @@ namespace Fitness.Migrations
                         .HasConstraintName("FK__Progress__Client__6D0D32F4");
 
                     b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("Fitness.Domain.Models.RefreshToken", b =>
+                {
+                    b.HasOne("Fitness.Domain.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Fitness.Domain.Models.Workout", b =>

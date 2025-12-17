@@ -35,8 +35,8 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<WorkoutExercise> WorkoutExercises { get; set; }
 
-    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
-
+  public virtual DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

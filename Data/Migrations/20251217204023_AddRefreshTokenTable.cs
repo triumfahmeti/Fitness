@@ -5,7 +5,7 @@
 namespace Fitness.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDomainTables : Migration
+    public partial class AddRefreshTokenTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
