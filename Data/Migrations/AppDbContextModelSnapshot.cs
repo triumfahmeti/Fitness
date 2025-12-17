@@ -38,7 +38,8 @@ namespace Fitness.Migrations
                     b.HasKey("AdminId")
                         .HasName("PK__Admin__719FE48806B48856");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Admin", (string)null);
                 });
@@ -145,7 +146,8 @@ namespace Fitness.Migrations
                     b.HasKey("ClientId")
                         .HasName("PK__Client__E67E1A248FC8850D");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Client", (string)null);
                 });
@@ -355,6 +357,36 @@ namespace Fitness.Migrations
                     b.HasIndex("ClientId");
 
                     b.ToTable("Progress", (string)null);
+                });
+
+            modelBuilder.Entity("Fitness.Domain.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Fitness.Domain.Models.Workout", b =>

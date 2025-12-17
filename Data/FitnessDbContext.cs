@@ -15,6 +15,8 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Admin> Admins { get; set; }
 
+    public virtual DbSet<ApplicationUser> Users { get; set; }
+
     public virtual DbSet<Client> Clients { get; set; }
 
     public virtual DbSet<Exercise> Exercises { get; set; }
@@ -33,6 +35,8 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<WorkoutExercise> WorkoutExercises { get; set; }
 
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -43,6 +47,9 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
             entity.ToTable("Admin");
 
             entity.Property(e => e.UserId).HasMaxLength(450);
+
+            // Ensure one Admin profile per ApplicationUser
+            entity.HasIndex(e => e.UserId).IsUnique();
 
             entity.HasOne(d => d.User).WithMany(p => p.Admins)
                 .HasForeignKey(d => d.UserId)
@@ -59,6 +66,9 @@ public partial class FitnessDbContext : IdentityDbContext<ApplicationUser>
             entity.ToTable("Client");
 
             entity.Property(e => e.UserId).HasMaxLength(450);
+
+            // Ensure one Client profile per ApplicationUser
+            entity.HasIndex(e => e.UserId).IsUnique();
 
             entity.HasOne(d => d.User).WithMany(p => p.Clients)
                 .HasForeignKey(d => d.UserId)
