@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -6,11 +6,20 @@ import { useAuth } from "../context/AuthContext.jsx";
 export default function Login() {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const [form, setForm] = useState({ email: "", password: "" });
+
+    const [form, setForm] = useState(() => {
+        const saved = localStorage.getItem("loginForm");
+        return saved ? JSON.parse(saved) : { email: "", password: "" };
+    });
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const onChange = (e) => {
+        const newForm = { ...form, [e.target.name]: e.target.value };
+        setForm(newForm);
+        localStorage.setItem("loginForm", JSON.stringify(newForm));
+    };
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -18,6 +27,7 @@ export default function Login() {
         setError(null);
         try {
             const { data } = await api.post("/api/auth/login", form);
+            localStorage.removeItem("loginForm");
             login({
                 accessToken: data.accessToken,
                 refreshToken: data.refreshToken,
@@ -25,6 +35,8 @@ export default function Login() {
                     userId: data.userId,
                     email: data.email,
                     userName: data.userName,
+                    name: data.name,
+                    surname: data.surname,
                     roles: data.roles || [],
                 },
             });
@@ -41,31 +53,27 @@ export default function Login() {
     return (
         <div className="container" style={{ maxWidth: 420 }}>
             <h2 className="mt-5 mb-4">Login</h2>
-            {error && (
-                <div className="alert alert-danger" role="alert">
-                    {error}
-                </div>
-            )}
+            {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={onSubmit}>
                 <div className="mb-3">
-                    <label className="form-label">Email</label>
+                    <label>Email</label>
                     <input
                         type="email"
                         name="email"
-                        className="form-control"
                         value={form.email}
                         onChange={onChange}
+                        className="form-control"
                         required
                     />
                 </div>
                 <div className="mb-3">
-                    <label className="form-label">Password</label>
+                    <label>Password</label>
                     <input
                         type="password"
                         name="password"
-                        className="form-control"
                         value={form.password}
                         onChange={onChange}
+                        className="form-control"
                         required
                     />
                 </div>

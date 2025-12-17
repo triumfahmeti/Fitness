@@ -28,7 +28,6 @@ export function AuthProvider({ children }) {
     const value = useMemo(() => ({ user, login, logout }), [user]);
 
     useEffect(() => {
-        // keep state in sync if storage is cleared elsewhere
         const handler = () => {
             const raw = localStorage.getItem("authUser");
             setUser(raw ? JSON.parse(raw) : null);

@@ -6,24 +6,34 @@ import { useAuth } from "../context/AuthContext.jsx";
 export default function Register() {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const [form, setForm] = useState({
-        email: "",
-        password: "",
-        userName: "",
-        fullName: "",
-        role: "Client",
+
+    const [form, setForm] = useState(() => {
+        const saved = localStorage.getItem("registerForm");
+        return saved
+            ? JSON.parse(saved)
+            : { email: "", password: "", userName: "", name: "", surname: "", birthday: "", gender: "", role: "Client" };
     });
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const onChange = (e) => {
+        const newForm = { ...form, [e.target.name]: e.target.value };
+        setForm(newForm);
+        localStorage.setItem("registerForm", JSON.stringify(newForm));
+    };
 
     const onSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         try {
-            const { data } = await api.post("/api/auth/register", form);
+            const payload = { ...form };
+            if (payload.birthday) payload.birthday = payload.birthday; // keep as YYYY-MM-DD
+
+            const { data } = await api.post("/api/auth/register", payload);
+
+            localStorage.removeItem("registerForm");
             login({
                 accessToken: data.accessToken,
                 refreshToken: data.refreshToken,
@@ -31,9 +41,14 @@ export default function Register() {
                     userId: data.userId,
                     email: data.email,
                     userName: data.userName,
+                    name: form.name,
+                    surname: form.surname,
+                    birthday: form.birthday,
+                    gender: form.gender,
                     roles: data.roles || [],
                 },
             });
+
             const roles = data.roles || [];
             if (roles.includes("Admin")) navigate("/admin", { replace: true });
             else navigate("/user/dashboard", { replace: true });
@@ -52,68 +67,48 @@ export default function Register() {
     return (
         <div className="container" style={{ maxWidth: 520 }}>
             <h2 className="mt-5 mb-4">Register</h2>
-            {error && (
-                <div className="alert alert-danger" role="alert">
-                    {error}
-                </div>
-            )}
+            {error && <div className="alert alert-danger">{error}</div>}
             <form onSubmit={onSubmit}>
                 <div className="mb-3">
                     <label className="form-label">Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        className="form-control"
-                        value={form.email}
-                        onChange={onChange}
-                        required
-                    />
+                    <input type="email" name="email" value={form.email} onChange={onChange} className="form-control" required />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Username</label>
-                    <input
-                        type="text"
-                        name="userName"
-                        className="form-control"
-                        value={form.userName}
-                        onChange={onChange}
-                        required
-                    />
+                    <input type="text" name="userName" value={form.userName} onChange={onChange} className="form-control" required />
                 </div>
                 <div className="mb-3">
-                    <label className="form-label">Full Name</label>
-                    <input
-                        type="text"
-                        name="fullName"
-                        className="form-control"
-                        value={form.fullName}
-                        onChange={onChange}
-                    />
+                    <label className="form-label">Name</label>
+                    <input type="text" name="name" value={form.name} onChange={onChange} className="form-control" required />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Surname</label>
+                    <input type="text" name="surname" value={form.surname} onChange={onChange} className="form-control" required />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Birthday</label>
+                    <input type="date" name="birthday" value={form.birthday} onChange={onChange} className="form-control" />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Gender</label>
+                    <select name="gender" value={form.gender} onChange={onChange} className="form-select">
+                        <option value="">Select</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        className="form-control"
-                        value={form.password}
-                        onChange={onChange}
-                        required
-                    />
+                    <input type="password" name="password" value={form.password} onChange={onChange} className="form-control" required />
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Role</label>
-                    <select
-                        className="form-select"
-                        name="role"
-                        value={form.role}
-                        onChange={onChange}
-                    >
+                    <select name="role" value={form.role} onChange={onChange} className="form-select">
                         <option value="Client">Client</option>
                         <option value="Admin">Admin</option>
                     </select>
                 </div>
-
                 <button className="btn btn-primary w-100" disabled={loading}>
                     {loading ? "Registering..." : "Register"}
                 </button>

@@ -33,88 +33,72 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+{
+    var existingUser = await _userManager.FindByEmailAsync(request.Email);
+    if (existingUser != null)
+        return BadRequest(new { message = "User with this email already exists" });
+
+    var user = new ApplicationUser
     {
-        // Check if user already exists
-        var existingUser = await _userManager.FindByEmailAsync(request.Email);
-        if (existingUser != null)
-        {
-            return BadRequest(new { message = "User with this email already exists" });
-        }
+        Email = request.Email,
+        UserName = request.UserName,
+        Name = request.Name,
+        Surname = request.Surname,
+        Birthday = request.Birthday,
+        Gender = request.Gender,
+        EmailConfirmed = true
+    };
 
-        // Create new user
-        var user = new ApplicationUser
-        {
-            Email = request.Email,
-            UserName = request.UserName,
-            Name = request.FullName,
-            EmailConfirmed = true // Auto-confirm for development
-        };
+    var result = await _userManager.CreateAsync(user, request.Password);
+    if (!result.Succeeded)
+        return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
 
-        var result = await _userManager.CreateAsync(user, request.Password);
-        if (!result.Succeeded)
-        {
-            return BadRequest(new { errors = result.Errors.Select(e => e.Description) });
-        }
+    var roleResult = await _userManager.AddToRoleAsync(user, request.Role);
+    if (!roleResult.Succeeded)
+        return BadRequest(new { errors = roleResult.Errors.Select(e => e.Description) });
 
-        // Assign role
-        var roleResult = await _userManager.AddToRoleAsync(user, request.Role);
-        if (!roleResult.Succeeded)
-        {
-            return BadRequest(new { errors = roleResult.Errors.Select(e => e.Description) });
-        }
-
-        // Create corresponding profile row based on role
-        if (string.Equals(request.Role, "Admin", StringComparison.OrdinalIgnoreCase))
-        {
-            var adminProfile = new Admin { UserId = user.Id };
-            _db.Admins.Add(adminProfile);
-            await _db.SaveChangesAsync();
-        }
-        else if (string.Equals(request.Role, "Client", StringComparison.OrdinalIgnoreCase))
-        {
-            var clientProfile = new Client { UserId = user.Id };
-            _db.Clients.Add(clientProfile);
-            await _db.SaveChangesAsync();
-        }
-
-        // Generate tokens
-        var roles = await _userManager.GetRolesAsync(user);
-        var accessToken = _jwtService.GenerateAccessToken(user, roles);
-        var refreshToken = _jwtService.GenerateRefreshToken();
-        await _jwtService.SaveRefreshTokenAsync(user.Id, refreshToken);
-
-        var jwtSettings = _configuration.GetSection("JwtSettings");
-        var expirationMinutes = int.Parse(jwtSettings["AccessTokenExpirationMinutes"]!);
-
-        return Ok(new AuthResponseDto
-        {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken,
-            ExpiresAt = DateTime.UtcNow.AddMinutes(expirationMinutes),
-            UserId = user.Id,
-            Email = user.Email,
-            UserName = user.UserName!,
-            Roles = roles
-        });
+    if (string.Equals(request.Role, "Admin", StringComparison.OrdinalIgnoreCase))
+    {
+        _db.Admins.Add(new Admin { UserId = user.Id });
+        await _db.SaveChangesAsync();
     }
+    else if (string.Equals(request.Role, "Client", StringComparison.OrdinalIgnoreCase))
+    {
+        _db.Clients.Add(new Client { UserId = user.Id });
+        await _db.SaveChangesAsync();
+    }
+
+    var roles = await _userManager.GetRolesAsync(user);
+    var accessToken = _jwtService.GenerateAccessToken(user, roles);
+    var refreshToken = _jwtService.GenerateRefreshToken();
+    await _jwtService.SaveRefreshTokenAsync(user.Id, refreshToken);
+
+    var jwtSettings = _configuration.GetSection("JwtSettings");
+    var expirationMinutes = int.Parse(jwtSettings["AccessTokenExpirationMinutes"]!);
+
+    return Ok(new AuthResponseDto
+    {
+        AccessToken = accessToken,
+        RefreshToken = refreshToken,
+        ExpiresAt = DateTime.UtcNow.AddMinutes(expirationMinutes),
+        UserId = user.Id,
+        Email = user.Email!,
+        UserName = user.UserName!,
+        Roles = roles
+    });
+}
+
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
-        if (user == null)
-        {
-            return Unauthorized(new { message = "Invalid credentials" });
-        }
+        if (user == null) return Unauthorized(new { message = "Invalid credentials" });
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
-        if (!result.Succeeded)
-        {
-            return Unauthorized(new { message = "Invalid credentials" });
-        }
+        if (!result.Succeeded) return Unauthorized(new { message = "Invalid credentials" });
 
-        // Generate tokens
         var roles = await _userManager.GetRolesAsync(user);
         var accessToken = _jwtService.GenerateAccessToken(user, roles);
         var refreshToken = _jwtService.GenerateRefreshToken();
@@ -139,33 +123,20 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto request)
     {
         var principal = _jwtService.GetPrincipalFromExpiredToken(request.AccessToken);
-        if (principal == null)
-        {
-            return BadRequest(new { message = "Invalid access token" });
-        }
+        if (principal == null) return BadRequest(new { message = "Invalid access token" });
 
         var userId = principal.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (string.IsNullOrEmpty(userId))
-        {
-            return BadRequest(new { message = "Invalid token claims" });
-        }
+        if (string.IsNullOrEmpty(userId)) return BadRequest(new { message = "Invalid token claims" });
 
         var user = await _userManager.FindByIdAsync(userId);
-        if (user == null)
-        {
-            return BadRequest(new { message = "User not found" });
-        }
+        if (user == null) return BadRequest(new { message = "User not found" });
 
         var storedRefreshToken = await _jwtService.GetRefreshTokenAsync(request.RefreshToken);
         if (storedRefreshToken == null || !storedRefreshToken.IsActive || storedRefreshToken.UserId != userId)
-        {
             return BadRequest(new { message = "Invalid refresh token" });
-        }
 
-        // Revoke old refresh token
         await _jwtService.RevokeRefreshTokenAsync(request.RefreshToken);
 
-        // Generate new tokens
         var roles = await _userManager.GetRolesAsync(user);
         var newAccessToken = _jwtService.GenerateAccessToken(user, roles);
         var newRefreshToken = _jwtService.GenerateRefreshToken();

@@ -36,13 +36,17 @@ IF EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_Admin_UserId' AND object_i
                     table.PrimaryKey("PK_RefreshTokens", x => x.Id);
                 });
 
-            // Create unique indexes only if tables already exist
-            migrationBuilder.Sql(@"
-IF OBJECT_ID('Client','U') IS NOT NULL AND NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_Client_UserId' AND object_id = OBJECT_ID('Client'))
-    CREATE UNIQUE INDEX [IX_Client_UserId] ON [Client] ([UserId]);
-IF OBJECT_ID('Admin','U') IS NOT NULL AND NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_Admin_UserId' AND object_id = OBJECT_ID('Admin'))
-    CREATE UNIQUE INDEX [IX_Admin_UserId] ON [Admin] ([UserId]);
-");
+            migrationBuilder.CreateIndex(
+                name: "IX_Client_UserId",
+                table: "Client",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Admin_UserId",
+                table: "Admin",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
