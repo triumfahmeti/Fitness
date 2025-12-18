@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fitness.Migrations
 {
     [DbContext(typeof(FitnessDbContext))]
-    [Migration("20251217204023_AddRefreshTokenTable")]
-    partial class AddRefreshTokenTable
+    [Migration("20251218113030_RemovePasswordFromAspNetUsers")]
+    partial class RemovePasswordFromAspNetUsers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

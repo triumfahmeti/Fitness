@@ -11,7 +11,7 @@ export default function Register() {
     const saved = localStorage.getItem("registerForm");
     return saved
       ? JSON.parse(saved)
-      : { email: "", password: "", userName: "", name: "", surname: "", birthday: "", gender: "", role: "Client" };
+      : { email: "", password: "", name: "", surname: "", birthday: "", gender: "", role: "Client" };
   });
 
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function Register() {
     setError(null);
     try {
       const payload = { ...form };
-      const { data } = await api.post("/api/auth/register", payload);
+      const { data } = await api.post("/api/Auth/register", payload);
 
       localStorage.removeItem("registerForm");
       login({
@@ -38,7 +38,6 @@ export default function Register() {
         profile: {
           userId: data.userId,
           email: data.email,
-          userName: data.userName,
           name: form.name,
           surname: form.surname,
           birthday: form.birthday,
@@ -80,10 +79,7 @@ export default function Register() {
             </div>
           </div>
 
-          <div className="mb-3 mt-3">
-            <label className="form-label">Username</label>
-            <input type="text" name="userName" value={form.userName} onChange={onChange} className="form-control" required />
-          </div>
+
 
           <div className="mb-3">
             <label className="form-label">Email</label>

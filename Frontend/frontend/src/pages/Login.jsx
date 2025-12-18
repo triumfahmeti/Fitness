@@ -26,7 +26,7 @@ export default function Login() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await api.post("/api/auth/login", form);
+      const { data } = await api.post("/api/Auth/login", form);
       localStorage.removeItem("loginForm");
       login({
         accessToken: data.accessToken,
