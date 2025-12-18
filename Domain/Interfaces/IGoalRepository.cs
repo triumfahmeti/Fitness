@@ -8,6 +8,7 @@ namespace Fitness.Domain.Interfaces
     public interface IGoalRepository
     {
         Task<IEnumerable<Goal>> GetAllAsync();
+        Task<IEnumerable<Goal>> GetByClientIdAsync(int clientId);
         Task<Goal> GetByIdAsync(int id);
         Task AddAsync(Goal goal);
         Task UpdateAsync(Goal goal);

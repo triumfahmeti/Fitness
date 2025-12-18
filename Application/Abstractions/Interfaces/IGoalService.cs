@@ -8,6 +8,7 @@ namespace Fitness.Application.Abstractions.Interfaces
     public interface IGoalService
     {
         Task<IEnumerable<Goal>> GetAllAsync();
+        Task<IEnumerable<Goal>> GetByClientIdAsync(int clientId);
         Task<Goal> GetByIdAsync(int id);
         Task<Goal> CreateAsync(CreateEditGoalDto dto);
         Task<Goal> UpdateAsync(int id, CreateEditGoalDto dto);

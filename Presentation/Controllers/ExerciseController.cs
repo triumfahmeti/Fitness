@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.ExerciseDtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Fitness.Presentation.Controllers
 {
@@ -20,6 +22,8 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, Client")]
+
         public async Task<IActionResult> GetAll()
         {
             var exercises = await _service.GetAllAsync();
@@ -27,19 +31,26 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet("{id}")]
+                [Authorize(Roles = "Admin, Client")]
+
         public async Task<IActionResult> GetById(int id)
         {
             return Ok(await _service.GetByIdAsync(id));
         }
 
         [HttpPost]
+                [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Create([FromBody] CreateEditExerciseDto dto)
         {
             var result = await _service.CreateAsync(dto);
             return Ok(result);
         }
+               
+
 
         [HttpPut("{id}")]
+         [Authorize(Roles = "Admin, Client")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateEditExerciseDto dto)
         {
             var result = await _service.UpdateAsync(id, dto);
@@ -47,6 +58,8 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpDelete("{id}")]
+                [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int id)
         {
             await _service.DeleteAsync(id);

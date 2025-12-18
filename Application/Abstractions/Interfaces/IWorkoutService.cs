@@ -10,6 +10,7 @@ namespace Fitness.Application.Abstractions.Interfaces
     public interface IWorkoutService
     {
         Task<IEnumerable<Workout>> GetAllAsync();
+        Task<IEnumerable<Workout>> GetByClientIdAsync(int clientId);
         Task<Workout> GetByIdAsync(int id);
         Task<Workout> CreateAsync(CreateEditWorkoutDto dto);
         Task<Workout> UpdateAsync(int id, CreateEditWorkoutDto dto);

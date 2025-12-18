@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -50,11 +50,11 @@ export default function Dashboard() {
         // Expect backend endpoints to provide aggregated data
         const [clientsRes, ageRes, genderRes, topExRes, topFoodRes] =
           await Promise.all([
-            axios.get(`${API_BASE}/Stats/clients/total`),
-            axios.get(`${API_BASE}/Stats/clients/age-buckets`),
-            axios.get(`${API_BASE}/Stats/clients/gender`),
-            axios.get(`${API_BASE}/Stats/top/exercises?count=5`),
-            axios.get(`${API_BASE}/Stats/top/foods?count=5`),
+            api.get(`${API_BASE}/Stats/clients/total`),
+            api.get(`${API_BASE}/Stats/clients/age-buckets`),
+            api.get(`${API_BASE}/Stats/clients/gender`),
+            api.get(`${API_BASE}/Stats/top/exercises?count=5`),
+            api.get(`${API_BASE}/Stats/top/foods?count=5`),
           ]);
 
         setStats({

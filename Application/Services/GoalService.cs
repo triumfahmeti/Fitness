@@ -24,6 +24,11 @@ namespace Fitness.Application.Abstractions.Interfaces
             return await _repo.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Goal>> GetByClientIdAsync(int clientId)
+        {
+            return await _repo.GetByClientIdAsync(clientId);
+        }
+
         public async Task<Goal> GetByIdAsync(int id)
         {
             return await _repo.GetByIdAsync(id);

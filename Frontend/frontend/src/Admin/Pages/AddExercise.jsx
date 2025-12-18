@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { useParams } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
 
@@ -50,7 +50,7 @@ function AddExercise() {
       if (form.imageFile) {
         const fd = new FormData();
         fd.append("file", form.imageFile);
-        const up = await axios.post(
+        const up = await api.post(
           `${API_BASE}/Files/upload?subfolder=images`,
           fd,
           {
@@ -66,7 +66,7 @@ function AddExercise() {
       if (form.videoFile) {
         const vfd = new FormData();
         vfd.append("file", form.videoFile);
-        const vup = await axios.post(
+        const vup = await api.post(
           `${API_BASE}/Files/upload?subfolder=videos`,
           vfd,
           {
@@ -86,10 +86,10 @@ function AddExercise() {
       };
 
       if (id) {
-        await axios.put(`${API_BASE}/Exercise/${id}`, payload);
+        await api.put(`${API_BASE}/Exercise/${id}`, payload);
         setSuccess("Exercise updated successfully.");
       } else {
-        await axios.post(`${API_BASE}/Exercise`, payload);
+        await api.post(`${API_BASE}/Exercise`, payload);
         setSuccess("Exercise added successfully.");
         setForm({
           name: "",
@@ -114,7 +114,7 @@ function AddExercise() {
       if (!id) return;
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE}/Exercise/${id}`);
+        const res = await api.get(`${API_BASE}/Exercise/${id}`);
         const ex = res.data;
         setForm({
           name: ex.name || "",

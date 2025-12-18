@@ -10,6 +10,7 @@ namespace Fitness.Domain.Interfaces
     public interface IMealRepository
     {
         Task<IEnumerable<Meal>> GetAllAsync();
+        Task<IEnumerable<Meal>> GetByClientIdAsync(int clientId);
         Task<Meal?> GetByIdAsync(int id);
         Task AddAsync(Meal meal);
         Task UpdateAsync(Meal meal);

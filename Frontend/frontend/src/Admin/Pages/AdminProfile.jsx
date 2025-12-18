@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 
 function AdminProfile() {
   const [profile, setProfile] = useState(null);
@@ -7,16 +7,16 @@ function AdminProfile() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // const adminId = localStorage.getItem("adminId");
-    const adminId = "2";
+    const adminIdStr = localStorage.getItem("adminId");
+    const adminId = Number(adminIdStr);
 
-    if (!adminId) {
-      setError("Missing adminId in localStorage");
+    if (!adminIdStr || Number.isNaN(adminId)) {
+      setError("Missing or invalid adminId in localStorage");
       setLoading(false);
       return;
     }
-    axios
-      .get(`https://localhost:7103/api/admin/${adminId}`)
+    api
+      .get(`/api/admin/${adminId}`)
       .then((res) => setProfile(res.data))
       .catch((err) => {
         const msg = err.response?.data || err.message;

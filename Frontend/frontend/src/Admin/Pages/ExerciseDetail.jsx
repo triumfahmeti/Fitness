@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 
 const API_BASE = "https://localhost:7103/api";
 
@@ -33,7 +33,7 @@ export default function ExerciseDetail() {
     const load = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE}/Exercise/${id}`);
+        const res = await api.get(`${API_BASE}/Exercise/${id}`);
         setExercise(res.data);
       } catch (err) {
         setError(err?.response?.data || err.message);

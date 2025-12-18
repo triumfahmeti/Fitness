@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../Components/Pagination";
 
@@ -18,7 +18,7 @@ export default function Foods() {
   const loadFoods = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("https://localhost:7103/api/Food");
+      const res = await api.get("/api/Food");
       setFoods(res.data || []);
     } catch (err) {
       setError("Failed to load foods.");
@@ -36,7 +36,7 @@ export default function Foods() {
   const deleteFood = async (id) => {
     if (!window.confirm("Are you sure you want to delete this food?")) return;
     try {
-      await axios.delete(`https://localhost:7103/api/Food/${id}`);
+      await api.delete(`/api/Food/${id}`);
       setFoods((prev) => prev.filter((f) => f.foodId !== id));
       setAlertType("success");
       setAlertMessage("The food was deleted successfully.");

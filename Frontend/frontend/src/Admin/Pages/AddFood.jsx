@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 function AddFood() {
@@ -43,7 +43,7 @@ function AddFood() {
       if (form.imageFile) {
         const fd = new FormData();
         fd.append("file", form.imageFile);
-        const up = await axios.post(
+        const up = await api.post(
           "https://localhost:7103/api/Files/upload?subfolder=images",
           fd,
           {
@@ -71,10 +71,10 @@ function AddFood() {
         imageUrl,
       };
       if (id) {
-        await axios.put(`https://localhost:7103/api/Food/${id}`, payload);
+        await api.put(`/api/Food/${id}`, payload);
         setSuccess("Food updated successfully.");
       } else {
-        await axios.post("https://localhost:7103/api/Food", payload);
+        await api.post("/api/Food", payload);
         setSuccess("Food added successfully.");
         setForm({
           name: "",
@@ -100,7 +100,7 @@ function AddFood() {
       if (!id) return;
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE}/Food/${id}`);
+        const res = await api.get(`${API_BASE}/Food/${id}`);
         const f = res.data;
         setForm({
           name: f.name || "",

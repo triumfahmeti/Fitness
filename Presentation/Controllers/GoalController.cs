@@ -1,13 +1,12 @@
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.GoalDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-
-
 
 namespace Fitness.Presentation.Controllers
 {
+        [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class GoalController : ControllerBase
@@ -19,11 +18,11 @@ namespace Fitness.Presentation.Controllers
             _service = service;
         }
 
-        // GET: api/goal
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        // GET: api/goal/client/5
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetByClientId(int clientId)
         {
-            var goals = await _service.GetAllAsync();
+            var goals = await _service.GetByClientIdAsync(clientId);
             return Ok(goals);
         }
 

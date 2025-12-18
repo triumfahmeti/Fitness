@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../Components/Pagination";
 
@@ -36,7 +36,7 @@ export default function Exercises() {
   const loadExercises = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("https://localhost:7103/api/Exercise");
+      const res = await api.get("/api/Exercise");
       setExercises(res.data || []);
     } catch (err) {
       setAlertType("danger");
@@ -54,7 +54,7 @@ export default function Exercises() {
     if (!window.confirm("Are you sure you want to delete this exercise?"))
       return;
     try {
-      await axios.delete(`https://localhost:7103/api/Exercise/${id}`);
+      await api.delete(`/api/Exercise/${id}`);
       setExercises((prev) => prev.filter((e) => e.exerciseId !== id));
       setAlertType("success");
       setAlertMessage("Exercise deleted successfully.");

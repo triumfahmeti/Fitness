@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import styles from "./exercisestyle.module.css";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -74,7 +74,7 @@ export default function Exercise() {
         });
         return;
       }
-      const response = await axios.post(`${API_BASE}/WorkoutExercise`, {
+      const response = await api.post(`${API_BASE}/WorkoutExercise`, {
         workoutId,
         exerciseId: exercise.exerciseId,
         sets: s,
@@ -111,12 +111,12 @@ export default function Exercise() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const exercisesRes = await axios.get(`${API_BASE}/Exercise`);
+        const exercisesRes = await api.get(`${API_BASE}/Exercise`);
         setExercises(exercisesRes.data);
 
         // Nëse ka një workout të zgjedhur, ngarko exercises që janë tashmë në workout
         if (workoutId) {
-          const workoutExercisesRes = await axios.get(
+          const workoutExercisesRes = await api.get(
             `${API_BASE}/WorkoutExercise/${workoutId}/exercises`
           );
           setWorkoutExercises(workoutExercisesRes.data);

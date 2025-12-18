@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import styles from "../../FoodMeal/Pages/mealstyle.module.css";
 import { useNavigate } from "react-router-dom";
 import pexelsImage from "../../FoodMeal/assets/img/pexels-estudiopolaroid-3112004.jpg";
@@ -15,7 +15,7 @@ function WorkoutList() {
   const [showFoodValues, setShowFoodValues] = useState(false);
   const [showAddWorkoutModal, setShowAddWorkoutModal] = useState(false);
   const [newWorkoutName, setNewWorkoutName] = useState("");
-  const CLIENT_ID = 1; // statik për momentin
+  const CLIENT_ID = localStorage.getItem("clientId");; // statik për momentin
   const [workoutImages, setWorkoutImages] = useState({});
   const [workoutCardTotals, setWorkoutCardTotals] = useState({}); // totals për çdo workout
   const [editingExerciseId, setEditingExerciseId] = useState(null);
@@ -60,7 +60,7 @@ function WorkoutList() {
     }
 
     try {
-      const res = await axios.post(`${API_BASE}/Workout`, {
+      const res = await api.post(`${API_BASE}/Workout`, {
         clientId: CLIENT_ID,
         title: newWorkoutName,
       });
@@ -87,7 +87,7 @@ function WorkoutList() {
       onConfirm: async () => {
         try {
           // Përdor `workoutToDelete.workoutId` për të fshirë
-          await axios.delete(`${API_BASE}/Workout/${workout.workoutId}`);
+          await api.delete(`${API_BASE}/Workout/${workout.workoutId}`);
 
           // Përdor `workoutId` për të filtruar dhe për të përditësuar listën
           setWorkouts((prev) =>
@@ -127,7 +127,7 @@ function WorkoutList() {
     // const fats = (mf.fats / mf.quantityGrams) * grams;
 
     try {
-      await axios.put(`${API_BASE}/WorkoutExercise`, {
+      await api.put(`${API_BASE}/WorkoutExercise`, {
         workoutId: we.workoutId,
         exerciseId: we.exerciseId,
         sets: parseInt(sets, 10),
@@ -157,7 +157,7 @@ function WorkoutList() {
       confirmText: "Remove",
       confirmClass: "btn-danger",
       onConfirm: async () => {
-        await axios.delete(
+        await api.delete(
           `${API_BASE}/WorkoutExercise/${we.workoutId}/exercises/${we.exerciseId}`
         );
         const updated = workoutExercises.filter(
@@ -191,8 +191,8 @@ function WorkoutList() {
   }, [workoutImages]);
 
   useEffect(() => {
-    axios
-      .get(`${API_BASE}/Workout`)
+    api
+      .get(`${API_BASE}/Workout/client/${CLIENT_ID}`)
       .then((res) => {
         console.log("WORKOUTS FROM API:", res.data);
         setWorkouts(res.data);
@@ -213,7 +213,7 @@ function WorkoutList() {
       await Promise.all(
         workouts.map(async (workout) => {
           try {
-            const res = await axios.get(
+            const res = await api.get(
               `${API_BASE}/WorkoutExercise/${workout.workoutId}/exercises`
             );
 
@@ -253,7 +253,7 @@ function WorkoutList() {
     setSelectedWorkout(workout);
 
     try {
-      const res = await axios.get(
+      const res = await api.get(
         `${API_BASE}/WorkoutExercise/${workout.workoutId}/exercises`
       );
 

@@ -7,6 +7,7 @@ namespace Fitness.Domain.Interfaces
     public interface IProgressRepository
     {
         Task<IEnumerable<Progress>> GetAllAsync();
+        Task<IEnumerable<Progress>> GetByClientIdAsync(int clientId);
         Task<Progress> GetByIdAsync(int id);
         Task AddAsync(Progress progress);
         Task UpdateAsync(Progress progress);

@@ -4,6 +4,8 @@ import AdminLayout from "./Admin/Components/AdminLayout";
 import UserLayout from "./Admin/Components/UserLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Logout from "./pages/Logout";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./Admin/Pages/Dashboard";
 import AdminProfile from "./Admin/Pages/AdminProfile";
 import AddFood from "./Admin/Pages/AddFood";
@@ -32,9 +34,17 @@ function App() {
       {/* Auth routes */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/logout" element={<Logout />} />
 
       {/* Admin routes */}
-      <Route path="/admin" element={<AdminLayout />}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="Admin">
+            <AdminLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="profile" element={<AdminProfile />} />
         <Route path="foods" element={<Foods />} />
@@ -51,8 +61,22 @@ function App() {
       </Route>
 
       {/* User routes */}
-      <Route path="/food" element={<Food />} />
-      <Route path="/user" element={<UserLayout />}>
+      <Route
+        path="/food"
+        element={
+          <ProtectedRoute requiredRole="Client">
+            <Food />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user"
+        element={
+          <ProtectedRoute requiredRole="Client">
+            <UserLayout />
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<ClientProfile />} />

@@ -44,6 +44,8 @@ export default function Register() {
           birthday: form.birthday,
           gender: form.gender,
           roles: data.roles || [],
+          adminId: data.adminId || null,
+          clientId: data.clientId || null,
         },
       });
 

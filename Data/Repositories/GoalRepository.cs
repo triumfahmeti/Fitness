@@ -20,6 +20,13 @@ namespace Fitness.Data.Repositories
             return await _context.Goals.ToListAsync();
         }
 
+        public async Task<IEnumerable<Goal>> GetByClientIdAsync(int clientId)
+        {
+            return await _context.Goals
+                .Where(g => g.ClientId == clientId)
+                .ToListAsync();
+        }
+
         public async Task<Goal> GetByIdAsync(int id)
         {
             return await _context.Goals.FindAsync(id);

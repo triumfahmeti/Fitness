@@ -58,15 +58,22 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     if (!roleResult.Succeeded)
         return BadRequest(new { errors = roleResult.Errors.Select(e => e.Description) });
 
+    int? adminId = null;
+    int? clientId = null;
+
     if (string.Equals(request.Role, "Admin", StringComparison.OrdinalIgnoreCase))
     {
-        _db.Admins.Add(new Admin { UserId = user.Id });
+        var admin = new Admin { UserId = user.Id };
+        _db.Admins.Add(admin);
         await _db.SaveChangesAsync();
+        adminId = admin.AdminId;
     }
     else if (string.Equals(request.Role, "Client", StringComparison.OrdinalIgnoreCase))
     {
-        _db.Clients.Add(new Client { UserId = user.Id });
+        var client = new Client { UserId = user.Id };
+        _db.Clients.Add(client);
         await _db.SaveChangesAsync();
+        clientId = client.ClientId;
     }
 
     var roles = await _userManager.GetRolesAsync(user);
@@ -85,7 +92,9 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         UserId = user.Id,
         Email = user.Email!,
         UserName = user.UserName!,
-        Roles = roles
+        Roles = roles,
+        AdminId = adminId,
+        ClientId = clientId
     });
 }
 
@@ -104,6 +113,20 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         var refreshToken = _jwtService.GenerateRefreshToken();
         await _jwtService.SaveRefreshTokenAsync(user.Id, refreshToken);
 
+        int? adminId = null;
+        int? clientId = null;
+
+        if (roles.Contains("Admin"))
+        {
+            var admin = _db.Admins.FirstOrDefault(a => a.UserId == user.Id);
+            adminId = admin?.AdminId;
+        }
+        else if (roles.Contains("Client"))
+        {
+            var client = _db.Clients.FirstOrDefault(c => c.UserId == user.Id);
+            clientId = client?.ClientId;
+        }
+
         var jwtSettings = _configuration.GetSection("JwtSettings");
         var expirationMinutes = int.Parse(jwtSettings["AccessTokenExpirationMinutes"]!);
 
@@ -115,7 +138,9 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
             UserId = user.Id,
             Email = user.Email!,
             UserName = user.UserName!,
-            Roles = roles
+            Roles = roles,
+            AdminId = adminId,
+            ClientId = clientId
         });
     }
 

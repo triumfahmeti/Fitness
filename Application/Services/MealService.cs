@@ -35,6 +35,21 @@ namespace Fitness.Application.Services
             });
         }
 
+        public async Task<IEnumerable<MealResponseDto>> GetByClientIdAsync(int clientId)
+        {
+            var meals = await _repo.GetByClientIdAsync(clientId);
+
+            return meals.Select(m => new MealResponseDto
+            {
+                MealId = m.MealId,
+                MealName = m.MealName,
+                TotalCalories = m.TotalCalories,
+                TotalProteins = m.TotalProteins,
+                TotalCarbs = m.TotalCarbs,
+                TotalFats = m.TotalFats
+            });
+        }
+
         public async Task<Meal?> GetByIdAsync(int id)
         {
             return await _repo.GetByIdAsync(id);

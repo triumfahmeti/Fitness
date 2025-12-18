@@ -1,9 +1,11 @@
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.MealFoodDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
+        [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class MealFoodController : ControllerBase

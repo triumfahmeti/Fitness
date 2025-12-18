@@ -1,9 +1,11 @@
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.MealDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
+        [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class MealController : ControllerBase
@@ -15,13 +17,11 @@ namespace Fitness.Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetByClientId(int clientId)
         {
-            return Ok(await _service.GetAllAsync());
+            return Ok(await _service.GetByClientIdAsync(clientId));
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

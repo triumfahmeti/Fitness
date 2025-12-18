@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import styles from "./mealstyle.module.css";
 import { useNavigate } from "react-router-dom";
 
@@ -14,7 +14,7 @@ function Meal() {
   const [showFoodValues, setShowFoodValues] = useState(false);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
   const [newMealName, setNewMealName] = useState("");
-  const CLIENT_ID = 1; // statik për momentin
+  const CLIENT_ID = localStorage.getItem("clientId");; // statik për momentin
   const [mealImages, setMealImages] = useState({});
   const [editingFoodId, setEditingFoodId] = useState(null);
   const [editGrams, setEditGrams] = useState({});
@@ -59,7 +59,7 @@ function Meal() {
     }
 
     try {
-      const res = await axios.post(`${API_BASE}/Meal`, {
+      const res = await api.post(`${API_BASE}/Meal`, {
         clientId: CLIENT_ID,
         mealName: newMealName,
         totalCalories: 0,
@@ -91,7 +91,7 @@ function Meal() {
       onConfirm: async () => {
         try {
           // Përdor `mealToDelete.mealId` për të fshirë
-          await axios.delete(`${API_BASE}/Meal/${meal.mealId}`);
+          await api.delete(`${API_BASE}/Meal/${meal.mealId}`);
 
           // Përdor `mealId` për të filtruar dhe për të përditësuar listën
           setMeals((prev) => prev.filter((m) => m.mealId !== meal.mealId));
@@ -128,7 +128,7 @@ function Meal() {
     const fats = (mf.fats / mf.quantityGrams) * grams;
 
     try {
-      await axios.put(`${API_BASE}/MealFood/${mf.mealId}/${mf.foodId}`, {
+      await api.put(`${API_BASE}/MealFood/${mf.mealId}/${mf.foodId}`, {
         quantityGrams: grams,
       });
 
@@ -156,7 +156,7 @@ function Meal() {
       confirmText: "Remove",
       confirmClass: "btn-danger",
       onConfirm: async () => {
-        await axios.delete(`${API_BASE}/MealFood/${mf.mealId}/${mf.foodId}`);
+        await api.delete(`${API_BASE}/MealFood/${mf.mealId}/${mf.foodId}`);
 
         const updated = mealFoods.filter((f) => f.foodId !== mf.foodId);
         setMealFoods(updated);
@@ -188,8 +188,8 @@ function Meal() {
   }, [mealImages]);
 
   useEffect(() => {
-    axios
-      .get(`${API_BASE}/Meal`)
+    api
+      .get(`${API_BASE}/Meal/client/${CLIENT_ID}`)
       .then((res) => setMeals(res.data))
       .catch((err) => console.error("Failed to load meals", err));
   }, []);
@@ -207,7 +207,7 @@ function Meal() {
       await Promise.all(
         meals.map(async (meal) => {
           try {
-            const res = await axios.get(
+            const res = await api.get(
               `${API_BASE}/MealFood/byMeal/${meal.mealId}`
             );
 
@@ -244,7 +244,7 @@ function Meal() {
     setSelectedMeal(meal);
 
     try {
-      const res = await axios.get(`${API_BASE}/MealFood/byMeal/${meal.mealId}`);
+      const res = await api.get(`${API_BASE}/MealFood/byMeal/${meal.mealId}`);
 
       setMealFoods(res.data);
 

@@ -9,6 +9,7 @@ namespace Fitness.Domain.Interfaces
     public interface IWorkoutRepository
     {
         Task<IEnumerable<Workout>> GetAllAsync();
+        Task<IEnumerable<Workout>> GetByClientIdAsync(int clientId);
         Task<Workout> GetByIdAsync(int id);
         Task AddAsync(Workout workout);
         Task UpdateAsync(Workout workout);

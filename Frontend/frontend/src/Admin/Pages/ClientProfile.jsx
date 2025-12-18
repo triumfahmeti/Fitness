@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 
 const API_BASE = "https://localhost:7103/api";
 
@@ -32,7 +32,7 @@ export default function ClientProfile() {
       return;
     }
     setLoading(true);
-    axios
+    api
       .get(`${API_BASE}/Client/${clientId}`)
       .then((res) => {
         const c = res.data;
@@ -88,7 +88,7 @@ export default function ClientProfile() {
     setError(null);
     try {
       // Update client record with available fields to avoid User endpoint validation (Password required)
-      await axios.put(`${API_BASE}/Client/${form.clientId}`, {
+      await api.put(`/api/Client/${form.clientId}`, {
         userId: form.userId,
         email: form.email,
         name: form.name,

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 export default function ProgressAndAnalytics() {
-  const clientId = 1;
+  const clientId = localStorage.getItem("clientId");;
 
   const [loading, setLoading] = useState(true);
   const [progressData, setProgressData] = useState([]);
@@ -15,7 +15,7 @@ export default function ProgressAndAnalytics() {
   useEffect(() => {
     const loadProgressData = async () => {
       try {
-        const response = await axios.get(`https://localhost:7103/api/Progress?clientId=${clientId}`);
+        const response = await api.get(`/api/Progress/client/${clientId}`);
         setProgressData(response.data);
       } finally {
         setLoading(false);
@@ -31,7 +31,7 @@ export default function ProgressAndAnalytics() {
     const updatedProgress = [...progressData, { weight: newWeight, date: new Date() }];
     setProgressData(updatedProgress); // Add new weight entry to progress data
 
-    await axios.post("https://localhost:7103/api/Progress", {
+    await api.post("/api/Progress", {
       clientId,
       weight: newWeight,
       date: new Date(),

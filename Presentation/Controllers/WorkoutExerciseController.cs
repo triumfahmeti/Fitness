@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.WorkoutExerciseDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
+        [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class WorkoutExerciseController : ControllerBase

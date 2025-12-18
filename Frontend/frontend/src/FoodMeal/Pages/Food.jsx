@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Routes, Route } from "react-router-dom";
 import styles from "./mealstyle.module.css";
 import { useParams } from "react-router-dom";
@@ -76,7 +76,7 @@ function Food() {
     }
 
     try {
-      await axios.post(`${API_BASE}/MealFood`, {
+      await api.post(`${API_BASE}/MealFood`, {
         mealId: Number(mealId),
         foodId: food.foodId,
         quantityGrams: g,
@@ -111,7 +111,7 @@ function Food() {
   useEffect(() => {
     const loadFoods = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/Food`);
+        const res = await api.get(`${API_BASE}/Food`);
         setFoods(res.data);
       } catch (err) {
         setError("Failed to load foods");

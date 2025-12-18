@@ -14,6 +14,21 @@ export function AuthProvider({ children }) {
     localStorage.setItem("accessToken", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
     localStorage.setItem("authUser", JSON.stringify(profile));
+    
+    // Store roles for authorization
+    if (profile.roles && profile.roles.length > 0) {
+      localStorage.setItem("userRole", profile.roles[0]); // Store primary role
+      localStorage.setItem("userRoles", JSON.stringify(profile.roles));
+    }
+    
+    // Store role-specific ID
+    if (profile.adminId !== null && profile.adminId !== undefined) {
+      localStorage.setItem("adminId", String(profile.adminId));
+    }
+    if (profile.clientId !== null && profile.clientId !== undefined) {
+      localStorage.setItem("clientId", String(profile.clientId));
+    }
+    
     setUser(profile);
   };
 
@@ -21,6 +36,10 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("authUser");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("userRoles");
+    localStorage.removeItem("adminId");
+    localStorage.removeItem("clientId");
     setUser(null);
     navigate("/login", { replace: true });
   };

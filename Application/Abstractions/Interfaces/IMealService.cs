@@ -9,6 +9,7 @@ namespace Fitness.Application.Abstractions.Interfaces
     public interface IMealService
     {
         Task<IEnumerable<MealResponseDto>> GetAllAsync();
+        Task<IEnumerable<MealResponseDto>> GetByClientIdAsync(int clientId);
 
         Task<Meal?> GetByIdAsync(int id);
         Task<Meal> CreateAsync(CreateEditMealDto dto);

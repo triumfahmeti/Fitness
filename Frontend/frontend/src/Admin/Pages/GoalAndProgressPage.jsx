@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from "react";
 
-import axios from "axios";
+import api from "../../api/axios";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
 export default function GoalAndProgressPage() {
-  const clientId = 1;
+  const clientId = localStorage.getItem("clientId");
 
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(""); // For the message
@@ -34,9 +34,8 @@ export default function GoalAndProgressPage() {
     const loadData = async () => {
       try {
         // PROGRESS (latest)
-        const pRes = await axios.get("https://localhost:7103/api/Progress");
+        const pRes = await api.get(`/api/Progress/client/${clientId}`);
         const list = pRes.data
-          .filter(p => p.clientId === clientId)
           .sort((a, b) => new Date(b.date) - new Date(a.date));
         if (list.length > 0) {
           setProgressData(list[0]);
@@ -44,8 +43,8 @@ export default function GoalAndProgressPage() {
         }
 
         // GOAL
-        const gRes = await axios.get("https://localhost:7103/api/Goal");
-        const g = gRes.data.find(x => x.clientId === clientId);
+        const gRes = await api.get(`/api/Goal/client/${clientId}`);
+        const g = gRes.data.find(x => x.clientId == clientId);
         if (g) setGoal(g);
       } finally {
         setLoading(false);
@@ -101,7 +100,7 @@ export default function GoalAndProgressPage() {
   const saveProgress = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://localhost:7103/api/Progress", {
+      await api.post("/api/Progress", {
         clientId,
         weight: progressData.weight,
         waist: progressData.waist,
@@ -127,7 +126,7 @@ export default function GoalAndProgressPage() {
     };
 
     try {
-      await axios.post("https://localhost:7103/api/Goal", updatedGoal);
+      await api.post("/api/Goal", updatedGoal);
       setMessage("Goal saved successfully.");
       setMessageType("success"); // Mesazh suksesi
     } catch (error) {
@@ -140,7 +139,7 @@ export default function GoalAndProgressPage() {
   const saveDailyWeight = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://localhost:7103/api/Progress", {
+      await api.post("/api/Progress", {
         clientId,
         weight: currentWeight,
       });

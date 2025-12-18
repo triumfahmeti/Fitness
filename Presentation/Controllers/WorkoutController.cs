@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.WorkoutDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
+        [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class WorkoutController : ControllerBase
@@ -19,10 +21,10 @@ namespace Fitness.Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetByClientId(int clientId)
         {
-            var workouts = await _service.GetAllAsync();
+            var workouts = await _service.GetByClientIdAsync(clientId);
             return Ok(workouts);
         }
 

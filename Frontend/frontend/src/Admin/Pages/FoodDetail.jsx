@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api/axios";
 import React from "react";
 
 const API_BASE = "https://localhost:7103/api";
@@ -16,7 +16,7 @@ export default function FoodDetail() {
     const load = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE}/Food/${id}`);
+        const res = await api.get(`${API_BASE}/Food/${id}`);
         setFood(res.data);
       } catch (err) {
         setError(err?.response?.data || err.message);

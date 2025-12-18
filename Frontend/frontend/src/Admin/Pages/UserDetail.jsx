@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 
 const API_BASE = "https://localhost:7103/api";
@@ -23,7 +23,7 @@ export default function UserDetail() {
     const load = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE}/User/${id}`);
+        const res = await api.get(`${API_BASE}/User/${id}`);
         const u = res.data;
         setUser(u);
         setForm({
@@ -59,7 +59,7 @@ export default function UserDetail() {
         gender: form.gender,
         birthday: form.birthday,
       };
-      await axios.put(`${API_BASE}/User/${id}`, payload);
+      await api.put(`${API_BASE}/User/${id}`, payload);
       setSuccess("User updated succesfully.");
     } catch (err) {
       setError(err.response?.data || err.message);
@@ -69,7 +69,7 @@ export default function UserDetail() {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await axios.delete(`${API_BASE}/User/${id}`);
+      await api.delete(`${API_BASE}/User/${id}`);
       navigate(-1);
     } catch (err) {
       setError(err.response?.data || err.message);

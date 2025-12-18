@@ -21,6 +21,11 @@ namespace Fitness.Application.Services
             return _repo.GetAllAsync();
         }
 
+        public Task<IEnumerable<Workout>> GetByClientIdAsync(int clientId)
+        {
+            return _repo.GetByClientIdAsync(clientId);
+        }
+
         public Task<Workout> GetByIdAsync(int id)
         {
             return _repo.GetByIdAsync(id);

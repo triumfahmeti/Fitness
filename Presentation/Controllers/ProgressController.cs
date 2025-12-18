@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.ProgressDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
+        [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class ProgressController : ControllerBase
@@ -16,10 +18,10 @@ namespace Fitness.Presentation.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("client/{clientId}")]
+        public async Task<IActionResult> GetByClientId(int clientId)
         {
-            var progress = await _service.GetAllAsync();
+            var progress = await _service.GetByClientIdAsync(clientId);
             return Ok(progress);
         }
 

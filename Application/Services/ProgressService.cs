@@ -21,6 +21,11 @@ namespace Fitness.Application.Services
             return await _repo.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Progress>> GetByClientIdAsync(int clientId)
+        {
+            return await _repo.GetByClientIdAsync(clientId);
+        }
+
         public async Task<Progress> GetByIdAsync(int id)
         {
             return await _repo.GetByIdAsync(id);

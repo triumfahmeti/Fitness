@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../api/axios";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../Components/Pagination";
 
@@ -18,7 +18,7 @@ export default function Users() {
   const loadUsers = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`${API_BASE}/User`);
+      const res = await api.get(`${API_BASE}/User`);
       setUsers(res.data || []);
     } catch (err) {
       setAlertType("danger");
@@ -35,7 +35,7 @@ export default function Users() {
   const deleteUser = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await axios.delete(`${API_BASE}/User/${id}`);
+      await api.delete(`${API_BASE}/User/${id}`);
       setUsers((prev) => prev.filter((u) => u.id !== id));
       setAlertType("success");
       setAlertMessage("User deleted successfully.");

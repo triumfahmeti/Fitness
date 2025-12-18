@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.ClientDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
+        
     [ApiController]
     [Route("api/[controller]")]
     public class ClientController : ControllerBase
@@ -20,6 +22,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var clients = await _clientService.GetAllAsync();
@@ -27,6 +30,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin, Client")]
         public async Task<IActionResult> GetById(int id)
         {
             var client = await _clientService.GetByIdAsync(id);
@@ -37,6 +41,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin , Client")]
         public async Task<IActionResult> Create([FromBody] CreateEditClientDto dto)
         {
             // Enforce required fields only for create
@@ -55,6 +60,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, Client")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateEditClientDto dto)
         {
             // Do not require Email/Password on update; allow partial updates
@@ -63,6 +69,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _clientService.DeleteAsync(id);

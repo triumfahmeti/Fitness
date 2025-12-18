@@ -1,8 +1,20 @@
 import React, { useEffect } from "react";
-import { Link, useNavigate, Outlet } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
+import { Link, useNavigate, Outlet } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import "../../style.css";
 
 export default function AdminLayout() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   useEffect(() => {
     const id = "admin-style";
     const href = new URL("../../style.css", import.meta.url).href;
@@ -13,13 +25,7 @@ export default function AdminLayout() {
       el.href = href;
       document.head.appendChild(el);
     }
-    // Keep the stylesheet loaded once appended; no cleanup on unmount
   }, []);
-  // const navigate = useNavigate();
-
-  // const logout = () => {
-  //   navigate("/login");
-  // };
 
   return (
     <div className="sb-nav-fixed">
@@ -28,91 +34,18 @@ export default function AdminLayout() {
         <a className="navbar-brand ps-3" href="#">
           FitLife
         </a>
-        <ul className="navbar-nav order-1 order-lg-0 me-4 me-lg-0">
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle"
-              id="navbarDropdown"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <i className="fas fa-bars"></i>
-            </a>
-            <ul
-              className="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarDropdown"
-            >
-              <li>
-                <Link className="dropdown-item" to="/admin/profile">
-                  My Profile
-                </Link>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/admin/dashboard">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link className="dropdown-item" to="/admin/foods">
-                  Manage Foods
-                </Link>
-              </li>
-
-              <li>
-                <Link className="dropdown-item" to="/admin/exercise">
-                  Manage Exercises
-                </Link>
-              </li>
-
-              <li>
-                <Link className="dropdown-item" to="/admin/users">
-                  Manage Users
-                </Link>
-              </li>
-            </ul>
-          </li>
-        </ul>
         <ul className="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-          <li className="nav-item dropdown">
-            <a
-              className="nav-link dropdown-toggle"
-              id="navbarUser"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+          <li className="nav-item">
+            <button 
+              className="btn btn-outline-light"
+              onClick={handleLogout}
             >
-              <i className="fas fa-user fa-fw"></i>
-            </a>
-            <ul
-              className="dropdown-menu dropdown-menu-end"
-              aria-labelledby="navbarUser"
-            >
-              <li>
-                <a className="dropdown-item" href="#">
-                  Settings
-                </a>
-              </li>
-
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <button
-                className="dropdown-item"
-                onClick={() => logout(navigate)}
-              >
-                Logout
-              </button>
-            </ul>
+              <i className="fas fa-sign-out-alt me-1"></i>
+              Logout
+            </button>
           </li>
         </ul>
       </nav>
-
       <div id="layoutSidenav">
         {/* Sidebar */}
         <div id="layoutSidenav_nav">
@@ -129,7 +62,7 @@ export default function AdminLayout() {
                   </div>
                   My Profile
                 </Link>
-                <Link to="/admin/dashboard" className="nav-link">
+                <Link to="/admin" className="nav-link">
                   <div className="sb-nav-link-icon">
                     <i className="fa-solid fa-bars"></i>
                   </div>
@@ -158,7 +91,7 @@ export default function AdminLayout() {
             </div>
             <div className="sb-sidenav-footer">
               <div className="small">Logged in as:</div>
-              Start Bootstrap
+              Admin
             </div>
           </nav>
         </div>

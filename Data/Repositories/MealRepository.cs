@@ -23,6 +23,13 @@ namespace Fitness.Data.Repositories
             return await _context.Meals.ToListAsync();
         }
 
+        public async Task<IEnumerable<Meal>> GetByClientIdAsync(int clientId)
+        {
+            return await _context.Meals
+                .Where(m => m.ClientId == clientId)
+                .ToListAsync();
+        }
+
         public async Task<Meal?> GetByIdAsync(int id)
         {
             return await _context.Meals.FindAsync(id);

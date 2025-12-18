@@ -38,11 +38,13 @@ export default function Login() {
           name: data.name,
           surname: data.surname,
           roles: data.roles || [],
+          adminId: data.adminId || null,
+          clientId: data.clientId || null,
         },
       });
       const roles = data.roles || [];
       if (roles.includes("Admin")) navigate("/admin", { replace: true });
-      else navigate("/user/dashboard", { replace: true });
+      else navigate("/user/profile", { replace: true });
     } catch (err) {
       setError(err?.response?.data?.message || "Login failed");
     } finally {
