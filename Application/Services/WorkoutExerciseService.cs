@@ -70,10 +70,6 @@ namespace Fitness.Application.Services
             await _repo.DeleteAsync(workoutId, exerciseId);
         }
 
-        // public async Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId)
-        // {
-        //     return await _repo.GetByMealIdAsync(mealId);
-        // }
 
 
 

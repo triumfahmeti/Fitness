@@ -79,14 +79,14 @@ namespace Fitness.Application.Services
             if (meal == null)
                 throw new Exception("Meal not found");
 
-            // 1️⃣ Fshij MealFoods
+
             var mealFoods = await _mealFoodRepo.GetByMealIdRawAsync(id);
             foreach (var mf in mealFoods)
             {
                 await _mealFoodRepo.DeleteAsync(mf);
             }
 
-            // 2️⃣ Fshij Meal
+
             await _repo.DeleteAsync(meal);
         }
 

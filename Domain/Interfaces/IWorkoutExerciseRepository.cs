@@ -14,8 +14,6 @@ namespace Fitness.Domain.Interfaces
         Task UpdateAsync(WorkoutExercise entity);
         Task DeleteAsync(int workoutId, int exerciseId);
 
-        // Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId);
-        // Task<IEnumerable<MealFood>> GetByMealIdRawAsync(int mealId);
-        // Task<Meal?> GetMealByIdAsync(int mealId);
+
     }
 }
