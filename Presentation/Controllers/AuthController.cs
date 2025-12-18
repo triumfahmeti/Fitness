@@ -5,6 +5,7 @@ using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.AuthDtos;
 using System.Security.Claims;
 using Fitness.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fitness.Presentation.Controllers;
 
@@ -32,6 +33,7 @@ public class AuthController : ControllerBase
         _db = db;
     }
 
+    [AllowAnonymous]
     [HttpPost("register")]
 public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
 {
@@ -42,7 +44,8 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
     var user = new ApplicationUser
     {
         Email = request.Email,
-        UserName = request.UserName,
+        // Auto-assign username to email so frontend doesn't need it
+        UserName = request.Email,
         Name = request.Name,
         Surname = request.Surname,
         Birthday = request.Birthday,
@@ -99,6 +102,7 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
 }
 
 
+    [AllowAnonymous]
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
     {
@@ -144,6 +148,7 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         });
     }
 
+    [AllowAnonymous]
     [HttpPost("refresh-token")]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequestDto request)
     {
@@ -182,6 +187,7 @@ public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
         });
     }
 
+    [Authorize]
     [HttpPost("revoke-token")]
     public async Task<IActionResult> RevokeToken([FromBody] string refreshToken)
     {
