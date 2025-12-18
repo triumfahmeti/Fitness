@@ -41,6 +41,17 @@ namespace Fitness.Data.Repositories
 
         public async Task DeleteAsync(Workout workout)
         {
+            // Fshi së pari të gjitha WorkoutExercises që janë të lidhura me këtë workout
+            var workoutExercises = await _context.WorkoutExercises
+                .Where(we => we.WorkoutId == workout.WorkoutId)
+                .ToListAsync();
+
+            if (workoutExercises.Any())
+            {
+                _context.WorkoutExercises.RemoveRange(workoutExercises);
+            }
+
+            // Pastaj fshi workout-in
             _context.Workouts.Remove(workout);
             await _context.SaveChangesAsync();
         }

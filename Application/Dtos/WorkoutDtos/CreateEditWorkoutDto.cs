@@ -7,6 +7,7 @@ namespace Fitness.Application.Dtos.WorkoutDtos
 {
     public class CreateEditWorkoutDto
     {
+        public int ClientId { get; set; }
         public string Title { get; set; } = null!;
     }
 }

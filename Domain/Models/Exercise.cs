@@ -7,7 +7,7 @@ namespace Fitness.Domain.Models
     {
         public int ExerciseId { get; set; }
 
-        public int ClientId { get; set; }
+
 
         public string Name { get; set; } = null!;
 

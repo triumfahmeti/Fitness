@@ -13,5 +13,7 @@ namespace Fitness.Domain.Interfaces
         Task AddAsync(WorkoutExercise entity);
         Task UpdateAsync(WorkoutExercise entity);
         Task DeleteAsync(int workoutId, int exerciseId);
+
+
     }
 }

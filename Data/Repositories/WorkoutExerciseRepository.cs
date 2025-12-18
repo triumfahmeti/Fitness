@@ -20,6 +20,7 @@ namespace Fitness.Data.Repositories
         {
             return await _context.WorkoutExercises
                 .Where(we => we.WorkoutId == workoutId)
+                .Include(we => we.Exercise)
                 .ToListAsync();
         }
 
@@ -51,9 +52,40 @@ namespace Fitness.Data.Repositories
             }
         }
 
+        // public async Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId)
+        // {
+        //     return await _context.MealFoods
+        //         .Where(mf => mf.MealId == mealId)
+        //         .Include(mf => mf.Food)
+        //         .Select(mf => new MealFoodResponseDto
+        //         {
+        //             MealId = mf.MealId,
+        //             FoodId = mf.FoodId,
+        //             FoodName = mf.Food.Name,
+        //             QuantityGrams = mf.QuantityGrams ?? 0,
+        //             FoodImageUrl = mf.Food.ImageUrl,
+        //             Calories = mf.Calories ?? 0,
+        //             Proteins = mf.Proteins ?? 0,
+        //             Carbs = mf.Carbs ?? 0,
+        //             Fats = mf.Fats ?? 0
+        //         })
+        //         .ToListAsync();
+        // }
+
+
+        // public async Task<IEnumerable<MealFood>> GetByMealIdRawAsync(int mealId)
+        // {
+        //     return await _context.MealFoods
+        //         .Where(mf => mf.MealId == mealId)
+        //         .ToListAsync();
+        // }
+
+        // public async Task<Meal?> GetMealByIdAsync(int mealId)
+        // {
+        //     return await _context.Meals.FindAsync(mealId);
+        // }
+
     }
 
-    public interface IWorkoutExercise
-    {
-    }
+
 }

@@ -15,8 +15,13 @@ import ExerciseDetail from "./Admin/Pages/ExerciseDetail";
 import Users from "./Admin/Pages/Users";
 import UserDetail from "./Admin/Pages/UserDetail";
 import ClientProfile from "./Admin/Pages/ClientProfile";
+import GoalAndProgressPage from "./Admin/Pages/GoalAndProgressPage";
+import ProgressAndAnalytics from "./Admin/Pages/ProgressAndAnalytics";
+import WorkoutList from "./Workout/Pages/WorkoutList"
 import Meal from "./FoodMeal/Pages/Meal";
 import Food from "./FoodMeal/Pages/Food";
+import Exercise from "./Exercise/Pages/Exercise";
+import ClientExercises from "./Exercise/Pages/Exercise";
 
 function App() {
   return (
@@ -52,7 +57,18 @@ function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="profile" element={<ClientProfile />} />
         <Route path="meals" element={<Meal />} />
-        <Route path="workouts" element={<div className="container py-4">My Workouts</div>} />
+        <Route path="food/:mealId" element={<Food />} />
+        <Route
+          path="exercises/workout/:workoutId"
+          element={<ClientExercises />}
+        />
+        <Route path="exercises/detail/:id" element={<ExerciseDetail />} />
+        <Route path="workouts" element={<WorkoutList />} />
+        <Route path="goal-progress" element={<GoalAndProgressPage />} />
+        <Route
+          path="progress-and-analytics"
+          element={<ProgressAndAnalytics />}
+        />
       </Route>
     </Routes>
   );

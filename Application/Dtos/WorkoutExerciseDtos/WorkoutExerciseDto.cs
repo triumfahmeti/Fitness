@@ -15,5 +15,6 @@ namespace Fitness.Application.Dtos.WorkoutExerciseDtos
 
         public int? Reps { get; set; }
         public string ExerciseName { get; set; } = null!;
+        public string ImageUrl { get; set; } = null!;
     }
 }

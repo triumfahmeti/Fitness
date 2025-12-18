@@ -13,5 +13,6 @@ namespace Fitness.Application.Abstractions.Interfaces
         Task<WorkoutExercise> AddAsync(CreateEditWorkoutExerciseDto dto);
         Task<WorkoutExercise> UpdateAsync(CreateEditWorkoutExerciseDto dto);
         Task DeleteAsync(int workoutId, int exerciseId);
+
     }
 }

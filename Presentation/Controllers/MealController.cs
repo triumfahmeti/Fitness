@@ -16,10 +16,12 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             return Ok(await _service.GetAllAsync());
         }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

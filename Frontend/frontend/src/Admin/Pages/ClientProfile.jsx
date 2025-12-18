@@ -25,7 +25,7 @@ export default function ClientProfile() {
 
   useEffect(() => {
     // Prefer clientId from localStorage; fallback for development/demo
-    const clientId = localStorage.getItem("clientId") || "2";
+    const clientId = localStorage.getItem("clientId") || "1";
     if (!clientId) {
       setError("Missing clientId");
       setLoading(false);

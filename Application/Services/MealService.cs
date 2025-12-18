@@ -12,15 +12,27 @@ namespace Fitness.Application.Services
     public class MealService : IMealService
     {
         private readonly IMealRepository _repo;
+        private readonly IMealFoodRepository _mealFoodRepo;
 
-        public MealService(IMealRepository repo)
+        public MealService(IMealRepository repo, IMealFoodRepository mealFoodRepo)
         {
             _repo = repo;
+            _mealFoodRepo = mealFoodRepo;
         }
 
-        public async Task<IEnumerable<Meal>> GetAllAsync()
+        public async Task<IEnumerable<MealResponseDto>> GetAllAsync()
         {
-            return await _repo.GetAllAsync();
+            var meals = await _repo.GetAllAsync();
+
+            return meals.Select(m => new MealResponseDto
+            {
+                MealId = m.MealId,
+                MealName = m.MealName,
+                TotalCalories = m.TotalCalories,
+                TotalProteins = m.TotalProteins,
+                TotalCarbs = m.TotalCarbs,
+                TotalFats = m.TotalFats
+            });
         }
 
         public async Task<Meal?> GetByIdAsync(int id)
@@ -67,7 +79,19 @@ namespace Fitness.Application.Services
             if (meal == null)
                 throw new Exception("Meal not found");
 
+
+            var mealFoods = await _mealFoodRepo.GetByMealIdRawAsync(id);
+            foreach (var mf in mealFoods)
+            {
+                await _mealFoodRepo.DeleteAsync(mf);
+            }
+
+
             await _repo.DeleteAsync(meal);
         }
+
     }
 }
+
+
+

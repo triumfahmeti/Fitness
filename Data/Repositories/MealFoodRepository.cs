@@ -52,23 +52,24 @@ namespace Fitness.Data.Repositories
 
         public async Task<IEnumerable<MealFoodResponseDto>> GetByMealIdAsync(int mealId)
         {
-            var mealFoods = await _context.MealFoods
-                .Include(mf => mf.Food)
+            return await _context.MealFoods
                 .Where(mf => mf.MealId == mealId)
+                .Include(mf => mf.Food)
+                .Select(mf => new MealFoodResponseDto
+                {
+                    MealId = mf.MealId,
+                    FoodId = mf.FoodId,
+                    FoodName = mf.Food.Name,
+                    QuantityGrams = mf.QuantityGrams ?? 0,
+                    FoodImageUrl = mf.Food.ImageUrl,
+                    Calories = mf.Calories ?? 0,
+                    Proteins = mf.Proteins ?? 0,
+                    Carbs = mf.Carbs ?? 0,
+                    Fats = mf.Fats ?? 0
+                })
                 .ToListAsync();
-
-            return mealFoods.Select(mf => new MealFoodResponseDto
-            {
-                MealId = mf.MealId,
-                FoodId = mf.FoodId,
-                FoodName = mf.Food.Name,
-                QuantityGrams = mf.QuantityGrams ?? 0,
-                Calories = mf.Calories ?? 0,
-                Proteins = mf.Proteins ?? 0,
-                Carbs = mf.Carbs ?? 0,
-                Fats = mf.Fats ?? 0
-            }).ToList();
         }
+
 
         public async Task<IEnumerable<MealFood>> GetByMealIdRawAsync(int mealId)
         {
@@ -89,20 +90,20 @@ namespace Fitness.Data.Repositories
 
         public async Task RecalculateMealTotalsAsync(int mealId)
         {
-            var mealFoods = await _context.MealFoods
-                .Where(mf => mf.MealId == mealId)
-                .ToListAsync();
+            var meal = await _context.Meals
+                .Include(m => m.MealFoods)
+                .FirstOrDefaultAsync(m => m.MealId == mealId);
 
-            var meal = await _context.Meals.FindAsync(mealId);
             if (meal == null) return;
 
-            meal.TotalCalories = mealFoods.Sum(x => x.Calories ?? 0);
-            meal.TotalProteins = mealFoods.Sum(x => x.Proteins ?? 0);
-            meal.TotalCarbs = mealFoods.Sum(x => x.Carbs ?? 0);
-            meal.TotalFats = mealFoods.Sum(x => x.Fats ?? 0);
+            meal.TotalCalories = meal.MealFoods.Sum(x => x.Calories ?? 0);
+            meal.TotalProteins = meal.MealFoods.Sum(x => x.Proteins ?? 0);
+            meal.TotalCarbs = meal.MealFoods.Sum(x => x.Carbs ?? 0);
+            meal.TotalFats = meal.MealFoods.Sum(x => x.Fats ?? 0);
 
             await _context.SaveChangesAsync();
         }
+
 
 
 
