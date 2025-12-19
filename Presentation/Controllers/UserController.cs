@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
 using Fitness.Application.Dtos.UserDtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
@@ -20,6 +21,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllAsync();
@@ -27,6 +29,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetByIdAsync(id);
@@ -35,6 +38,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin, Client")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
         {
             var user = await _userService.CreateAsync(dto);
@@ -42,6 +46,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin, Client")]
         public async Task<IActionResult> UpdateUser(string id, [FromBody] UpdateUserDto dto)
         {
             var user = await _userService.UpdateAsync(id, dto);
@@ -50,6 +55,7 @@ namespace Fitness.Presentation.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var ok = await _userService.DeleteAsync(id);

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Fitness.Presentation.Controllers
 {
-        [Authorize(Roles = "Client")]
+    [Authorize(Roles = "Client")]
     [ApiController]
     [Route("api/[controller]")]
     public class WorkoutExerciseController : ControllerBase

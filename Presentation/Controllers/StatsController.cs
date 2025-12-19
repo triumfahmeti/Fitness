@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Fitness.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Fitness.Presentation.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/[controller]")]
     public class StatsController : ControllerBase

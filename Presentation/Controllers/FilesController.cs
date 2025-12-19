@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Fitness.Application.Abstractions.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,7 @@ namespace Fitness.Presentation.Controllers
 
         // POST api/Files/upload
         [HttpPost("upload")]
+        [Authorize(Roles = "Admin")]
         [RequestSizeLimit(100_000_000)] // allow larger files like videos (~100MB)
         public async Task<IActionResult> Upload([FromForm] IFormFile file, [FromQuery] string subfolder = "images")
         {

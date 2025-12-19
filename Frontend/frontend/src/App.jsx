@@ -19,7 +19,7 @@ import UserDetail from "./Admin/Pages/UserDetail";
 import ClientProfile from "./Admin/Pages/ClientProfile";
 import GoalAndProgressPage from "./Admin/Pages/GoalAndProgressPage";
 import ProgressAndAnalytics from "./Admin/Pages/ProgressAndAnalytics";
-import WorkoutList from "./Workout/Pages/WorkoutList"
+import WorkoutList from "./Workout/Pages/WorkoutList";
 import Meal from "./FoodMeal/Pages/Meal";
 import Food from "./FoodMeal/Pages/Food";
 import Exercise from "./Exercise/Pages/Exercise";
@@ -77,8 +77,8 @@ function App() {
           </ProtectedRoute>
         }
       >
-        <Route index element={<Dashboard />} />
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route index element={<ClientProfile />} />
+
         <Route path="profile" element={<ClientProfile />} />
         <Route path="meals" element={<Meal />} />
         <Route path="food/:mealId" element={<Food />} />
