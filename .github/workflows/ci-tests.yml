@@ -15,7 +15,7 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
       ASPNETCORE_ENVIRONMENT: Development
-      # ConnectionStrings__DefaultConnection: "Server=(localdb)\\MSSQLLocalDB;Database=Fitness;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+      ConnectionStrings__DefaultConnection: "Server=(localdb)\\MSSQLLocalDB;Database=Fitness;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
 
     steps:
       - name: Checkout
@@ -45,10 +45,10 @@ jobs:
       - name: Build backend
         run: dotnet build "Fitness.csproj" --configuration Release --no-restore
 
-      # - name: Ensure LocalDB is running
-      #   shell: pwsh
-      #   run: |
-      #     sqllocaldb start MSSQLLocalDB
+      - name: Ensure LocalDB is running
+        shell: pwsh
+        run: |
+          sqllocaldb start MSSQLLocalDB
 
       - name: Install dotnet-ef
         shell: pwsh
@@ -56,8 +56,8 @@ jobs:
           dotnet tool install --global dotnet-ef --version 9.0.4
           "$env:USERPROFILE\.dotnet\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      # - name: Apply database migrations
-      #   run: dotnet ef database update --project "Fitness.csproj" --no-build
+      - name: Apply database migrations
+        run: dotnet ef database update --project "Fitness.csproj" --no-build
 
       - name: Install frontend dependencies
         working-directory: Frontend/frontend
@@ -74,8 +74,8 @@ jobs:
         run: |
           Start-Process -FilePath "npm" -ArgumentList 'run dev -- --host 127.0.0.1 --port 5173' -WorkingDirectory "Frontend/frontend" -NoNewWindow
 
-      # - name: Wait for services
-      #   run: npx --yes wait-on --timeout 60000 --strictSSL false https://localhost:7103 http://localhost:5173
+      - name: Wait for services
+        run: npx --yes wait-on --timeout 60000 --strictSSL false https://localhost:7103 http://localhost:5173
 
       - name: Run tests
         run: >
