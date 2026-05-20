@@ -28,6 +28,9 @@ jobs:
       - name: Restore
         run: dotnet restore "FitnessApp.Tests/FitnessApp.Tests.csproj"
 
+      - name: Build backend
+        run: dotnet build "Fitness.csproj" --configuration Release --no-restore
+
       - name: Install frontend dependencies
         working-directory: Frontend/frontend
         run: npm ci
@@ -35,8 +38,8 @@ jobs:
       - name: Start backend
         shell: pwsh
         run: |
-          dotnet dev-certs https --trust
-          Start-Process -FilePath "dotnet" -ArgumentList 'run --project "Fitness.csproj" --urls "https://localhost:7103"' -NoNewWindow
+          $env:ASPNETCORE_URLS = "https://localhost:7103"
+          Start-Process -FilePath "dotnet" -ArgumentList 'run --project "Fitness.csproj" --configuration Release --no-build' -NoNewWindow
 
       - name: Start frontend
         shell: pwsh
