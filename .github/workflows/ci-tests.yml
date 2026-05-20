@@ -20,8 +20,31 @@ jobs:
         with:
           dotnet-version: "9.0.x"
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
       - name: Restore
         run: dotnet restore "FitnessApp.Tests/FitnessApp.Tests.csproj"
+
+      - name: Install frontend dependencies
+        working-directory: Frontend/frontend
+        run: npm ci
+
+      - name: Start backend
+        shell: pwsh
+        run: |
+          dotnet dev-certs https --trust
+          Start-Process -FilePath "dotnet" -ArgumentList 'run --project "Fitness.csproj" --urls "https://localhost:7103"' -NoNewWindow
+
+      - name: Start frontend
+        shell: pwsh
+        run: |
+          Start-Process -FilePath "npm" -ArgumentList 'run dev -- --host 127.0.0.1 --port 5173' -WorkingDirectory "Frontend/frontend" -NoNewWindow
+
+      - name: Wait for services
+        run: npx --yes wait-on --timeout 600000 --strictSSL false https://localhost:7103 http://localhost:5173
 
       - name: Run tests
         run: >
