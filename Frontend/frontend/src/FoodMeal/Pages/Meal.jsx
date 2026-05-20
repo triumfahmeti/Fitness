@@ -14,7 +14,7 @@ function Meal() {
   const [showFoodValues, setShowFoodValues] = useState(false);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
   const [newMealName, setNewMealName] = useState("");
-  const CLIENT_ID = localStorage.getItem("clientId");; // statik për momentin
+  const CLIENT_ID = localStorage.getItem("clientId"); // statik për momentin
   const [mealImages, setMealImages] = useState({});
   const [editingFoodId, setEditingFoodId] = useState(null);
   const [editGrams, setEditGrams] = useState({});
@@ -136,7 +136,7 @@ function Meal() {
       const updatedFoods = mealFoods.map((f) =>
         f.foodId === mf.foodId
           ? { ...f, quantityGrams: grams, calories, proteins, carbs, fats }
-          : f
+          : f,
       );
 
       setMealFoods(updatedFoods);
@@ -208,7 +208,7 @@ function Meal() {
         meals.map(async (meal) => {
           try {
             const res = await api.get(
-              `${API_BASE}/MealFood/byMeal/${meal.mealId}`
+              `${API_BASE}/MealFood/byMeal/${meal.mealId}`,
             );
 
             images[meal.mealId] = res.data
@@ -218,7 +218,7 @@ function Meal() {
           } catch (err) {
             console.error("Failed to load images", err);
           }
-        })
+        }),
       );
 
       setMealImages(images);
@@ -236,7 +236,7 @@ function Meal() {
         totals.fats += Number(item.fats ?? item.Fats ?? 0);
         return totals;
       },
-      { calories: 0, proteins: 0, carbs: 0, fats: 0 }
+      { calories: 0, proteins: 0, carbs: 0, fats: 0 },
     );
   };
 
@@ -284,6 +284,7 @@ function Meal() {
                 </p>
                 <div className="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
                   <button
+                    id="addmeal-button"
                     className="btn btn-success btn-lg px-4 me-sm-3"
                     onClick={() => setShowAddMealModal(true)}
                   >
@@ -643,6 +644,7 @@ function Meal() {
                   <div className="mb-3">
                     <label className="form-label">Meal Name</label>
                     <input
+                      id="meal-name"
                       type="text"
                       className="form-control"
                       placeholder="e.g. Breakfast"
@@ -659,7 +661,11 @@ function Meal() {
                   >
                     Cancel
                   </button>
-                  <button className="btn btn-primary" onClick={handleAddMeal}>
+                  <button
+                    id="save-meal"
+                    className="btn btn-primary"
+                    onClick={handleAddMeal}
+                  >
                     Save Meal
                   </button>
                 </div>

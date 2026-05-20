@@ -64,7 +64,7 @@ export default function Register() {
         err?.response?.data?.message ||
           (Array.isArray(err?.response?.data?.errors)
             ? err.response.data.errors.join(", ")
-            : "Registration failed")
+            : "Registration failed"),
       );
     } finally {
       setLoading(false);
@@ -85,6 +85,7 @@ export default function Register() {
             <div className="col-md-6">
               <label className="form-label">Name</label>
               <input
+                id="name"
                 type="text"
                 name="name"
                 value={form.name}
@@ -96,6 +97,7 @@ export default function Register() {
             <div className="col-md-6">
               <label className="form-label">Surname</label>
               <input
+                id="surname"
                 type="text"
                 name="surname"
                 value={form.surname}
@@ -109,6 +111,7 @@ export default function Register() {
           <div className="mb-3">
             <label className="form-label">Email</label>
             <input
+              id="email"
               type="email"
               name="email"
               value={form.email}
@@ -122,6 +125,7 @@ export default function Register() {
             <div className="col-md-6">
               <label className="form-label">Birthday</label>
               <input
+                id="birthday"
                 type="date"
                 name="birthday"
                 value={form.birthday}
@@ -132,6 +136,7 @@ export default function Register() {
             <div className="col-md-6">
               <label className="form-label">Gender</label>
               <select
+                id="gender"
                 name="gender"
                 value={form.gender}
                 onChange={onChange}
@@ -148,6 +153,7 @@ export default function Register() {
           <div className="mb-3 mt-3">
             <label className="form-label">Password</label>
             <input
+              id="password"
               type="password"
               name="password"
               value={form.password}
@@ -160,6 +166,7 @@ export default function Register() {
           <div className="mb-4">
             <label className="form-label">Role</label>
             <select
+              id="role"
               name="role"
               value={form.role}
               onChange={onChange}
@@ -170,7 +177,11 @@ export default function Register() {
             </select>
           </div>
 
-          <button className="btn btn-primary w-100" disabled={loading}>
+          <button
+            id="register-button"
+            className="btn btn-primary w-100"
+            disabled={loading}
+          >
             {loading ? "Registering..." : "Register"}
           </button>
         </form>

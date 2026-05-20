@@ -15,7 +15,7 @@ function WorkoutList() {
   const [showFoodValues, setShowFoodValues] = useState(false);
   const [showAddWorkoutModal, setShowAddWorkoutModal] = useState(false);
   const [newWorkoutName, setNewWorkoutName] = useState("");
-  const CLIENT_ID = localStorage.getItem("clientId");; // statik për momentin
+  const CLIENT_ID = localStorage.getItem("clientId"); // statik për momentin
   const [workoutImages, setWorkoutImages] = useState({});
   const [workoutCardTotals, setWorkoutCardTotals] = useState({}); // totals për çdo workout
   const [editingExerciseId, setEditingExerciseId] = useState(null);
@@ -91,7 +91,7 @@ function WorkoutList() {
 
           // Përdor `workoutId` për të filtruar dhe për të përditësuar listën
           setWorkouts((prev) =>
-            prev.filter((w) => w.workoutId !== workout.workoutId)
+            prev.filter((w) => w.workoutId !== workout.workoutId),
           );
 
           // Mbyll modalin pas fshirjes
@@ -138,7 +138,7 @@ function WorkoutList() {
       const updatedExercises = workoutExercises.map((e) =>
         e.exerciseId === we.exerciseId
           ? { ...e, sets: parseInt(sets, 10), reps: parseInt(reps, 10) }
-          : e
+          : e,
       );
 
       setWorkoutExercises(updatedExercises);
@@ -158,10 +158,10 @@ function WorkoutList() {
       confirmClass: "btn-danger",
       onConfirm: async () => {
         await api.delete(
-          `${API_BASE}/WorkoutExercise/${we.workoutId}/exercises/${we.exerciseId}`
+          `${API_BASE}/WorkoutExercise/${we.workoutId}/exercises/${we.exerciseId}`,
         );
         const updated = workoutExercises.filter(
-          (e) => e.exerciseId !== we.exerciseId
+          (e) => e.exerciseId !== we.exerciseId,
         );
         setWorkoutExercises(updated);
         setWorkoutTotals(calculateTotals(updated));
@@ -214,7 +214,7 @@ function WorkoutList() {
         workouts.map(async (workout) => {
           try {
             const res = await api.get(
-              `${API_BASE}/WorkoutExercise/${workout.workoutId}/exercises`
+              `${API_BASE}/WorkoutExercise/${workout.workoutId}/exercises`,
             );
 
             images[workout.workoutId] = res.data
@@ -227,7 +227,7 @@ function WorkoutList() {
           } catch (err) {
             console.error("Failed to load images", err);
           }
-        })
+        }),
       );
 
       setWorkoutImages(images);
@@ -245,7 +245,7 @@ function WorkoutList() {
 
         return totals;
       },
-      { sets: 0, reps: 0 }
+      { sets: 0, reps: 0 },
     );
   };
 
@@ -254,7 +254,7 @@ function WorkoutList() {
 
     try {
       const res = await api.get(
-        `${API_BASE}/WorkoutExercise/${workout.workoutId}/exercises`
+        `${API_BASE}/WorkoutExercise/${workout.workoutId}/exercises`,
       );
 
       setWorkoutExercises(res.data);
@@ -295,6 +295,7 @@ function WorkoutList() {
                 </p>
                 <div className="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
                   <button
+                    id="addworkout-button"
                     className="btn btn-success btn-lg px-4 me-sm-3"
                     onClick={() => setShowAddWorkoutModal(true)}
                   >
@@ -426,7 +427,7 @@ function WorkoutList() {
                       src="https://via.placeholder.com/400x250?text=No+Exercises"
                       className="card-img-top"
                       style={{ height: "180px", objectFit: "cover" }}
-                      alt="No food"
+                      alt="No exercises"
                     />
                   )}
 
@@ -451,7 +452,7 @@ function WorkoutList() {
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(
-                          `/user/exercises/workout/${workout.workoutId}`
+                          `/user/exercises/workout/${workout.workoutId}`,
                         );
                       }}
                     >
@@ -460,6 +461,7 @@ function WorkoutList() {
 
                     {/* DELETE WORKOUT */}
                     <button
+                      id="deleteworkout-button"
                       className="btn  btn-danger"
                       onClick={(e) => {
                         e.stopPropagation();
@@ -527,7 +529,7 @@ function WorkoutList() {
                                 style={{ cursor: "pointer", color: "#0d6efd" }}
                                 onClick={() =>
                                   navigate(
-                                    `/user/exercises/detail/${we.exerciseId}`
+                                    `/user/exercises/detail/${we.exerciseId}`,
                                   )
                                 }
                                 onMouseEnter={(e) =>
@@ -685,9 +687,10 @@ function WorkoutList() {
                   <div className="mb-3">
                     <label className="form-label">Workout Name</label>
                     <input
+                      id="workout-name"
                       type="text"
                       className="form-control"
-                      placeholder="e.g. Breakfast"
+                      placeholder="e.g. UpperBody"
                       value={newWorkoutName}
                       onChange={(e) => setNewWorkoutName(e.target.value)}
                     />
@@ -702,6 +705,7 @@ function WorkoutList() {
                     Cancel
                   </button>
                   <button
+                    id="save-workout"
                     className="btn btn-primary"
                     onClick={handleAddWorkout}
                   >
@@ -733,8 +737,8 @@ function WorkoutList() {
                   Are you sure you want to delete
                   <strong>
                     {" "}
-                    "{workoutToDelete.title ??
-                      workoutToDelete.workoutName}"{" "}
+                    "{workoutToDelete.title ?? workoutToDelete.workoutName}
+                    "{" "}
                   </strong>
                   ?
                 </p>
@@ -753,6 +757,7 @@ function WorkoutList() {
 
                 <button
                   className="btn btn-danger"
+                  id="deleteworkout-modal"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleDeleteWorkout(workoutToDelete); // Kërkon fshirjen e workout

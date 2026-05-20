@@ -35,8 +35,9 @@ export default function GoalAndProgressPage() {
       try {
         // PROGRESS (latest)
         const pRes = await api.get(`/api/Progress/client/${clientId}`);
-        const list = pRes.data
-          .sort((a, b) => new Date(b.date) - new Date(a.date));
+        const list = pRes.data.sort(
+          (a, b) => new Date(b.date) - new Date(a.date),
+        );
         if (list.length > 0) {
           setProgressData(list[0]);
           setCurrentWeight(list[0].weight);
@@ -44,7 +45,7 @@ export default function GoalAndProgressPage() {
 
         // GOAL
         const gRes = await api.get(`/api/Goal/client/${clientId}`);
-        const g = gRes.data.find(x => x.clientId == clientId);
+        const g = gRes.data.find((x) => x.clientId == clientId);
         if (g) setGoal(g);
       } finally {
         setLoading(false);
@@ -62,21 +63,20 @@ export default function GoalAndProgressPage() {
     if (!initial || !current || !target) return 0;
 
     if (goal.goalType === "LOSE_WEIGHT" && current <= target) {
-  return 100; // Goal is achieved (current weight is less than or equal to target)
-}
+      return 100; // Goal is achieved (current weight is less than or equal to target)
+    }
 
     if (goal.goalType === "LOSE_WEIGHT" && current >= initial) {
-  return 0; // Goal is achieved (current weight is less than or equal to target)
-}
+      return 0; // Goal is achieved (current weight is less than or equal to target)
+    }
 
     if (goal.goalType === "GAIN_WEIGHT" && current >= target) {
       return 100; // Goal is achieved (current weight is greater than or equal to target)
     }
 
-        if (goal.goalType === "GAIN_WEIGHT" && current <= initial) {
-  return 0; // Goal is achieved (current weight is less than or equal to target)
-}
-
+    if (goal.goalType === "GAIN_WEIGHT" && current <= initial) {
+      return 0; // Goal is achieved (current weight is less than or equal to target)
+    }
 
     // Calculate the total difference between initial and target
     const totalNeeded = Math.abs(target - initial);
@@ -157,8 +157,9 @@ export default function GoalAndProgressPage() {
   const messageStyle = {
     backgroundColor: messageType === "success" ? "#d4edda" : "#f8d7da",
     color: messageType === "success" ? "#155724" : "#721c24",
-    border: messageType === "success" ? "1px solid #c3e6cb" : "1px solid #f5c6cb",
-    padding: "15px",  // Adjusted padding for more spacing
+    border:
+      messageType === "success" ? "1px solid #c3e6cb" : "1px solid #f5c6cb",
+    padding: "15px", // Adjusted padding for more spacing
     borderRadius: "5px",
     marginTop: "20px",
     width: "100%",
@@ -192,9 +193,11 @@ export default function GoalAndProgressPage() {
     <div className="row justify-content-center gx-5 py-4">
       {/* Mesazhi i suksesit ose gabimit */}
       {message && (
-        <div style={messageStyle}>
+        <div id="successgoal-message" style={messageStyle}>
           {message}
-          <button onClick={closeMessage} style={closeButtonStyle}>X</button>
+          <button onClick={closeMessage} style={closeButtonStyle}>
+            X
+          </button>
         </div>
       )}
 
@@ -204,14 +207,14 @@ export default function GoalAndProgressPage() {
           <div className="card-body">
             <h4 className="text-center fw-bold mb-4">Personal Information</h4>
             <form onSubmit={saveProgress}>
-              {["weight", "waist", "chest", "arm", "thigh"].map(f => (
+              {["weight", "waist", "chest", "arm", "thigh"].map((f) => (
                 <input
                   key={f}
                   type="number"
                   className="form-control form-control-lg mb-3"
                   placeholder={f.toUpperCase()}
                   value={progressData[f]}
-                  onChange={e =>
+                  onChange={(e) =>
                     setProgressData({ ...progressData, [f]: e.target.value })
                   }
                 />
@@ -231,21 +234,25 @@ export default function GoalAndProgressPage() {
               <select
                 className="form-control form-control-lg mb-3"
                 value={goal.goalType}
-                onChange={e => setGoal({ ...goal, goalType: e.target.value })}
+                onChange={(e) => setGoal({ ...goal, goalType: e.target.value })}
               >
                 <option value="GAIN_WEIGHT">Gain Weight</option>
                 <option value="LOSE_WEIGHT">Lose Weight</option>
               </select>
               <input
+                id="target-weight"
                 type="number"
                 className="form-control form-control-lg mb-3"
                 placeholder="Target weight"
                 value={goal.targetValue}
-                onChange={e =>
+                onChange={(e) =>
                   setGoal({ ...goal, targetValue: e.target.value })
                 }
               />
-              <button className="btn btn-dark btn-lg w-100"> Save Goal </button>
+              <button id="save-goal" className="btn btn-dark btn-lg w-100">
+                {" "}
+                Save Goal{" "}
+              </button>
             </form>
           </div>
         </div>
@@ -268,7 +275,8 @@ export default function GoalAndProgressPage() {
               />
             </div>
             <p className="mt-3 text-muted">
-              {progressData.weight} kg → {currentWeight} kg → {goal.targetValue} kg
+              {progressData.weight} kg → {currentWeight} kg → {goal.targetValue}{" "}
+              kg
             </p>
           </div>
         </div>
@@ -285,7 +293,7 @@ export default function GoalAndProgressPage() {
                 className="form-control form-control-lg mb-3"
                 placeholder="Today's weight"
                 value={currentWeight}
-                onChange={e => setCurrentWeight(e.target.value)}
+                onChange={(e) => setCurrentWeight(e.target.value)}
               />
               <button className="btn btn-dark btn-lg px-5">Save</button>
             </form>

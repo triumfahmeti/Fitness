@@ -18,7 +18,7 @@ function Food() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const filteredFoods = foods.filter((food) =>
-    food.name.toLowerCase().includes(searchTerm.toLowerCase())
+    food.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const [modal, setModal] = useState({
@@ -196,6 +196,7 @@ function Food() {
                         {/* INPUT GRAMS */}
                         <input
                           type="number"
+                          id="enterfood-grams"
                           className="form-control mb-2"
                           placeholder="Enter grams"
                           value={grams[food.foodId] || ""}
@@ -247,7 +248,10 @@ function Food() {
                         </p>
                       </div>
                     </p>
-                    <div className="card-footer p-4 pt-0 bg-transparent border-top-0 mt-4">
+                    <div
+                      id="addfood-tomeal-button"
+                      className="card-footer p-4 pt-0 bg-transparent border-top-0 mt-4"
+                    >
                       <button
                         className="btn btn-success w-100"
                         onClick={() => handleAddToMeal(food)}

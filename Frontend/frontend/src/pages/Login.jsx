@@ -54,22 +54,51 @@ export default function Login() {
 
   return (
     <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
-      <div className="card shadow-lg p-4" style={{ width: "100%", maxWidth: 420 }}>
+      <div
+        className="card shadow-lg p-4"
+        style={{ width: "100%", maxWidth: 420 }}
+      >
         <h2 className="mb-4 text-center">Login</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
+        {error && (
+          <div id="login-error" className="alert alert-danger">
+            {error}
+          </div>
+        )}
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={(e) => e.preventDefault()}>
           <div className="mb-3">
             <label>Email</label>
-            <input type="email" name="email" value={form.email} onChange={onChange} className="form-control" required />
+            <input
+              id="email"
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={onChange}
+              className="form-control"
+              required
+            />
           </div>
 
           <div className="mb-3">
             <label>Password</label>
-            <input type="password" name="password" value={form.password} onChange={onChange} className="form-control" required />
+            <input
+              id="password"
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={onChange}
+              className="form-control"
+              required
+            />
           </div>
 
-          <button className="btn btn-primary w-100" disabled={loading}>
+          <button
+            id="login-button"
+            type="button"
+            className="btn btn-primary w-100"
+            disabled={loading}
+            onClick={onSubmit}
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
