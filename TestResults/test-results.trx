@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TestRun id="e513f861-78a2-4af3-8e41-8e59cc4853e0" name="Lenovo@DESKTOP-V90BOH7 2026-05-20 20:43:12" runUser="DESKTOP-V90BOH7\Lenovo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
-  <Times creation="2026-05-20T20:43:12.4483900+02:00" queuing="2026-05-20T20:43:12.4483908+02:00" start="2026-05-20T20:43:05.9061011+02:00" finish="2026-05-20T20:43:12.4540617+02:00" />
-  <TestSettings name="default" id="121db51f-81a5-4435-82d0-0085b1e18b59">
-    <Deployment runDeploymentRoot="Lenovo_DESKTOP-V90BOH7_2026-05-20_20_43_12" />
+<TestRun id="f4de218a-d59d-467c-80b9-8a0068b07520" name="Lenovo@DESKTOP-V90BOH7 2026-05-20 20:50:18" runUser="DESKTOP-V90BOH7\Lenovo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-05-20T20:50:18.0760496+02:00" queuing="2026-05-20T20:50:18.0760500+02:00" start="2026-05-20T20:50:11.4910488+02:00" finish="2026-05-20T20:50:18.0839534+02:00" />
+  <TestSettings name="default" id="fb8ec12c-b9cb-4f39-8485-b411668bedd5">
+    <Deployment runDeploymentRoot="Lenovo_DESKTOP-V90BOH7_2026-05-20_20_50_18" />
   </TestSettings>
   <Results>
-    <UnitTestResult executionId="c57ddb8d-d480-4f02-9a22-b204ea259e5d" testId="747fa23f-3d3e-503a-d6e7-8fb6affbb58d" testName="FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" computerName="DESKTOP-V90BOH7" duration="00:00:05.4995782" startTime="2026-05-20T20:43:12.3219645+02:00" endTime="2026-05-20T20:43:12.3220023+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c57ddb8d-d480-4f02-9a22-b204ea259e5d" />
+    <UnitTestResult executionId="629c8944-822e-42e8-a731-b308e0cce32f" testId="747fa23f-3d3e-503a-d6e7-8fb6affbb58d" testName="FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" computerName="DESKTOP-V90BOH7" duration="00:00:05.4993884" startTime="2026-05-20T20:50:17.9320638+02:00" endTime="2026-05-20T20:50:17.9320846+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="629c8944-822e-42e8-a731-b308e0cce32f" />
   </Results>
   <TestDefinitions>
     <UnitTest name="FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\debug\net8.0\fitnessapp.tests.dll" id="747fa23f-3d3e-503a-d6e7-8fb6affbb58d">
-      <Execution id="c57ddb8d-d480-4f02-9a22-b204ea259e5d" />
+      <Execution id="629c8944-822e-42e8-a731-b308e0cce32f" />
       <TestMethod codeBase="c:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Debug\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.AdminDashboardTest" name="TestAdminDashboardAccess" />
     </UnitTest>
   </TestDefinitions>
   <TestEntries>
-    <TestEntry testId="747fa23f-3d3e-503a-d6e7-8fb6affbb58d" executionId="c57ddb8d-d480-4f02-9a22-b204ea259e5d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="747fa23f-3d3e-503a-d6e7-8fb6affbb58d" executionId="629c8944-822e-42e8-a731-b308e0cce32f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
   </TestEntries>
   <TestLists>
     <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
@@ -24,10 +24,10 @@
     <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
     <Output>
       <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.15)&#xD;
-[xUnit.net 00:00:00.11]   Discovering: FitnessApp.Tests&#xD;
-[xUnit.net 00:00:00.15]   Discovered:  FitnessApp.Tests&#xD;
-[xUnit.net 00:00:00.16]   Starting:    FitnessApp.Tests&#xD;
-[xUnit.net 00:00:05.76]   Finished:    FitnessApp.Tests&#xD;
+[xUnit.net 00:00:00.14]   Discovering: FitnessApp.Tests&#xD;
+[xUnit.net 00:00:00.21]   Discovered:  FitnessApp.Tests&#xD;
+[xUnit.net 00:00:00.22]   Starting:    FitnessApp.Tests&#xD;
+[xUnit.net 00:00:05.81]   Finished:    FitnessApp.Tests&#xD;
 </StdOut>
     </Output>
   </ResultSummary>
