@@ -15,7 +15,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "9.0.x"
 
       - name: Restore
         run: dotnet restore "FitnessApp.Tests/FitnessApp.Tests.csproj"
@@ -27,9 +27,17 @@ jobs:
           --logger "trx;LogFileName=test-results.trx"
           --results-directory "TestResults"
 
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: test-results
+          path: TestResults/*.trx
+          reporter: dotnet-trx
+
       - name: Upload test report (TRX)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results-trx
-          path: TestResults/test-results.trx
+          path: TestResults/**/*.trx
