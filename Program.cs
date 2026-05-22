@@ -152,8 +152,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    var dbContext = services.GetRequiredService<FitnessDbContext>();
-    await dbContext.Database.MigrateAsync();
+
 
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     string[] roles = new[] { "Admin", "Client" };

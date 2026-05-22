@@ -34,20 +34,23 @@ namespace FitnessApp.Tests
             IWebDriver driver = new ChromeDriver(driverDir, options);
             try
             {
-                _wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                _wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
-                driver.Navigate().GoToUrl("http://127.0.0.1:5173/login");
+                driver.Navigate().GoToUrl("http://localhost:5173/login");
 
                 driver.FindElement(By.Id("email")).SendKeys("admin1@gmail.com");
                 driver.FindElement(By.Id("password")).SendKeys("Admin12.");
                 driver.FindElement(By.Id("login-button")).Click();
                 Thread.Sleep(2000);
-                driver.Navigate().GoToUrl("http://127.0.0.1:5173/admin");
+                driver.Navigate().GoToUrl("http://localhost:5173/admin");
 
                 _wait.Until(d => !d.PageSource.Contains("Loading..."));
 
                 // titulli
-                Assert.True(driver.FindElements(By.XPath("//h2[normalize-space()='Dashboard']")).Any());
+                Assert.True(
+                    _wait.Until(d => d.FindElements(By.XPath("//h2[normalize-space()='Dashboard']")).Any()),
+                    "Dashboard title was not found."
+                );
 
                 // Total Users karta
                 Assert.True(driver.FindElements(By.XPath("//div[contains(@class,'card-body')]//*[normalize-space()='Total Users']")).Any());
