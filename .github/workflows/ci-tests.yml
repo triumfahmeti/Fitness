@@ -10,6 +10,7 @@ permissions:
 jobs:
   test:
     runs-on: windows-latest
+
     env:
       NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
       DOTNET_NOLOGO: true
@@ -54,45 +55,57 @@ jobs:
         working-directory: Frontend/frontend
         run: npm ci
 
-      - name: Create HTTPS dev certificate
-        shell: pwsh
-        run: |
-          $certPath = "$env:RUNNER_TEMP\aspnet-devcert.pfx"
-          $certPassword = "devcert-pass"
-          dotnet dev-certs https -ep $certPath -p $certPassword
-          "ASPNETCORE_Kestrel__Certificates__Default__Path=$certPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "ASPNETCORE_Kestrel__Certificates__Default__Password=$certPassword" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
       - name: Start backend
         shell: pwsh
         run: |
-          $env:ASPNETCORE_URLS = "https://localhost:7103"
+          $env:ASPNETCORE_URLS = "http://localhost:7103"
+
           $outLog = Join-Path $env:RUNNER_TEMP "backend.out.log"
           $errLog = Join-Path $env:RUNNER_TEMP "backend.err.log"
-          Write-Host "Backend logs: $outLog and $errLog"
-          $proc = Start-Process -FilePath "dotnet" -ArgumentList 'run --project "Fitness.csproj" --configuration Release --no-build --no-launch-profile' -RedirectStandardOutput $outLog -RedirectStandardError $errLog -NoNewWindow -PassThru
-          Start-Sleep -Seconds 3
-          if (-Not (Test-Path $outLog)) { Write-Host "Backend stdout log not found yet." } else { Get-Content $outLog -Tail 30 -ErrorAction SilentlyContinue }
+
+          Write-Host "Backend logs:"
+          Write-Host $outLog
+          Write-Host $errLog
+
+          Start-Process `
+            -FilePath "dotnet" `
+            -ArgumentList 'run --project "Fitness.csproj" --configuration Release --no-build --no-launch-profile' `
+            -RedirectStandardOutput $outLog `
+            -RedirectStandardError $errLog `
+            -NoNewWindow
 
       - name: Start frontend
         shell: pwsh
         run: |
-          Start-Process -FilePath "npm" -ArgumentList 'run dev -- --host 127.0.0.1 --port 5173' -WorkingDirectory "Frontend/frontend" -NoNewWindow
+          Start-Process `
+            -FilePath "npm" `
+            -ArgumentList 'run dev -- --host 0.0.0.0 --port 5173' `
+            -WorkingDirectory "Frontend/frontend" `
+            -NoNewWindow
+
+      - name: Wait for services
+        run: npx --yes wait-on tcp:7103 tcp:5173 --timeout 60000
 
       - name: Run tests
         shell: pwsh
         run: |
           $maxAttempts = 3
+
           for ($i = 1; $i -le $maxAttempts; $i++) {
+
             Write-Host "Test attempt $i of $maxAttempts"
+
             dotnet test "FitnessApp.Tests/FitnessApp.Tests.csproj" `
               --filter "FullyQualifiedName~FitnessApp.Tests.AdminDashboardTest" `
               --logger "trx;LogFileName=test-results.trx" `
               --results-directory "TestResults"
 
-            if ($LASTEXITCODE -eq 0) { exit 0 }
+            if ($LASTEXITCODE -eq 0) {
+              exit 0
+            }
+
             if ($i -lt $maxAttempts) {
-              Write-Host "Test failed, retrying in 10s..."
+              Write-Host "Tests failed. Retrying in 10 seconds..."
               Start-Sleep -Seconds 10
             }
           }

@@ -24,18 +24,25 @@ namespace FitnessApp.Tests
                 "chromedriver",
                 driverVersion,
                 "chromedriver-win64"));
-            IWebDriver driver = new ChromeDriver(driverDir);
+            var options = new ChromeOptions();
+
+            options.AddArgument("--headless=new");
+            options.AddArgument("--no-sandbox");
+            options.AddArgument("--disable-dev-shm-usage");
+            options.AddArgument("--window-size=1920,1080");
+
+            IWebDriver driver = new ChromeDriver(driverDir, options);
             try
             {
                 _wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
-                driver.Navigate().GoToUrl("http://localhost:5173/login");
+                driver.Navigate().GoToUrl("http://127.0.0.1:5173/login");
 
                 driver.FindElement(By.Id("email")).SendKeys("admin1@gmail.com");
                 driver.FindElement(By.Id("password")).SendKeys("Admin12.");
                 driver.FindElement(By.Id("login-button")).Click();
                 Thread.Sleep(2000);
-                driver.Navigate().GoToUrl("http://localhost:5173/admin");
+                driver.Navigate().GoToUrl("http://127.0.0.1:5173/admin");
 
                 _wait.Until(d => !d.PageSource.Contains("Loading..."));
 
