@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2f110334-f7b6-419c-9c07-ad75e7bd6084" name="Lenovo@DESKTOP-V90BOH7 2026-05-23 01:00:54" runUser="DESKTOP-V90BOH7\Lenovo" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-05-23T01:00:54.9932186+02:00" queuing="2026-05-23T01:00:54.9932190+02:00" start="2026-05-23T01:00:33.7102379+02:00" finish="2026-05-23T01:01:01.4777367+02:00" />
+  <TestSettings name="default" id="fd4fe921-9409-426b-9b90-0af6bd6df658">
+    <Deployment runDeploymentRoot="Lenovo_DESKTOP-V90BOH7_2026-05-23_01_00_54" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0fe04df4-ef68-44d9-9f38-1d2f669b2641" testId="747fa23f-3d3e-503a-d6e7-8fb6affbb58d" testName="FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" computerName="DESKTOP-V90BOH7" duration="00:00:25.1885765" startTime="2026-05-23T01:01:00.7532204+02:00" endTime="2026-05-23T01:01:00.7532209+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0fe04df4-ef68-44d9-9f38-1d2f669b2641" />
+    <UnitTestResult executionId="3bce0f78-764c-4274-bf2c-04feabbab17f" testId="be1ae582-2a06-ac9e-2e1d-12bae518fa22" testName="FitnessApp.Tests.UnitTest1.TestDeleteWorkout" computerName="DESKTOP-V90BOH7" duration="00:00:24.6002639" startTime="2026-05-23T01:01:00.1647844+02:00" endTime="2026-05-23T01:01:00.1647847+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3bce0f78-764c-4274-bf2c-04feabbab17f" />
+    <UnitTestResult executionId="e300f0c9-8301-494d-9643-ed67c758a224" testId="070ff5e9-72c4-d244-4df8-267e4db35e38" testName="FitnessApp.Tests.MealTests.TestAddMeal" computerName="DESKTOP-V90BOH7" duration="00:00:19.8243158" startTime="2026-05-23T01:00:55.4638011+02:00" endTime="2026-05-23T01:00:55.4638016+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e300f0c9-8301-494d-9643-ed67c758a224">
+      <Output>
+        <ErrorInfo>
+          <Message>OpenQA.Selenium.NoSuchElementException : no such element: Unable to locate element: {"method":"css selector","selector":"#addmeal\-button"}
+  (Session info: chrome=148.0.7778.179); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception</Message>
+          <StackTrace>   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)&#xD;
+   at OpenQA.Selenium.WebDriver.ExecuteAsync(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+   at OpenQA.Selenium.WebDriver.FindElement(String mechanism, String value)&#xD;
+   at OpenQA.Selenium.By.&lt;.ctor&gt;b__6_0(ISearchContext context)&#xD;
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)&#xD;
+   at OpenQA.Selenium.WebDriver.FindElement(By by)&#xD;
+   at FitnessApp.Tests.MealTests.TestAddMeal() in C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\MealTests.cs:line 36&#xD;
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f4dc395d-309b-4687-8f11-f29d88b406ed" testId="3afe7637-bd0d-0179-845b-52bcbf30fb3b" testName="FitnessApp.Tests.LoginTests.TestLoginWithInvalidCredentials" computerName="DESKTOP-V90BOH7" duration="00:00:18.6462012" startTime="2026-05-23T01:00:54.2180855+02:00" endTime="2026-05-23T01:00:54.2181285+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4dc395d-309b-4687-8f11-f29d88b406ed" />
+    <UnitTestResult executionId="f6e5e549-2f2e-4519-8228-70896507d19d" testId="21ee7f67-9fa6-2012-53fd-400181aa3b43" testName="ClientProfileEditTests.EditProfile_UpdatesFieldsAndSaves" computerName="DESKTOP-V90BOH7" duration="00:00:25.8245483" startTime="2026-05-23T01:01:01.3857037+02:00" endTime="2026-05-23T01:01:01.3857041+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6e5e549-2f2e-4519-8228-70896507d19d" />
+    <UnitTestResult executionId="c34d940a-eb84-44fe-83f5-b5568e50556e" testId="50ca41f8-f3ad-ee4b-a3cf-260948a4f7b3" testName="FitnessApp.Tests.RegisterTest.RegisterWithValidCredentials" computerName="DESKTOP-V90BOH7" duration="00:00:25.4460092" startTime="2026-05-23T01:01:01.0209011+02:00" endTime="2026-05-23T01:01:01.0209014+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c34d940a-eb84-44fe-83f5-b5568e50556e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Contains() Failure: Sub-string not found&#xD;
+String:    "http://localhost:5173/register"&#xD;
+Not found: "profile"</Message>
+          <StackTrace>   at FitnessApp.Tests.RegisterTest.RegisterWithValidCredentials() in C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\RegisterTest.cs:line 47&#xD;
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="20a40821-28c6-4cb4-a71a-cae2168119a7" testId="fe91c9a5-1c0d-0f70-06e8-a41cedc892ef" testName="FitnessApp.Tests.WorkoutTest.TestAddWorkout" computerName="DESKTOP-V90BOH7" duration="00:00:19.9969918" startTime="2026-05-23T01:00:55.5675385+02:00" endTime="2026-05-23T01:00:55.5675389+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20a40821-28c6-4cb4-a71a-cae2168119a7">
+      <Output>
+        <ErrorInfo>
+          <Message>OpenQA.Selenium.NoSuchElementException : no such element: Unable to locate element: {"method":"css selector","selector":"#addworkout\-button"}
+  (Session info: chrome=148.0.7778.179); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception</Message>
+          <StackTrace>   at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)&#xD;
+   at OpenQA.Selenium.WebDriver.ExecuteAsync(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+   at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+   at OpenQA.Selenium.WebDriver.FindElement(String mechanism, String value)&#xD;
+   at OpenQA.Selenium.By.&lt;.ctor&gt;b__6_0(ISearchContext context)&#xD;
+   at OpenQA.Selenium.By.FindElement(ISearchContext context)&#xD;
+   at OpenQA.Selenium.WebDriver.FindElement(By by)&#xD;
+   at FitnessApp.Tests.WorkoutTest.TestAddWorkout() in C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\WorkoutTest.cs:line 36&#xD;
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9cd4e860-4b09-4d1e-bb50-899d2cb7a2f8" testId="d4c34efb-f6d3-1149-956e-f5a9c041c4c4" testName="FitnessApp.Tests.GoalTest.AddGoal" computerName="DESKTOP-V90BOH7" duration="00:00:24.1647547" startTime="2026-05-23T01:00:59.7293661+02:00" endTime="2026-05-23T01:00:59.7293672+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9cd4e860-4b09-4d1e-bb50-899d2cb7a2f8" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="FitnessApp.Tests.GoalTest.AddGoal" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="d4c34efb-f6d3-1149-956e-f5a9c041c4c4">
+      <Execution id="9cd4e860-4b09-4d1e-bb50-899d2cb7a2f8" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.GoalTest" name="AddGoal" />
+    </UnitTest>
+    <UnitTest name="FitnessApp.Tests.LoginTests.TestLoginWithInvalidCredentials" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="3afe7637-bd0d-0179-845b-52bcbf30fb3b">
+      <Execution id="f4dc395d-309b-4687-8f11-f29d88b406ed" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.LoginTests" name="TestLoginWithInvalidCredentials" />
+    </UnitTest>
+    <UnitTest name="FitnessApp.Tests.RegisterTest.RegisterWithValidCredentials" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="50ca41f8-f3ad-ee4b-a3cf-260948a4f7b3">
+      <Execution id="c34d940a-eb84-44fe-83f5-b5568e50556e" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.RegisterTest" name="RegisterWithValidCredentials" />
+    </UnitTest>
+    <UnitTest name="FitnessApp.Tests.UnitTest1.TestDeleteWorkout" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="be1ae582-2a06-ac9e-2e1d-12bae518fa22">
+      <Execution id="3bce0f78-764c-4274-bf2c-04feabbab17f" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.UnitTest1" name="TestDeleteWorkout" />
+    </UnitTest>
+    <UnitTest name="ClientProfileEditTests.EditProfile_UpdatesFieldsAndSaves" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="21ee7f67-9fa6-2012-53fd-400181aa3b43">
+      <Execution id="f6e5e549-2f2e-4519-8228-70896507d19d" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="ClientProfileEditTests" name="EditProfile_UpdatesFieldsAndSaves" />
+    </UnitTest>
+    <UnitTest name="FitnessApp.Tests.WorkoutTest.TestAddWorkout" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="fe91c9a5-1c0d-0f70-06e8-a41cedc892ef">
+      <Execution id="20a40821-28c6-4cb4-a71a-cae2168119a7" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.WorkoutTest" name="TestAddWorkout" />
+    </UnitTest>
+    <UnitTest name="FitnessApp.Tests.MealTests.TestAddMeal" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="070ff5e9-72c4-d244-4df8-267e4db35e38">
+      <Execution id="e300f0c9-8301-494d-9643-ed67c758a224" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.MealTests" name="TestAddMeal" />
+    </UnitTest>
+    <UnitTest name="FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" storage="c:\users\lenovo\desktop\fitness\fitnessapp.tests\bin\release\net8.0\fitnessapp.tests.dll" id="747fa23f-3d3e-503a-d6e7-8fb6affbb58d">
+      <Execution id="0fe04df4-ef68-44d9-9f38-1d2f669b2641" />
+      <TestMethod codeBase="C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\bin\Release\net8.0\FitnessApp.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="FitnessApp.Tests.AdminDashboardTest" name="TestAdminDashboardAccess" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="747fa23f-3d3e-503a-d6e7-8fb6affbb58d" executionId="0fe04df4-ef68-44d9-9f38-1d2f669b2641" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="be1ae582-2a06-ac9e-2e1d-12bae518fa22" executionId="3bce0f78-764c-4274-bf2c-04feabbab17f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="070ff5e9-72c4-d244-4df8-267e4db35e38" executionId="e300f0c9-8301-494d-9643-ed67c758a224" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3afe7637-bd0d-0179-845b-52bcbf30fb3b" executionId="f4dc395d-309b-4687-8f11-f29d88b406ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21ee7f67-9fa6-2012-53fd-400181aa3b43" executionId="f6e5e549-2f2e-4519-8228-70896507d19d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="50ca41f8-f3ad-ee4b-a3cf-260948a4f7b3" executionId="c34d940a-eb84-44fe-83f5-b5568e50556e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe91c9a5-1c0d-0f70-06e8-a41cedc892ef" executionId="20a40821-28c6-4cb4-a71a-cae2168119a7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d4c34efb-f6d3-1149-956e-f5a9c041c4c4" executionId="9cd4e860-4b09-4d1e-bb50-899d2cb7a2f8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="8" executed="8" passed="5" failed="3" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.5.3.1+6b60a9e56a (64-bit .NET 8.0.15)&#xD;
+[xUnit.net 00:00:00.74]   Discovering: FitnessApp.Tests&#xD;
+[xUnit.net 00:00:00.78]   Discovered:  FitnessApp.Tests&#xD;
+[xUnit.net 00:00:00.79]   Starting:    FitnessApp.Tests&#xD;
+[xUnit.net 00:00:20.73]       OpenQA.Selenium.NoSuchElementException : no such element: Unable to locate element: {"method":"css selector","selector":"#addmeal\-button"}
+  (Session info: chrome=148.0.7778.179); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception&#xD;
+[xUnit.net 00:00:20.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.WebDriver.ExecuteAsync(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.WebDriver.FindElement(String mechanism, String value)&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.By.&lt;.ctor&gt;b__6_0(ISearchContext context)&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.By.FindElement(ISearchContext context)&#xD;
+[xUnit.net 00:00:20.74]            at OpenQA.Selenium.WebDriver.FindElement(By by)&#xD;
+[xUnit.net 00:00:20.74]         C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\MealTests.cs(36,0): at FitnessApp.Tests.MealTests.TestAddMeal()&#xD;
+[xUnit.net 00:00:20.74]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+[xUnit.net 00:00:20.74]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:20.85]       OpenQA.Selenium.NoSuchElementException : no such element: Unable to locate element: {"method":"css selector","selector":"#addworkout\-button"}
+  (Session info: chrome=148.0.7778.179); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception&#xD;
+[xUnit.net 00:00:20.85]       Stack Trace:&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.WebDriver.UnpackAndThrowOnError(Response errorResponse, String commandToExecute)&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.WebDriver.ExecuteAsync(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.WebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.WebDriver.FindElement(String mechanism, String value)&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.By.&lt;.ctor&gt;b__6_0(ISearchContext context)&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.By.FindElement(ISearchContext context)&#xD;
+[xUnit.net 00:00:20.85]            at OpenQA.Selenium.WebDriver.FindElement(By by)&#xD;
+[xUnit.net 00:00:20.85]         C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\WorkoutTest.cs(36,0): at FitnessApp.Tests.WorkoutTest.TestAddWorkout()&#xD;
+[xUnit.net 00:00:20.85]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+[xUnit.net 00:00:20.85]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:26.30]       Assert.Contains() Failure: Sub-string not found&#xD;
+[xUnit.net 00:00:26.30]       String:    "http://localhost:5173/register"&#xD;
+[xUnit.net 00:00:26.30]       Not found: "profile"&#xD;
+[xUnit.net 00:00:26.30]       Stack Trace:&#xD;
+[xUnit.net 00:00:26.30]         C:\Users\Lenovo\Desktop\Fitness\FitnessApp.Tests\RegisterTest.cs(47,0): at FitnessApp.Tests.RegisterTest.RegisterWithValidCredentials()&#xD;
+[xUnit.net 00:00:26.30]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)&#xD;
+[xUnit.net 00:00:26.30]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:26.67]   Finished:    FitnessApp.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="DESKTOP-V90BOH7" outcome="Error" timestamp="2026-05-23T01:00:55.4469508+02:00">
+        <Text>[xUnit.net 00:00:20.73]     FitnessApp.Tests.MealTests.TestAddMeal [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-V90BOH7" outcome="Error" timestamp="2026-05-23T01:00:55.5640674+02:00">
+        <Text>[xUnit.net 00:00:20.85]     FitnessApp.Tests.WorkoutTest.TestAddWorkout [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="DESKTOP-V90BOH7" outcome="Error" timestamp="2026-05-23T01:01:01.0198803+02:00">
+        <Text>[xUnit.net 00:00:26.30]     FitnessApp.Tests.RegisterTest.RegisterWithValidCredentials [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

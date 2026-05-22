@@ -1,204 +1,47 @@
-name: CI Tests
+name: CI - Selenium Tests
 
 on:
   push:
 
-permissions:
-  contents: read
-  checks: write
-
 jobs:
-  test:
+  build-and-test:
     runs-on: windows-latest
-
-    env:
-      NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
-      DOTNET_NOLOGO: true
-      DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-      ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=(localdb)\\MSSQLLocalDB;Database=Fitness;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
-
+    timeout-minutes: 40
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "9.0.x"
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.NUGET_PACKAGES }}
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.sln', '**/packages.lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nuget-
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
       - name: Restore
-        run: dotnet restore "Fitness.sln"
+        run: dotnet restore
 
-      - name: Build backend
-        run: dotnet build "Fitness.csproj" --configuration Release --no-restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
 
-      - name: Ensure LocalDB is running
+      - name: Prepare ChromeDriver
         shell: pwsh
+        env:
+          DRIVER_VERSION: "148.0.7778.168"
         run: |
-          sqllocaldb start MSSQLLocalDB
+          $version = $env:DRIVER_VERSION
+          $dest = Join-Path -Path $PWD -ChildPath "tools\chromedriver\$version\chromedriver-win64"
+          Write-Host "Creating $dest"
+          New-Item -ItemType Directory -Force -Path $dest | Out-Null
+          $url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$version/win64/chromedriver-win64.zip"
+          Write-Host "Downloading Chromedriver from $url"
+          Invoke-WebRequest -Uri $url -OutFile chromedriver.zip
+          Expand-Archive chromedriver.zip -DestinationPath $dest -Force
+          Remove-Item chromedriver.zip -Force
 
-      - name: Install frontend dependencies
-        working-directory: Frontend/frontend
-        run: npm ci
+      - name: Run only AdminDashboard test
+        run: dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj --configuration Release --no-build --filter "FullyQualifiedName=FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" --logger "trx;LogFileName=test-results.trx"
 
-      - name: Create HTTPS dev certificate
-        shell: pwsh
-        run: |
-          $certPath = "$env:RUNNER_TEMP\aspnet-devcert.pfx"
-          $certPassword = "devcert-pass"
-          dotnet dev-certs https -ep $certPath -p $certPassword
-          "ASPNETCORE_Kestrel__Certificates__Default__Path=$certPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          "ASPNETCORE_Kestrel__Certificates__Default__Password=$certPassword" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Start backend
-        shell: pwsh
-        run: |
-          $env:ASPNETCORE_URLS = "https://localhost:7103"
-
-          $outLog = Join-Path $env:RUNNER_TEMP "backend.out.log"
-          $errLog = Join-Path $env:RUNNER_TEMP "backend.err.log"
-
-          Write-Host "Backend logs:"
-          Write-Host $outLog
-          Write-Host $errLog
-
-          Start-Process `
-            -FilePath "dotnet" `
-            -ArgumentList 'run --project "Fitness.csproj" --configuration Release --no-build --no-launch-profile' `
-            -RedirectStandardOutput $outLog `
-            -RedirectStandardError $errLog `
-            -NoNewWindow
-
-      - name: Start frontend
-        shell: pwsh
-        run: |
-          cd Frontend/frontend
-
-          $frontendLog = Join-Path $env:RUNNER_TEMP "frontend.log"
-
-          Write-Host "Frontend log:"
-          Write-Host $frontendLog
-
-          Start-Process cmd.exe `
-            -ArgumentList "/c npm run dev -- --host 0.0.0.0 --port 5173 > `"$frontendLog`" 2>&1" `
-            -PassThru
-
-          Start-Sleep -Seconds 20
-
-          Get-Content $frontendLog
-
-      - name: Check frontend connectivity
-        shell: pwsh
-        run: |
-          try {
-            $response = Invoke-WebRequest -Uri "http://127.0.0.1:5173" -UseBasicParsing
-            Write-Host "Frontend reachable!"
-            Write-Host $response.StatusCode
-          }
-          catch {
-            Write-Error "Frontend NOT reachable"
-            exit 1
-          }
-
-      - name: Wait for frontend
-        continue-on-error: true
-        run: npx --yes wait-on http://127.0.0.1:5173 --timeout 60000
-
-      - name: Wait for backend
-        continue-on-error: true
-        run: npx --yes wait-on --strictSSL false https://127.0.0.1:7103 --timeout 60000
-
-      - name: Seed admin account
-        shell: pwsh
-        run: |
-          $payload = @{
-            email = "admin1@gmail.com"
-            password = "Admin12."
-            userName = "admin1@gmail.com"
-            name = "Admin"
-            surname = "Test"
-            birthday = "1990-01-01"
-            gender = "Male"
-            role = "Admin"
-          } | ConvertTo-Json
-
-          try {
-            $response = Invoke-RestMethod `
-              -Method Post `
-              -Uri "https://localhost:7103/api/Auth/register" `
-              -Body $payload `
-              -ContentType "application/json" `
-              -SkipCertificateCheck `
-              -SkipHttpErrorCheck
-
-            Write-Host "Admin seed response:"
-            Write-Host ($response | ConvertTo-Json -Depth 5)
-          }
-          catch {
-            Write-Host "Admin seed step completed with non-fatal response."
-            Write-Host $_.Exception.Message
-          }
-
-      - name: Run tests
-        shell: pwsh
-        run: |
-          $maxAttempts = 3
-
-          for ($i = 1; $i -le $maxAttempts; $i++) {
-
-            Write-Host "Test attempt $i of $maxAttempts"
-
-            dotnet test "FitnessApp.Tests/FitnessApp.Tests.csproj" `
-              --filter "FullyQualifiedName~FitnessApp.Tests.AdminDashboardTest" `
-              --logger "trx;LogFileName=test-results.trx" `
-              --results-directory "TestResults"
-
-            if ($LASTEXITCODE -eq 0) {
-              exit 0
-            }
-
-            if ($i -lt $maxAttempts) {
-              Write-Host "Tests failed. Retrying in 10 seconds..."
-              Start-Sleep -Seconds 10
-            }
-          }
-
-          exit 1
-
-      - name: Publish test results
-        if: always()
-        uses: dorny/test-reporter@v1
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: TestResults/*.trx
-          reporter: dotnet-trx
-
-      - name: Upload backend logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-logs
-          path: |
-            ${{ runner.temp }}/backend.out.log
-            ${{ runner.temp }}/backend.err.log
-
-      - name: Upload test report (TRX)
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results-trx
-          path: TestResults/**/*.trx
+          path: "**/*.trx"

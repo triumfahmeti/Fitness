@@ -1,0 +1,209 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\0292f8b4-0b5c-4df5-bd89-f4895bf9a390.jpg",
+      "PackagePath": "staticwebassets\\images\\0292f8b4-0b5c-4df5-bd89-f4895bf9a390.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\0400cf59-e1c9-4190-92fb-bb99fa253860.png",
+      "PackagePath": "staticwebassets\\images\\0400cf59-e1c9-4190-92fb-bb99fa253860.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\19836b9a-41a7-463d-ae61-ff4df33f0db2.png",
+      "PackagePath": "staticwebassets\\images\\19836b9a-41a7-463d-ae61-ff4df33f0db2.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\1bf5b6f5-1d91-4909-9cce-50215c89eb69.jpg",
+      "PackagePath": "staticwebassets\\images\\1bf5b6f5-1d91-4909-9cce-50215c89eb69.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\1fa9feb2-34e5-4d00-a6fc-4f59bf78116f.jpg",
+      "PackagePath": "staticwebassets\\images\\1fa9feb2-34e5-4d00-a6fc-4f59bf78116f.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\2b0c175d-383f-4784-8d04-6632c5a85fad.jpg",
+      "PackagePath": "staticwebassets\\images\\2b0c175d-383f-4784-8d04-6632c5a85fad.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\38dd3ead-23a5-4fa5-8248-4f3ff198df34.jpg",
+      "PackagePath": "staticwebassets\\images\\38dd3ead-23a5-4fa5-8248-4f3ff198df34.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\4a77e36a-3285-45bc-8d82-e0cf088deb76.jpg",
+      "PackagePath": "staticwebassets\\images\\4a77e36a-3285-45bc-8d82-e0cf088deb76.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\4d7c1f62-3085-4a56-8f6e-776d142d3fb2.png",
+      "PackagePath": "staticwebassets\\images\\4d7c1f62-3085-4a56-8f6e-776d142d3fb2.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\4e2ac039-54a4-4a86-84b7-5a08119dfd16.png",
+      "PackagePath": "staticwebassets\\images\\4e2ac039-54a4-4a86-84b7-5a08119dfd16.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\5fd2d796-2a98-4ceb-8218-e5f52cac4502.png",
+      "PackagePath": "staticwebassets\\images\\5fd2d796-2a98-4ceb-8218-e5f52cac4502.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\644e7203-9111-4589-81ef-331198b016fc.png",
+      "PackagePath": "staticwebassets\\images\\644e7203-9111-4589-81ef-331198b016fc.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\65b8d999-5950-4ed9-b628-f72bef39a24f.jpg",
+      "PackagePath": "staticwebassets\\images\\65b8d999-5950-4ed9-b628-f72bef39a24f.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\68cfac8f-0dc9-4d86-b711-7c6c7a060b3e.webp",
+      "PackagePath": "staticwebassets\\images\\68cfac8f-0dc9-4d86-b711-7c6c7a060b3e.webp"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\70f555ca-125b-4ed8-8779-3beb332923c4.png",
+      "PackagePath": "staticwebassets\\images\\70f555ca-125b-4ed8-8779-3beb332923c4.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\71edd879-68d1-4ba6-9118-85e4f59e5562.png",
+      "PackagePath": "staticwebassets\\images\\71edd879-68d1-4ba6-9118-85e4f59e5562.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\73ffb179-cf6a-4b68-9e89-250feeb79a8c.jpg",
+      "PackagePath": "staticwebassets\\images\\73ffb179-cf6a-4b68-9e89-250feeb79a8c.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\7e6ef384-b4d4-4c85-859a-356ff6a39090.jpg",
+      "PackagePath": "staticwebassets\\images\\7e6ef384-b4d4-4c85-859a-356ff6a39090.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\916e83bf-2720-4c9b-b722-5851d5279b6c.jpg",
+      "PackagePath": "staticwebassets\\images\\916e83bf-2720-4c9b-b722-5851d5279b6c.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\9190f50d-74eb-45e5-ac7b-c3f4459e8f7a.jpg",
+      "PackagePath": "staticwebassets\\images\\9190f50d-74eb-45e5-ac7b-c3f4459e8f7a.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\92d4b8a3-f0b8-4f65-bb27-af3501200be2.jpg",
+      "PackagePath": "staticwebassets\\images\\92d4b8a3-f0b8-4f65-bb27-af3501200be2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\9f0233da-7384-4040-a31d-f2fd15fb424c.jpg",
+      "PackagePath": "staticwebassets\\images\\9f0233da-7384-4040-a31d-f2fd15fb424c.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\9f979ea9-765a-4b4f-942c-1a8a9ef74c62.jpg",
+      "PackagePath": "staticwebassets\\images\\9f979ea9-765a-4b4f-942c-1a8a9ef74c62.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\b6718a8c-39f7-4a6e-9c51-32e291917deb.jpg",
+      "PackagePath": "staticwebassets\\images\\b6718a8c-39f7-4a6e-9c51-32e291917deb.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\bad38f23-e56b-4790-8787-6b0801a7355b.PNG",
+      "PackagePath": "staticwebassets\\images\\bad38f23-e56b-4790-8787-6b0801a7355b.PNG"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\c03d030e-718a-4002-8b27-162fa3baf1aa.png",
+      "PackagePath": "staticwebassets\\images\\c03d030e-718a-4002-8b27-162fa3baf1aa.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\c3c287d8-549d-4ee0-bd30-9ba958fbaf01.jpg",
+      "PackagePath": "staticwebassets\\images\\c3c287d8-549d-4ee0-bd30-9ba958fbaf01.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\cd08526f-1e3c-4c14-9306-fd11c47f3239.jpg",
+      "PackagePath": "staticwebassets\\images\\cd08526f-1e3c-4c14-9306-fd11c47f3239.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\d4190ad1-31eb-4d74-8e89-2e19d33300b9.png",
+      "PackagePath": "staticwebassets\\images\\d4190ad1-31eb-4d74-8e89-2e19d33300b9.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\dc709680-13b1-4eb9-92cc-0ebdb858c2f4.jpg",
+      "PackagePath": "staticwebassets\\images\\dc709680-13b1-4eb9-92cc-0ebdb858c2f4.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\dcaefa36-120d-497e-b8b4-7a7dee2fcb42.jpg",
+      "PackagePath": "staticwebassets\\images\\dcaefa36-120d-497e-b8b4-7a7dee2fcb42.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\e9fbe0bd-ce53-4ac0-9359-b42d70ac16d9.png",
+      "PackagePath": "staticwebassets\\images\\e9fbe0bd-ce53-4ac0-9359-b42d70ac16d9.png"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\ee08f891-2188-4a4b-a226-91d4a50a3ea7.jpg",
+      "PackagePath": "staticwebassets\\images\\ee08f891-2188-4a4b-a226-91d4a50a3ea7.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\images\\fc566ccb-c4c1-4b9f-8555-74f4f7e470a9.jpg",
+      "PackagePath": "staticwebassets\\images\\fc566ccb-c4c1-4b9f-8555-74f4f7e470a9.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\00f9db6b-a3f4-4d08-9832-1fc7cf3a3fb1.mp4",
+      "PackagePath": "staticwebassets\\videos\\00f9db6b-a3f4-4d08-9832-1fc7cf3a3fb1.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\077c9184-3844-4d5a-9532-97e506f42561.mp4",
+      "PackagePath": "staticwebassets\\videos\\077c9184-3844-4d5a-9532-97e506f42561.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\0ec66fdc-682c-4ad8-af3c-cdba298e00e1.mp4",
+      "PackagePath": "staticwebassets\\videos\\0ec66fdc-682c-4ad8-af3c-cdba298e00e1.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\33b25105-0f4f-4bbb-b149-876fde4d7b8a.mp4",
+      "PackagePath": "staticwebassets\\videos\\33b25105-0f4f-4bbb-b149-876fde4d7b8a.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\56c80058-3b38-49c0-8af8-3db80694a58b.mp4",
+      "PackagePath": "staticwebassets\\videos\\56c80058-3b38-49c0-8af8-3db80694a58b.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\5dbd759a-3b7a-49d2-87da-c7a8a82f229f.mp4",
+      "PackagePath": "staticwebassets\\videos\\5dbd759a-3b7a-49d2-87da-c7a8a82f229f.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\5e3c7ebf-fecf-424e-8bf5-cfac7a5cd5ad.mp4",
+      "PackagePath": "staticwebassets\\videos\\5e3c7ebf-fecf-424e-8bf5-cfac7a5cd5ad.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\685e89d6-2c89-44dc-bf1c-b48a87408a6a.mp4",
+      "PackagePath": "staticwebassets\\videos\\685e89d6-2c89-44dc-bf1c-b48a87408a6a.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\7f93c0f2-d586-4695-986d-fb9664081fdb.AVI",
+      "PackagePath": "staticwebassets\\videos\\7f93c0f2-d586-4695-986d-fb9664081fdb.AVI"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\d62c89bb-0f78-4789-b2b4-5e5f42d2b620.mp4",
+      "PackagePath": "staticwebassets\\videos\\d62c89bb-0f78-4789-b2b4-5e5f42d2b620.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\d6fff0c7-bae1-4e2b-aa11-6bd109314f69.mp4",
+      "PackagePath": "staticwebassets\\videos\\d6fff0c7-bae1-4e2b-aa11-6bd109314f69.mp4"
+    },
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\Fitness\\wwwroot\\videos\\ea78f35f-2030-41f2-adce-f1141f654d27.mp4",
+      "PackagePath": "staticwebassets\\videos\\ea78f35f-2030-41f2-adce-f1141f654d27.mp4"
+    },
+    {
+      "Id": "obj\\Release\\net9.0\\staticwebassets\\msbuild.Fitness.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Release\\net9.0\\staticwebassets\\msbuild.Fitness.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Release\\net9.0\\staticwebassets\\msbuild.build.Fitness.props",
+      "PackagePath": "build\\Fitness.props"
+    },
+    {
+      "Id": "obj\\Release\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.Fitness.props",
+      "PackagePath": "buildMultiTargeting\\Fitness.props"
+    },
+    {
+      "Id": "obj\\Release\\net9.0\\staticwebassets\\msbuild.buildTransitive.Fitness.props",
+      "PackagePath": "buildTransitive\\Fitness.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
