@@ -25,6 +25,12 @@ jobs:
         working-directory: Frontend/frontend
         run: npm ci
 
+      - name: Trust ASP.NET HTTPS dev certificate
+        shell: pwsh
+        run: |
+          dotnet dev-certs https --trust
+          dotnet dev-certs https --check --trust
+
       - name: Restore
         run: dotnet restore
 
@@ -46,10 +52,44 @@ jobs:
           Expand-Archive chromedriver.zip -DestinationPath $dest -Force
           Remove-Item chromedriver.zip -Force
 
+      - name: Start backend and verify HTTPS
+        shell: pwsh
+        run: |
+          $backend = Start-Process -FilePath dotnet -ArgumentList @('run','--project','Fitness.csproj','--launch-profile','https') -PassThru -RedirectStandardOutput backend.log -RedirectStandardError backend.err
+          Set-Content -Path backend-pid.txt -Value $backend.Id
+
+          $timeout = 180
+          $started = $false
+          for ($i = 0; $i -lt $timeout; $i++) {
+            if ($backend.HasExited) {
+              Write-Host 'Backend process exited early.'
+              Get-Content backend.err -ErrorAction SilentlyContinue | Write-Host
+              exit 1
+            }
+
+            try {
+              $r = Invoke-WebRequest -Uri https://localhost:7103/swagger -UseBasicParsing -TimeoutSec 5
+              if ($r.StatusCode -eq 200) {
+                $started = $true
+                break
+              }
+            } catch {
+              Start-Sleep -Seconds 1
+            }
+          }
+
+          if (-not $started) {
+            Write-Host 'Backend did not become available on https://localhost:7103/swagger'
+            Get-Content backend.err -ErrorAction SilentlyContinue | Write-Host
+            exit 1
+          }
+
+          Write-Host 'Backend HTTPS endpoint is reachable.'
+
       - name: Start frontend and run test
         shell: pwsh
-        working-directory: Frontend/frontend
         run: |
+          Push-Location Frontend/frontend
           $server = Start-Process -FilePath npm.cmd -ArgumentList @('run','dev','--','--host','localhost','--strictPort','--port','5173') -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
           Set-Content -Path frontend-pid.txt -Value $server.Id
 
@@ -123,6 +163,9 @@ jobs:
             **/test-results.trx
             test-exit-code.txt
             chromedriver-listing.txt
+            backend.log
+            backend.err
+            backend-pid.txt
             frontend.log
             frontend.err
             frontend-pid.txt
