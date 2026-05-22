@@ -64,8 +64,45 @@ jobs:
           Expand-Archive chromedriver.zip -DestinationPath $dest -Force
           Remove-Item chromedriver.zip -Force
 
-      - name: Run only AdminDashboard test
-        run: dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj --configuration Release --no-build --filter "FullyQualifiedName=FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" --logger "trx;LogFileName=test-results.trx"
+      - name: Run only AdminDashboard test (capture exit code)
+        shell: pwsh
+        run: |
+          dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj --configuration Release --no-build --filter "FullyQualifiedName=FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" --logger "trx;LogFileName=test-results.trx"
+          $testExit = $LASTEXITCODE
+          Write-Host "DOTNET_TEST_EXIT_CODE=$testExit"
+          Set-Content -Path test-exit-code.txt -Value $testExit
+        continue-on-error: true
+
+      - name: Collect diagnostics
+        shell: pwsh
+        run: |
+          Write-Host "Listing chromedriver folders"
+          $driverRoot = Join-Path $PWD 'tools\chromedriver'
+          if (Test-Path $driverRoot) { Get-ChildItem -Recurse $driverRoot | Out-File chromedriver-listing.txt } else { 'No chromedriver folder' | Out-File chromedriver-listing.txt }
+          Write-Host "Checking http://localhost:5173"
+          try { $r=Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5; $r.StatusCode | Out-File frontend-status.txt } catch { $_.Exception.Message | Out-File frontend-status.txt }
+          Get-ChildItem -Path '**/*.trx' -ErrorAction SilentlyContinue | ForEach-Object { $_.FullName } | Out-File trx-paths.txt
+
+      - name: Upload diagnostics artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-diagnostics
+          path: |
+            **/test-results.trx
+            test-exit-code.txt
+            chromedriver-listing.txt
+            frontend-status.txt
+            trx-paths.txt
+
+      - name: Fail job on test failure
+        shell: pwsh
+        run: |
+          if (Test-Path test-exit-code.txt) {
+            $code = [int](Get-Content test-exit-code.txt)
+            if ($code -ne 0) { Write-Host "Failing job with exit code $code"; exit $code }
+          } else {
+            Write-Host "No test-exit-code.txt found, assuming failure"; exit 1
+          }
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
