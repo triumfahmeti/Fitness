@@ -29,6 +29,8 @@ namespace FitnessApp.Tests
             options.AddArgument("--no-sandbox");
             options.AddArgument("--disable-dev-shm-usage");
             options.AddArgument("--window-size=1920,1080");
+            options.AddArgument("--ignore-certificate-errors");
+            options.AddArgument("--allow-insecure-localhost");
 
             IWebDriver driver = new ChromeDriver(driverDir, options);
             try

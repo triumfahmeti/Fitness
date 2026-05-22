@@ -55,10 +55,19 @@ jobs:
         working-directory: Frontend/frontend
         run: npm ci
 
+      - name: Create HTTPS dev certificate
+        shell: pwsh
+        run: |
+          $certPath = "$env:RUNNER_TEMP\aspnet-devcert.pfx"
+          $certPassword = "devcert-pass"
+          dotnet dev-certs https -ep $certPath -p $certPassword
+          "ASPNETCORE_Kestrel__Certificates__Default__Path=$certPath" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "ASPNETCORE_Kestrel__Certificates__Default__Password=$certPassword" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
       - name: Start backend
         shell: pwsh
         run: |
-          $env:ASPNETCORE_URLS = "http://localhost:7103"
+          $env:ASPNETCORE_URLS = "https://localhost:7103"
 
           $outLog = Join-Path $env:RUNNER_TEMP "backend.out.log"
           $errLog = Join-Path $env:RUNNER_TEMP "backend.err.log"
@@ -111,7 +120,7 @@ jobs:
 
       - name: Wait for backend
         continue-on-error: true
-        run: npx --yes wait-on http://127.0.0.1:7103 --timeout 60000
+        run: npx --yes wait-on --strictSSL false https://127.0.0.1:7103 --timeout 60000
 
       - name: Run tests
         shell: pwsh
