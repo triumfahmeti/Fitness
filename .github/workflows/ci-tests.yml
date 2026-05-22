@@ -76,7 +76,12 @@ jobs:
         shell: pwsh
         run: |
           $env:ASPNETCORE_URLS = "https://localhost:7103"
-          Start-Process -FilePath "dotnet" -ArgumentList 'run --project "Fitness.csproj" --configuration Release --no-build' -NoNewWindow
+          $outLog = Join-Path $env:RUNNER_TEMP "backend.out.log"
+          $errLog = Join-Path $env:RUNNER_TEMP "backend.err.log"
+          Write-Host "Backend logs: $outLog and $errLog"
+          $proc = Start-Process -FilePath "dotnet" -ArgumentList 'run --project "Fitness.csproj" --configuration Release --no-build --no-launch-profile' -RedirectStandardOutput $outLog -RedirectStandardError $errLog -NoNewWindow -PassThru
+          Start-Sleep -Seconds 3
+          if (-Not (Test-Path $outLog)) { Write-Host "Backend stdout log not found yet." } else { Get-Content $outLog -Tail 30 -ErrorAction SilentlyContinue }
 
       - name: Start frontend
         shell: pwsh
@@ -110,6 +115,15 @@ jobs:
           name: test-results
           path: TestResults/*.trx
           reporter: dotnet-trx
+
+      - name: Upload backend logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-logs
+          path: |
+            ${{ runner.temp }}/backend.out.log
+            ${{ runner.temp }}/backend.err.log
 
       - name: Upload test report (TRX)
         if: always()
