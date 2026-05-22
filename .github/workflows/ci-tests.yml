@@ -83,12 +83,13 @@ jobs:
             -WorkingDirectory "Frontend/frontend" `
             -NoNewWindow
 
-      - name: Wait a bit for services
-        shell: pwsh
-        run: Start-Sleep -Seconds 15
+      - name: Wait for frontend
+        continue-on-error: true
+        run: npx --yes wait-on http://127.0.0.1:5173 --timeout 60000
 
-      # - name: Wait for services
-      #   run: npx --yes wait-on tcp:7103 tcp:5173 --timeout 60000
+      - name: Wait for backend
+        continue-on-error: true
+        run: npx --yes wait-on http://127.0.0.1:7103 --timeout 60000
 
       - name: Run tests
         shell: pwsh
