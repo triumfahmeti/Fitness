@@ -84,7 +84,7 @@ jobs:
           Start-Process -FilePath "npm" -ArgumentList 'run dev -- --host 127.0.0.1 --port 5173' -WorkingDirectory "Frontend/frontend" -NoNewWindow
 
       - name: Wait for services
-        run: npx --yes wait-on --timeout 30000 --strictSSL false https://localhost:7103 http://localhost:5173
+        run: npx --yes wait-on --timeout 30000 --strictSSL false https://localhost:5138 http://localhost:5173
 
       - name: Run tests
         run: >
