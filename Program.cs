@@ -58,7 +58,9 @@ builder.Services.AddCors(options =>
 
 // Database
 builder.Services.AddDbContext<FitnessDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
