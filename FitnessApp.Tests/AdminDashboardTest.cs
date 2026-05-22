@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
@@ -41,7 +40,31 @@ namespace FitnessApp.Tests
                 driver.FindElement(By.Id("email")).SendKeys("admin1@gmail.com");
                 driver.FindElement(By.Id("password")).SendKeys("Admin12.");
                 driver.FindElement(By.Id("login-button")).Click();
-                Thread.Sleep(2000);
+
+                _wait.Until(d =>
+                {
+                    var hasLoginError = d.FindElements(By.Id("login-error")).Any();
+                    if (hasLoginError)
+                    {
+                        return true;
+                    }
+
+                    var hasAdminUrl = d.Url.Contains("/admin", StringComparison.OrdinalIgnoreCase);
+                    if (hasAdminUrl)
+                    {
+                        return true;
+                    }
+
+                    var token = (string?)((IJavaScriptExecutor)d).ExecuteScript("return window.localStorage.getItem('accessToken');");
+                    return !string.IsNullOrWhiteSpace(token);
+                });
+
+                if (driver.FindElements(By.Id("login-error")).Any())
+                {
+                    var errorText = driver.FindElement(By.Id("login-error")).Text;
+                    Assert.Fail($"Login failed before dashboard assertions. UI error: {errorText}");
+                }
+
                 driver.Navigate().GoToUrl("http://localhost:5173/admin");
 
                 _wait.Until(d => !d.PageSource.Contains("Loading..."));
@@ -53,7 +76,10 @@ namespace FitnessApp.Tests
                 );
 
                 // Total Users karta
-                Assert.True(driver.FindElements(By.XPath("//div[contains(@class,'card-body')]//*[normalize-space()='Total Users']")).Any());
+                Assert.True(
+                    _wait.Until(d => d.FindElements(By.XPath("//div[contains(@class,'card-body')]//*[normalize-space()='Total Users']")).Any()),
+                    "Total Users card was not found."
+                );
 
                 // Kartat e grafikave
                 AssertCardHasChartCanvas("Age Distribution");
