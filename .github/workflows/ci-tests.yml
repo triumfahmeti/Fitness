@@ -77,11 +77,33 @@ jobs:
       - name: Start frontend
         shell: pwsh
         run: |
-          Start-Process `
-            -FilePath "npm" `
-            -ArgumentList 'run dev -- --host 0.0.0.0 --port 5173' `
-            -WorkingDirectory "Frontend/frontend" `
-            -NoNewWindow
+          cd Frontend/frontend
+
+          $frontendLog = Join-Path $env:RUNNER_TEMP "frontend.log"
+
+          Write-Host "Frontend log:"
+          Write-Host $frontendLog
+
+          Start-Process cmd.exe `
+            -ArgumentList "/c npm run dev -- --host 0.0.0.0 --port 5173 > `"$frontendLog`" 2>&1" `
+            -PassThru
+
+          Start-Sleep -Seconds 20
+
+          Get-Content $frontendLog
+
+      - name: Check frontend connectivity
+  shell: pwsh
+  run: |
+    try {
+      $response = Invoke-WebRequest -Uri "http://127.0.0.1:5173" -UseBasicParsing
+      Write-Host "Frontend reachable!"
+      Write-Host $response.StatusCode
+    }
+    catch {
+      Write-Error "Frontend NOT reachable"
+      exit 1
+    }
 
       - name: Wait for frontend
         continue-on-error: true
