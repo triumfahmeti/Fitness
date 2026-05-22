@@ -122,6 +122,37 @@ jobs:
         continue-on-error: true
         run: npx --yes wait-on --strictSSL false https://127.0.0.1:7103 --timeout 60000
 
+      - name: Seed admin account
+        shell: pwsh
+        run: |
+          $payload = @{
+            email = "admin1@gmail.com"
+            password = "Admin12."
+            userName = "admin1@gmail.com"
+            name = "Admin"
+            surname = "Test"
+            birthday = "1990-01-01"
+            gender = "Male"
+            role = "Admin"
+          } | ConvertTo-Json
+
+          try {
+            $response = Invoke-RestMethod `
+              -Method Post `
+              -Uri "https://localhost:7103/api/Auth/register" `
+              -Body $payload `
+              -ContentType "application/json" `
+              -SkipCertificateCheck `
+              -SkipHttpErrorCheck
+
+            Write-Host "Admin seed response:"
+            Write-Host ($response | ConvertTo-Json -Depth 5)
+          }
+          catch {
+            Write-Host "Admin seed step completed with non-fatal response."
+            Write-Host $_.Exception.Message
+          }
+
       - name: Run tests
         shell: pwsh
         run: |

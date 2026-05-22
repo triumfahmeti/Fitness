@@ -9,7 +9,7 @@ namespace FitnessApp.Tests
 {
     public class AdminDashboardTest
     {
-        private WebDriverWait _wait;
+        private WebDriverWait _wait = null!;
         [Fact]
         public void TestAdminDashboardAccess()
         {
@@ -95,6 +95,7 @@ namespace FitnessApp.Tests
             }
 
         }
+
         private void AssertCardHasChartCanvas(string cardTitle)
         {
             var card = _wait.Until(d =>
