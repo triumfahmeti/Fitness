@@ -25,11 +25,10 @@ jobs:
         working-directory: Frontend/frontend
         run: npm ci
 
-      - name: Trust ASP.NET HTTPS dev certificate
+      - name: Ensure ASP.NET HTTPS dev certificate exists
         shell: pwsh
         run: |
-          dotnet dev-certs https --trust
-          dotnet dev-certs https --check --trust
+          dotnet dev-certs https --check
 
       - name: Restore
         run: dotnet restore
@@ -68,7 +67,7 @@ jobs:
             }
 
             try {
-              $r = Invoke-WebRequest -Uri https://localhost:7103/swagger -UseBasicParsing -TimeoutSec 5
+              $r = Invoke-WebRequest -Uri https://localhost:7103/swagger -UseBasicParsing -SkipCertificateCheck -TimeoutSec 5
               if ($r.StatusCode -eq 200) {
                 $started = $true
                 break
