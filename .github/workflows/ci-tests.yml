@@ -29,15 +29,14 @@ jobs:
         shell: pwsh
         working-directory: Frontend/frontend
         run: |
-          $server = Start-Process -FilePath npm.cmd -ArgumentList @('run','dev','--','--host','::','--strictPort','--port','5173') -WorkingDirectory $PWD -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
+          $server = Start-Process -FilePath npm.cmd -ArgumentList @('run','dev','--','--host','localhost','--strictPort','--port','5173') -WorkingDirectory $PWD -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
           Set-Content -Path frontend-pid.txt -Value $server.Id
           $timeout = 120
           $i = 0
           while ($i -lt $timeout) {
             try {
-              $r1 = Invoke-WebRequest -Uri http://127.0.0.1:5173 -UseBasicParsing -TimeoutSec 5
-              $r2 = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
-              if ($r1.StatusCode -eq 200 -and $r2.StatusCode -eq 200) { Write-Host 'Frontend started' ; break }
+              $r = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
+              if ($r.StatusCode -eq 200) { Write-Host 'Frontend started' ; break }
             } catch {
               if ($server.HasExited) {
                 Write-Host 'Frontend process exited early.'
@@ -54,9 +53,8 @@ jobs:
         shell: pwsh
         run: |
           try {
-            $r1 = Invoke-WebRequest -Uri http://127.0.0.1:5173 -UseBasicParsing -TimeoutSec 5
-            $r2 = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
-            Write-Host "Frontend status: 127.0.0.1=$($r1.StatusCode) localhost=$($r2.StatusCode)"
+            $r = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
+            Write-Host "Frontend status: localhost=$($r.StatusCode)"
           } catch {
             Write-Host "Frontend pre-test check failed: $($_.Exception.Message)"
             if (Test-Path Frontend/frontend/frontend.err) { Get-Content Frontend/frontend/frontend.err | Write-Host }
@@ -100,9 +98,8 @@ jobs:
           Write-Host "Listing chromedriver folders"
           $driverRoot = Join-Path $PWD 'tools\chromedriver'
           if (Test-Path $driverRoot) { Get-ChildItem -Recurse $driverRoot | Out-File chromedriver-listing.txt } else { 'No chromedriver folder' | Out-File chromedriver-listing.txt }
-          Write-Host "Checking http://127.0.0.1:5173"
-          try { $r=Invoke-WebRequest -Uri http://127.0.0.1:5173 -UseBasicParsing -TimeoutSec 5; $r.StatusCode | Out-File frontend-status.txt } catch { $_.Exception.Message | Out-File frontend-status.txt }
-          try { $r=Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5; $r.StatusCode | Out-File frontend-localhost-status.txt } catch { $_.Exception.Message | Out-File frontend-localhost-status.txt }
+          Write-Host "Checking http://localhost:5173"
+          try { $r=Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5; $r.StatusCode | Out-File frontend-status.txt } catch { $_.Exception.Message | Out-File frontend-status.txt }
           if (Test-Path Frontend/frontend/frontend.log) { Copy-Item Frontend/frontend/frontend.log frontend.log -Force }
           if (Test-Path Frontend/frontend/frontend.err) { Copy-Item Frontend/frontend/frontend.err frontend.err -Force }
           if (Test-Path Frontend/frontend/frontend-pid.txt) { Copy-Item Frontend/frontend/frontend-pid.txt frontend-pid.txt -Force }
@@ -117,7 +114,6 @@ jobs:
             test-exit-code.txt
             chromedriver-listing.txt
             frontend-status.txt
-            frontend-localhost-status.txt
             frontend.log
             frontend.err
             frontend-pid.txt
