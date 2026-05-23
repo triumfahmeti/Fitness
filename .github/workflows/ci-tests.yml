@@ -109,31 +109,32 @@ jobs:
         shell: pwsh
         run: npm run build
 
-      - name: Start Frontend
+      - name: Start frontend preview server
         shell: pwsh
         working-directory: Frontend/frontend
         run: |
-          npm install
-          Start-Process pwsh -ArgumentList "-Command", "npm run dev > frontend.log 2> frontend.err" -NoNewWindow
-          # Wait up to 30s for port 5173 to open
+          Start-Process pwsh -ArgumentList @(
+            '-Command',
+            'npx vite preview --port 5173 2>&1 | Tee-Object -FilePath frontend.log'
+          ) -NoNewWindow
+          
+          Write-Host "Waiting for frontend on port 5173..."
           $timeout = 30
-          $elapsed = 0
-          while ($elapsed -lt $timeout) {
+          for ($i = 0; $i -lt $timeout; $i++) {
             try {
               $null = Invoke-WebRequest -Uri http://127.0.0.1:5173/ -UseBasicParsing -TimeoutSec 2
               Write-Host "Frontend is up!"
               break
             } catch {
+              if ($i -eq ($timeout - 1)) {
+                Write-Host "Frontend failed to start!"
+                Get-Content frontend.log -ErrorAction SilentlyContinue | Write-Host
+                exit 1
+              }
               Start-Sleep -Seconds 1
-              $elapsed++
             }
           }
-          if ($elapsed -ge $timeout) {
-            Write-Host "Frontend failed to start in time"
-            Get-Content frontend.log -ErrorAction SilentlyContinue
-            Get-Content frontend.err -ErrorAction SilentlyContinue
-            exit 1
-          }
+
 
       - name: Verify frontend still reachable before tests
         shell: pwsh
