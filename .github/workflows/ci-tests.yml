@@ -109,58 +109,31 @@ jobs:
         shell: pwsh
         run: npm run build
 
-      - name: Start frontend
+      - name: Start Frontend
         shell: pwsh
+        working-directory: Frontend/frontend
         run: |
-          $logOut = Join-Path $PWD "Frontend\frontend\frontend.log"
-          $logErr = Join-Path $PWD "Frontend\frontend\frontend.err"
-
-          $server = Start-Process -FilePath "node" `
-            -ArgumentList @(
-              (Join-Path $PWD "Frontend\frontend\node_modules\vite\bin\vite.js"),
-              "preview",
-              "--host", "127.0.0.1",
-              "--strictPort",
-              "--port", "5173"
-            ) `
-            -WorkingDirectory (Join-Path $PWD "Frontend\frontend") `
-            -PassThru `
-            -RedirectStandardOutput $logOut `
-            -RedirectStandardError $logErr
-
-          Write-Host "Frontend PID: $($server.Id)"
-          Set-Content -Path frontend-pid.txt -Value $server.Id
-
-          $timeout = 120
-          $started = $false
-
-          for ($i = 0; $i -lt $timeout; $i++) {
-            if ($server.HasExited) {
-              Write-Host 'Frontend process exited early.'
-              Get-Content $logErr -ErrorAction SilentlyContinue | Write-Host
-              exit 1
-            }
-
+          npm install
+          Start-Process pwsh -ArgumentList "-Command", "npm run dev > frontend.log 2> frontend.err" -NoNewWindow
+          # Wait up to 30s for port 5173 to open
+          $timeout = 30
+          $elapsed = 0
+          while ($elapsed -lt $timeout) {
             try {
-              $r = Invoke-WebRequest -Uri http://127.0.0.1:5173/ `
-                -UseBasicParsing `
-                -TimeoutSec 5
-              if ($r.StatusCode -eq 200) {
-                $started = $true
-                break
-              }
-            } catch {}
-
-            Start-Sleep -Seconds 1
+              $null = Invoke-WebRequest -Uri http://127.0.0.1:5173/ -UseBasicParsing -TimeoutSec 2
+              Write-Host "Frontend is up!"
+              break
+            } catch {
+              Start-Sleep -Seconds 1
+              $elapsed++
+            }
           }
-
-          if (-not $started) {
-            Write-Host 'Frontend did not become available on http://127.0.0.1:5173/'
-            Get-Content $logErr -ErrorAction SilentlyContinue | Write-Host
+          if ($elapsed -ge $timeout) {
+            Write-Host "Frontend failed to start in time"
+            Get-Content frontend.log -ErrorAction SilentlyContinue
+            Get-Content frontend.err -ErrorAction SilentlyContinue
             exit 1
           }
-
-          Write-Host 'Frontend started successfully.'
 
       - name: Verify frontend still reachable before tests
         shell: pwsh
