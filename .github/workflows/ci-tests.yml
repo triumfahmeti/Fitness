@@ -159,7 +159,19 @@ jobs:
           Write-Host 'Frontend started successfully.'
           Pop-Location
 
-      
+      - name: Verify frontend still reachable before tests
+        shell: pwsh
+        run: |
+          try {
+            $r = Invoke-WebRequest -Uri http://127.0.0.1:5173/ -UseBasicParsing -TimeoutSec 5
+            Write-Host "Frontend still reachable. Status: $($r.StatusCode)"
+          } catch {
+            Write-Host "ERROR: Frontend is NOT reachable before tests!"
+            Write-Host $_.Exception.Message
+            Get-Content Frontend/frontend/frontend.log -ErrorAction SilentlyContinue | Write-Host
+            Get-Content Frontend/frontend/frontend.err -ErrorAction SilentlyContinue | Write-Host
+            exit 1
+          }
 
       - name: Build test project
         run: dotnet build FitnessApp.Tests/FitnessApp.Tests.csproj --configuration Release

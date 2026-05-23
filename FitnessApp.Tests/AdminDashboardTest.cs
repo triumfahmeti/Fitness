@@ -38,8 +38,8 @@ namespace FitnessApp.Tests
                 _wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
                 driver.Navigate().GoToUrl("http://127.0.0.1:5173/login");
-                driver.FindElement(By.Id("email")).SendKeys("admin1@gmail.com");
-                driver.FindElement(By.Id("password")).SendKeys("Admin12.");
+                driver.FindElement(By.Id("email")).SendKeys("admin.test@fitness.com");
+                driver.FindElement(By.Id("password")).SendKeys("Admin@1234");
                 driver.FindElement(By.Id("login-button")).Click();
 
                 _wait.Until(d =>
