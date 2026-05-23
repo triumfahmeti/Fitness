@@ -115,7 +115,7 @@ jobs:
         run: |
           Start-Process pwsh -ArgumentList @(
             '-Command',
-            'npx vite preview --port 5173 --host 127.0.0.1 2>&1 | Tee-Object -FilePath frontend.log'
+            'npx vite preview --port 5173 2>&1 | Tee-Object -FilePath frontend.log'
           ) -NoNewWindow
           
           Write-Host "Waiting for frontend on port 5173..."
