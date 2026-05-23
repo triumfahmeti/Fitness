@@ -6,6 +6,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Security.Claims;
 using Fitness.Data;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Fitness.Domain.Models;
 using Fitness.Domain.Interfaces;
 using Fitness.Application.Services;
@@ -60,7 +61,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<FitnessDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
-        sqlOptions => sqlOptions.EnableRetryOnFailure()));
+        sqlOptions => sqlOptions.EnableRetryOnFailure())
+    .ConfigureWarnings(w => w.Ignore(RelationalEventId.PendingModelChangesWarning)));
 
 // Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
