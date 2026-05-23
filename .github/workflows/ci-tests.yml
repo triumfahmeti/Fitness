@@ -159,36 +159,7 @@ jobs:
           Write-Host 'Frontend started successfully.'
           Pop-Location
 
-      - name: Seed test admin user
-        shell: pwsh
-        continue-on-error: true
-        run: |
-          $body = @{
-            email = "admin1@gmail.com"
-            password = "Admin12."
-            userName = "admin1"
-            name = "Admin"
-            surname = "User"
-            birthday = "1990-01-01"
-            gender = "Male"
-            role = "Admin"
-          } | ConvertTo-Json
-
-          try {
-            $response = Invoke-RestMethod -Uri "https://localhost:7103/api/auth/register" `
-              -Method Post `
-              -Body $body `
-              -ContentType "application/json" `
-              -SkipCertificateCheck
-            Write-Host "Admin user created successfully"
-          } catch {
-            $statusCode = $_.Exception.Response.StatusCode.value__
-            if ($statusCode -eq 400) {
-              Write-Host "Admin user already exists (this is OK)"
-            } else {
-              Write-Host "Failed to create admin: $($_.Exception.Message)"
-            }
-          }
+      
 
       - name: Build test project
         run: dotnet build FitnessApp.Tests/FitnessApp.Tests.csproj --configuration Release
