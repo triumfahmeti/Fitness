@@ -112,52 +112,55 @@ jobs:
       - name: Start frontend
         shell: pwsh
         run: |
-          Push-Location Frontend/frontend
+          $logOut = Join-Path $PWD "Frontend\frontend\frontend.log"
+          $logErr = Join-Path $PWD "Frontend\frontend\frontend.err"
 
-          $server = Start-Process -FilePath npm.cmd `
-            -ArgumentList @('run','preview','--','--host','127.0.0.1','--strictPort','--port','5173') `
+          $server = Start-Process -FilePath "node" `
+            -ArgumentList @(
+              (Join-Path $PWD "Frontend\frontend\node_modules\vite\bin\vite.js"),
+              "preview",
+              "--host", "127.0.0.1",
+              "--strictPort",
+              "--port", "5173"
+            ) `
+            -WorkingDirectory (Join-Path $PWD "Frontend\frontend") `
             -PassThru `
-            -RedirectStandardOutput frontend.log `
-            -RedirectStandardError frontend.err
+            -RedirectStandardOutput $logOut `
+            -RedirectStandardError $logErr
 
+          Write-Host "Frontend PID: $($server.Id)"
           Set-Content -Path frontend-pid.txt -Value $server.Id
 
           $timeout = 120
           $started = $false
 
           for ($i = 0; $i -lt $timeout; $i++) {
-
             if ($server.HasExited) {
               Write-Host 'Frontend process exited early.'
-              Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
+              Get-Content $logErr -ErrorAction SilentlyContinue | Write-Host
               exit 1
             }
 
             try {
-              # Use root / because vite preview always serves index.html there
               $r = Invoke-WebRequest -Uri http://127.0.0.1:5173/ `
                 -UseBasicParsing `
                 -TimeoutSec 5
-
               if ($r.StatusCode -eq 200) {
                 $started = $true
                 break
               }
-
-            } catch {
-            }
+            } catch {}
 
             Start-Sleep -Seconds 1
           }
 
           if (-not $started) {
             Write-Host 'Frontend did not become available on http://127.0.0.1:5173/'
-            Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
+            Get-Content $logErr -ErrorAction SilentlyContinue | Write-Host
             exit 1
           }
 
           Write-Host 'Frontend started successfully.'
-          Pop-Location
 
       - name: Verify frontend still reachable before tests
         shell: pwsh
