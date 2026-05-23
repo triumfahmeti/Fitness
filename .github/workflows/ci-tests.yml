@@ -104,13 +104,18 @@ jobs:
 
           Write-Host 'Backend HTTPS endpoint is reachable.'
 
+      - name: Build frontend for preview
+        working-directory: Frontend/frontend
+        shell: pwsh
+        run: npm run build
+
       - name: Start frontend
         shell: pwsh
         run: |
           Push-Location Frontend/frontend
 
           $server = Start-Process -FilePath npm.cmd `
-            -ArgumentList @('run','dev','--','--host','127.0.0.1','--strictPort','--port','5173') `
+            -ArgumentList @('run','preview','--','--host','127.0.0.1','--strictPort','--port','5173') `
             -PassThru `
             -RedirectStandardOutput frontend.log `
             -RedirectStandardError frontend.err
@@ -369,5 +374,3 @@ jobs:
             Write-Host "Test exit code: $code"
           }
           Write-Host "HTML report uploaded as artifact"
-
-          
