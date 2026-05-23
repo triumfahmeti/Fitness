@@ -108,12 +108,20 @@ jobs:
         shell: pwsh
         run: |
           Push-Location Frontend/frontend
-          $server = Start-Process -FilePath npm.cmd -ArgumentList @('run','dev','--','--host','localhost','--strictPort','--port','5173') -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
+
+          $server = Start-Process -FilePath npm.cmd `
+            -ArgumentList @('run','dev','--','--host','127.0.0.1','--strictPort','--port','5173') `
+            -PassThru `
+            -RedirectStandardOutput frontend.log `
+            -RedirectStandardError frontend.err
+
           Set-Content -Path frontend-pid.txt -Value $server.Id
 
           $timeout = 120
           $started = $false
+
           for ($i = 0; $i -lt $timeout; $i++) {
+
             if ($server.HasExited) {
               Write-Host 'Frontend process exited early.'
               Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
@@ -121,11 +129,15 @@ jobs:
             }
 
             try {
-              $r = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
+              $r = Invoke-WebRequest -Uri http://127.0.0.1:5173/login `
+                -UseBasicParsing `
+                -TimeoutSec 5
+
               if ($r.StatusCode -eq 200) {
                 $started = $true
                 break
               }
+
             } catch {
             }
 
@@ -133,13 +145,14 @@ jobs:
           }
 
           if (-not $started) {
-            Write-Host 'Frontend did not become available on http://localhost:5173'
+            Write-Host 'Frontend did not become available on http://127.0.0.1:5173/login'
             Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
             exit 1
           }
 
           Write-Host 'Frontend started successfully.'
           Pop-Location
+
 
       - name: Seed test admin user
         shell: pwsh

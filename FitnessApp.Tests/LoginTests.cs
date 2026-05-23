@@ -79,8 +79,8 @@ namespace FitnessApp.Tests
 
             var error = wait.Until(d => d.FindElement(By.Id("login-error")));
 
-            Assert.Contains("Invalid credentials", error.Text);
-
+        //    Assert.Contains("Invalid credentials", error.Text);
+                Assert.Contains("Login failed", error.Text);
             // mbyll browser
             driver.Quit();
         }

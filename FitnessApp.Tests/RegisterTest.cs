@@ -34,7 +34,8 @@ namespace FitnessApp.Tests
             // gjej inputet
             driver.FindElement(By.Id("name")).SendKeys("TestName");
             driver.FindElement(By.Id("surname")).SendKeys("TestSurname");
-            driver.FindElement(By.Id("email")).SendKeys("test@gmail.com");
+            //driver.FindElement(By.Id("email")).SendKeys("test@gmail.com");
+            driver.FindElement(By.Id("email")).SendKeys($"test{DateTime.Now.Ticks}@gmail.com");
             SetDateValue(driver, "birthday", new DateTime(1995, 5, 17));
             driver.FindElement(By.Id("gender")).SendKeys("Male");
             driver.FindElement(By.Id("password")).SendKeys("Test12.");

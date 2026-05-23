@@ -37,7 +37,7 @@ namespace FitnessApp.Tests
             {
                 _wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
-                driver.Navigate().GoToUrl("http://localhost:5173/login");
+driver.Navigate().GoToUrl("http://127.0.0.1:5173/login");
 
                 driver.FindElement(By.Id("email")).SendKeys("admin1@gmail.com");
                 driver.FindElement(By.Id("password")).SendKeys("Admin12.");
@@ -79,10 +79,9 @@ namespace FitnessApp.Tests
                     Assert.Fail($"Login failed before dashboard assertions. UI error: {errorText}");
                 }
 
-                driver.Navigate().GoToUrl("http://localhost:5173/admin");
-
+driver.Navigate().GoToUrl("http://127.0.0.1:5173/admin");
                 _wait.Until(d => !d.PageSource.Contains("Loading..."));
-
+    //testt
                 // titulli
                 Assert.True(
                     _wait.Until(d => d.FindElements(By.XPath("//h2[normalize-space()='Dashboard']")).Any()),
@@ -92,7 +91,7 @@ namespace FitnessApp.Tests
                 // Total Users karta
                 Assert.True(
                     _wait.Until(d => d.FindElements(By.XPath("//div[contains(@class,'card-body')]//*[normalize-space()='Total Users']")).Any()),
-                    "Total Users card was not found."
+                    "Total   Users card was not found."
                 );
 
                 // Kartat e grafikave
