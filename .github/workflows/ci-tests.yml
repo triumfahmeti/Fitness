@@ -134,7 +134,8 @@ jobs:
             }
 
             try {
-              $r = Invoke-WebRequest -Uri http://127.0.0.1:5173/login `
+              # Use root / because vite preview always serves index.html there
+              $r = Invoke-WebRequest -Uri http://127.0.0.1:5173/ `
                 -UseBasicParsing `
                 -TimeoutSec 5
 
@@ -150,14 +151,13 @@ jobs:
           }
 
           if (-not $started) {
-            Write-Host 'Frontend did not become available on http://127.0.0.1:5173/login'
+            Write-Host 'Frontend did not become available on http://127.0.0.1:5173/'
             Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
             exit 1
           }
 
           Write-Host 'Frontend started successfully.'
           Pop-Location
-
 
       - name: Seed test admin user
         shell: pwsh
@@ -189,6 +189,9 @@ jobs:
               Write-Host "Failed to create admin: $($_.Exception.Message)"
             }
           }
+
+      - name: Build test project
+        run: dotnet build FitnessApp.Tests/FitnessApp.Tests.csproj --configuration Release
 
       - name: Run automated tests
         shell: pwsh
