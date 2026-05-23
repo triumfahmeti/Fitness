@@ -64,6 +64,7 @@ namespace FitnessApp.Tests
                 if (driver.FindElements(By.Id("login-error")).Any())
                 {
                     var errorText = driver.FindElement(By.Id("login-error")).Text;
+                    var body = driver.FindElement(By.TagName("body")).Text; Console.WriteLine(body);
                     Assert.Fail($"Login failed before dashboard assertions. UI error: {errorText}");
                 }
 

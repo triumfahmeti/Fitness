@@ -14,6 +14,7 @@ using Fitness.Data.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Fitness.Application.Abstractions.Interfaces;
 
+
 // Create builder
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +45,8 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+
 
 // CORS
 builder.Services.AddCors(options =>
@@ -131,8 +134,55 @@ builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
+
+
+
 // Build app
 var app = builder.Build();
+
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+        // krijo rolin Admin nëse nuk ekziston
+        if (!await roleManager.RoleExistsAsync("Admin"))
+        {
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
+        }
+
+        // kontrollo userin
+        var adminEmail = "admin1@gmail.com";
+
+        var existingUser = await userManager.FindByEmailAsync(adminEmail);
+
+        if (existingUser == null)
+        {
+            var adminUser = new ApplicationUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
+
+            var result = await userManager.CreateAsync(adminUser, "Admin12.");
+
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+}
 
 // Middleware order
 if (app.Environment.IsDevelopment())
