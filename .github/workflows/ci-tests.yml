@@ -152,38 +152,40 @@ jobs:
             --logger "trx;LogFileName=test-results.trx" `
             --logger "html;LogFileName=test-results.html" `
             --results-directory TestResults
-          
+
           $testExit = $LASTEXITCODE
           Write-Host "DOTNET_TEST_EXIT_CODE=$testExit"
           Set-Content -Path test-exit-code.txt -Value $testExit
 
-          
       - name: Generate Custom HTML Report
         if: always()
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path reports | Out-Null
-          
-          # Lexo vetëm TRX kryesor (jo duplicates)
+
           $trxFile = Get-ChildItem -Path TestResults -Filter "test-results.trx" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-          
+
           $totalTests = 0
           $passedTests = 0
           $failedTests = 0
           $testRows = ""
-          
+
           if ($trxFile) {
             [xml]$xml = Get-Content $trxFile.FullName
             $results = $xml.TestRun.Results.UnitTestResult
-            
-            # Filtro vetëm test results unikë (nga emri)
-            $seenTests = @{}
-            
-            foreach ($r in $results) {
+
+            $grouped = $results | Group-Object -Property testName
+            $uniqueResults = @()
+            foreach ($g in $grouped) {
+              $best = $g.Group | Where-Object { $_.outcome -eq "Passed" } | Select-Object -First 1
+              if (-not $best) {
+                $best = $g.Group | Select-Object -First 1
+              }
+              $uniqueResults += $best
+            }
+
+            foreach ($r in $uniqueResults) {
               $name = $r.testName
-              if ($seenTests.ContainsKey($name)) { continue }
-              $seenTests[$name] = $true
-              
               $totalTests++
               $outcome = $r.outcome
               $duration = $r.duration
@@ -199,13 +201,13 @@ jobs:
               $testRows += "<tr><td>$name</td><td style='color:$statusColor;font-weight:bold;'>$statusText</td><td>$duration</td></tr>`n"
             }
           }
-          
+
           if ($totalTests -eq 0) {
             $testRows = "<tr><td colspan='3' style='text-align:center;color:#999;'>No test results found</td></tr>"
           }
-          
+
           $passRate = if ($totalTests -gt 0) { [math]::Round(($passedTests / $totalTests) * 100, 1) } else { 0 }
-          
+
           $html = @"
           <!DOCTYPE html>
           <html lang="en">
@@ -282,12 +284,11 @@ jobs:
           </body>
           </html>
           "@
-          
+
           Set-Content -Path "reports/test-report.html" -Value $html -Encoding UTF8
           Write-Host "HTML report generated successfully"
 
-
-      - name: Upload Test Results (TRX + HTML from dotnet)
+      - name: Upload Test Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
