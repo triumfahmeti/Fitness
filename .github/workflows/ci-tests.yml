@@ -164,19 +164,28 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force -Path reports | Out-Null
           
-          $trxFiles = Get-ChildItem -Path TestResults -Filter "*.trx" -Recurse -ErrorAction SilentlyContinue
+          # Lexo vetëm TRX kryesor (jo duplicates)
+          $trxFile = Get-ChildItem -Path TestResults -Filter "test-results.trx" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          
           $totalTests = 0
           $passedTests = 0
           $failedTests = 0
           $testRows = ""
           
-          foreach ($trx in $trxFiles) {
-            [xml]$xml = Get-Content $trx.FullName
+          if ($trxFile) {
+            [xml]$xml = Get-Content $trxFile.FullName
             $results = $xml.TestRun.Results.UnitTestResult
+            
+            # Filtro vetëm test results unikë (nga emri)
+            $seenTests = @{}
+            
             foreach ($r in $results) {
+              $name = $r.testName
+              if ($seenTests.ContainsKey($name)) { continue }
+              $seenTests[$name] = $true
+              
               $totalTests++
               $outcome = $r.outcome
-              $name = $r.testName
               $duration = $r.duration
               if ($outcome -eq "Passed") {
                 $passedTests++
@@ -276,6 +285,7 @@ jobs:
           
           Set-Content -Path "reports/test-report.html" -Value $html -Encoding UTF8
           Write-Host "HTML report generated successfully"
+
 
       - name: Upload Test Results (TRX + HTML from dotnet)
         if: always()
