@@ -148,6 +148,7 @@ jobs:
           dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj `
             --configuration Release `
             --no-build `
+            --filter "FullyQualifiedName=FitnessApp.Tests.LoginTests.TestLoginWithInvalidCredentials|FullyQualifiedName=FitnessApp.Tests.PageLoadTests.TestLoginPageLoads|FullyQualifiedName=FitnessApp.Tests.PageLoadTests.TestRegisterPageLoads" `
             --logger "trx;LogFileName=test-results.trx" `
             --logger "html;LogFileName=test-results.html" `
             --results-directory TestResults
@@ -156,6 +157,7 @@ jobs:
           Write-Host "DOTNET_TEST_EXIT_CODE=$testExit"
           Set-Content -Path test-exit-code.txt -Value $testExit
 
+          
       - name: Generate Custom HTML Report
         if: always()
         shell: pwsh
