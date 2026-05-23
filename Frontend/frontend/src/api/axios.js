@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:7103",
-  withCredentials: true, // only if you plan to use cookies
+  // withCredentials: true, // only if you plan to use cookies
 });
 
 api.interceptors.request.use((config) => {

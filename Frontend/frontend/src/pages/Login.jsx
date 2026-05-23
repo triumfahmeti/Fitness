@@ -46,7 +46,8 @@ export default function Login() {
       if (roles.includes("Admin")) navigate("/admin", { replace: true });
       else navigate("/user/profile", { replace: true });
     } catch (err) {
-      setError(err?.response?.data?.message || "Login failed");
+      console.error(err);
+      setError(err?.response?.data || err?.message || JSON.stringify(err));
     } finally {
       setLoading(false);
     }
