@@ -148,7 +148,7 @@ jobs:
           dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj `
             --configuration Release `
             --no-build `
-            --filter "FullyQualifiedName=FitnessApp.Tests.LoginTests.TestLoginWithInvalidCredentials|FullyQualifiedName=FitnessApp.Tests.PageLoadTests.TestLoginPageLoads|FullyQualifiedName=FitnessApp.Tests.PageLoadTests.TestRegisterPageLoads" `
+            --filter "FullyQualifiedName=FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" `
             --logger "trx;LogFileName=test-results.trx" `
             --logger "html;LogFileName=test-results.html" `
             --results-directory TestResults
