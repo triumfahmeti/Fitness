@@ -26,119 +26,57 @@ jobs:
         working-directory: Frontend/frontend
         run: npm ci
 
-      - name: Ensure ASP.NET HTTPS dev certificate exists
-        shell: pwsh
+      - name: Restore and build
         run: |
-          dotnet dev-certs https --check
-
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+          dotnet restore
+          dotnet build --configuration Release --no-restore
 
       - name: Prepare ChromeDriver
         shell: pwsh
         env:
           DRIVER_VERSION: "148.0.7778.168"
         run: |
-          $version = $env:DRIVER_VERSION
-          $dest = Join-Path -Path $PWD -ChildPath "tools\chromedriver\$version\chromedriver-win64"
-          Write-Host "Creating $dest"
+          $dest = Join-Path $PWD "tools\chromedriver\$env:DRIVER_VERSION\chromedriver-win64"
           New-Item -ItemType Directory -Force -Path $dest | Out-Null
-          $url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$version/win64/chromedriver-win64.zip"
-          Write-Host "Downloading Chromedriver from $url"
+          $url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$env:DRIVER_VERSION/win64/chromedriver-win64.zip"
           Invoke-WebRequest -Uri $url -OutFile chromedriver.zip
           Expand-Archive chromedriver.zip -DestinationPath $dest -Force
           Remove-Item chromedriver.zip -Force
 
-      - name: Configure LocalDB
+      - name: Configure database and apply migrations
         shell: pwsh
         run: |
-          sqllocaldb info MSSQLLocalDB
           sqllocaldb start MSSQLLocalDB
           "ConnectionStrings__DefaultConnection=Server=(localdb)\MSSQLLocalDB;Database=Fitness;Trusted_Connection=True;TrustServerCertificate=True" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-
-      - name: Apply database migrations
-        shell: pwsh
-        run: |
           dotnet tool update --global dotnet-ef --version 9.*
           $ef = Join-Path $env:USERPROFILE '.dotnet\tools\dotnet-ef.exe'
-          if (-not (Test-Path $ef)) {
-            Write-Host "dotnet-ef not found at $ef"
-            exit 1
-          }
           & $ef database update --project Fitness.csproj --startup-project Fitness.csproj
 
-      - name: Start backend and verify HTTPS
+      - name: Start backend
         shell: pwsh
         run: |
-          $backend = Start-Process -FilePath dotnet -ArgumentList @('run','--project','Fitness.csproj','--launch-profile','https') -PassThru -RedirectStandardOutput backend.log -RedirectStandardError backend.err
-          Set-Content -Path backend-pid.txt -Value $backend.Id
-
-          $timeout = 180
-          $started = $false
-          for ($i = 0; $i -lt $timeout; $i++) {
-            if ($backend.HasExited) {
-              Write-Host 'Backend process exited early.'
-              Get-Content backend.err -ErrorAction SilentlyContinue | Write-Host
-              exit 1
-            }
-
+          $proc = Start-Process dotnet -ArgumentList @('run', '--project', 'Fitness.csproj', '--launch-profile', 'https') -PassThru -RedirectStandardOutput backend.log -RedirectStandardError backend.err
+          for ($i = 0; $i -lt 180; $i++) {
+            if ($proc.HasExited) { Get-Content backend.err -ErrorAction SilentlyContinue; exit 1 }
             try {
               $r = Invoke-WebRequest -Uri https://localhost:7103/swagger -UseBasicParsing -SkipCertificateCheck -TimeoutSec 5
-              if ($r.StatusCode -eq 200) {
-                $started = $true
-                break
-              }
-            } catch {
-              Start-Sleep -Seconds 1
-            }
+              if ($r.StatusCode -eq 200) { Write-Host "Backend ready."; break }
+            } catch { Start-Sleep -Seconds 1 }
           }
-
-          if (-not $started) {
-            Write-Host 'Backend did not become available on https://localhost:7103/swagger'
-            Get-Content backend.err -ErrorAction SilentlyContinue | Write-Host
-            exit 1
-          }
-
-          Write-Host 'Backend HTTPS endpoint is reachable.'
 
       - name: Start frontend
         shell: pwsh
         run: |
           Push-Location Frontend/frontend
-          $server = Start-Process -FilePath npm.cmd -ArgumentList @('run','dev','--','--host','localhost','--strictPort','--port','5173') -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
-          Set-Content -Path frontend-pid.txt -Value $server.Id
-
-          $timeout = 120
-          $started = $false
-          for ($i = 0; $i -lt $timeout; $i++) {
-            if ($server.HasExited) {
-              Write-Host 'Frontend process exited early.'
-              Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
-              exit 1
-            }
-
+          $proc = Start-Process npm.cmd -ArgumentList @('run', 'dev', '--', '--host', 'localhost', '--strictPort', '--port', '5173') -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
+          for ($i = 0; $i -lt 120; $i++) {
+            if ($proc.HasExited) { Get-Content frontend.err -ErrorAction SilentlyContinue; exit 1 }
             try {
               $r = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
-              if ($r.StatusCode -eq 200) {
-                $started = $true
-                break
-              }
-            } catch {
-            }
-
+              if ($r.StatusCode -eq 200) { Write-Host "Frontend ready."; break }
+            } catch { }
             Start-Sleep -Seconds 1
           }
-
-          if (-not $started) {
-            Write-Host 'Frontend did not become available on http://localhost:5173'
-            Get-Content frontend.err -ErrorAction SilentlyContinue | Write-Host
-            exit 1
-          }
-
-          Write-Host 'Frontend started successfully.'
           Pop-Location
 
       - name: Seed test admin user
@@ -146,194 +84,37 @@ jobs:
         continue-on-error: true
         run: |
           $body = @{
-            email = "admin1@gmail.com"
-            password = "Admin12."
-            userName = "admin1"
-            name = "Admin"
-            surname = "User"
-            birthday = "1990-01-01"
-            gender = "Male"
-            role = "Admin"
+            email = "admin1@gmail.com"; password = "Admin12."; userName = "admin1"
+            name = "Admin"; surname = "User"; birthday = "1990-01-01"
+            gender = "Male"; role = "Admin"
           } | ConvertTo-Json
-
           try {
-            $response = Invoke-RestMethod -Uri "https://localhost:7103/api/auth/register" `
-              -Method Post `
-              -Body $body `
-              -ContentType "application/json" `
-              -SkipCertificateCheck
-            Write-Host "Admin user created successfully"
+            Invoke-RestMethod -Uri "https://localhost:7103/api/auth/register" -Method Post -Body $body -ContentType "application/json" -SkipCertificateCheck
+            Write-Host "Admin user created."
           } catch {
-            $statusCode = $_.Exception.Response.StatusCode.value__
-            if ($statusCode -eq 400) {
-              Write-Host "Admin user already exists (this is OK)"
-            } else {
-              Write-Host "Failed to create admin: $($_.Exception.Message)"
-            }
+            $code = $_.Exception.Response.StatusCode.value__
+            Write-Host $(if ($code -eq 400) { "Admin already exists (OK)." } else { "Warning: $($_.Exception.Message)" })
           }
 
       - name: Run automated tests
         shell: pwsh
-        continue-on-error: true
         run: |
           dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj `
             --configuration Release `
             --no-build `
-            --filter "FullyQualifiedName=FitnessApp.Tests.AdminDashboardTest.TestAdminDashboardAccess" `
+            --filter "FullyQualifiedName~FitnessApp.Tests.PageLoadTests|FullyQualifiedName~FitnessApp.Tests.AdminDashboardTest" `
             --logger "trx;LogFileName=test-results.trx" `
             --logger "html;LogFileName=test-results.html" `
             --results-directory TestResults
 
-          $testExit = $LASTEXITCODE
-          Write-Host "DOTNET_TEST_EXIT_CODE=$testExit"
-          Set-Content -Path test-exit-code.txt -Value $testExit
-
-      - name: Generate Custom HTML Report
-        if: always()
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path reports | Out-Null
-
-          $trxFile = Get-ChildItem -Path TestResults -Filter "test-results.trx" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
-
-          $totalTests = 0
-          $passedTests = 0
-          $failedTests = 0
-          $testRows = ""
-
-          if ($trxFile) {
-            [xml]$xml = Get-Content $trxFile.FullName
-            $results = $xml.TestRun.Results.UnitTestResult
-
-            $grouped = $results | Group-Object -Property testName
-            $uniqueResults = @()
-            foreach ($g in $grouped) {
-              $best = $g.Group | Where-Object { $_.outcome -eq "Passed" } | Select-Object -First 1
-              if (-not $best) {
-                $best = $g.Group | Select-Object -First 1
-              }
-              $uniqueResults += $best
-            }
-
-            foreach ($r in $uniqueResults) {
-              $name = $r.testName
-              $totalTests++
-              $outcome = $r.outcome
-              $duration = $r.duration
-              if ($outcome -eq "Passed") {
-                $passedTests++
-                $statusColor = "#10B981"
-                $statusText = "PASSED"
-              } else {
-                $failedTests++
-                $statusColor = "#DC2626"
-                $statusText = "FAILED"
-              }
-              $testRows += "<tr><td>$name</td><td style='color:$statusColor;font-weight:bold;'>$statusText</td><td>$duration</td></tr>`n"
-            }
-          }
-
-          if ($totalTests -eq 0) {
-            $testRows = "<tr><td colspan='3' style='text-align:center;color:#999;'>No test results found</td></tr>"
-          }
-
-          $passRate = if ($totalTests -gt 0) { [math]::Round(($passedTests / $totalTests) * 100, 1) } else { 0 }
-
-          $html = @"
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-            <meta charset="UTF-8">
-            <title>CI Test Report - Fitness Tracker</title>
-            <style>
-              * { box-sizing: border-box; margin: 0; padding: 0; }
-              body { font-family: 'Segoe UI', Arial, sans-serif; background: #f3f4f6; padding: 40px; }
-              .container { max-width: 1000px; margin: auto; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
-              .header { background: linear-gradient(135deg, #1F4E78, #2E74B5); color: white; padding: 40px; }
-              .header h1 { font-size: 32px; margin-bottom: 8px; }
-              .header p { opacity: 0.9; font-size: 14px; }
-              .content { padding: 40px; }
-              .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-              .stat-card { background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 8px; padding: 20px; text-align: center; }
-              .stat-value { font-size: 36px; font-weight: bold; }
-              .stat-label { color: #6B7280; font-size: 13px; margin-top: 4px; text-transform: uppercase; }
-              .blue { color: #1F4E78; }
-              .green { color: #10B981; }
-              .red { color: #DC2626; }
-              h2 { color: #1F4E78; border-bottom: 2px solid #E5E7EB; padding-bottom: 10px; margin-bottom: 20px; margin-top: 20px; }
-              table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-              th { background: #1F4E78; color: white; padding: 12px; text-align: left; font-size: 13px; }
-              td { padding: 12px; border-bottom: 1px solid #E5E7EB; font-size: 14px; }
-              tr:last-child td { border-bottom: none; }
-              tr:nth-child(even) { background: #F9FAFB; }
-              .footer { background: #F9FAFB; padding: 20px 40px; color: #6B7280; font-size: 12px; text-align: center; border-top: 1px solid #E5E7EB; }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="header">
-                <h1>Fitness & Nutrition Tracker</h1>
-                <p>CI/CD Automated Test Report - Generated by GitHub Actions</p>
-              </div>
-              <div class="content">
-                <div class="stats">
-                  <div class="stat-card">
-                    <div class="stat-value blue">$totalTests</div>
-                    <div class="stat-label">Total Tests</div>
-                  </div>
-                  <div class="stat-card">
-                    <div class="stat-value green">$passedTests</div>
-                    <div class="stat-label">Passed</div>
-                  </div>
-                  <div class="stat-card">
-                    <div class="stat-value red">$failedTests</div>
-                    <div class="stat-label">Failed</div>
-                  </div>
-                  <div class="stat-card">
-                    <div class="stat-value blue">$passRate%</div>
-                    <div class="stat-label">Pass Rate</div>
-                  </div>
-                </div>
-                <h2>Test Results Detail</h2>
-                <table>
-                  <tr><th>Test Name</th><th>Status</th><th>Duration</th></tr>
-                  $testRows
-                </table>
-                <h2>Pipeline Information</h2>
-                <table>
-                  <tr><td><strong>Framework</strong></td><td>ASP.NET Core 9.0</td></tr>
-                  <tr><td><strong>Test Framework</strong></td><td>xUnit + Selenium WebDriver</td></tr>
-                  <tr><td><strong>Browser</strong></td><td>Chrome (Headless)</td></tr>
-                  <tr><td><strong>CI/CD Tool</strong></td><td>GitHub Actions</td></tr>
-                  <tr><td><strong>Runner</strong></td><td>windows-latest</td></tr>
-                </table>
-              </div>
-              <div class="footer">
-                Generated automatically by GitHub Actions
-              </div>
-            </div>
-          </body>
-          </html>
-          "@
-
-          Set-Content -Path "reports/test-report.html" -Value $html -Encoding UTF8
-          Write-Host "HTML report generated successfully"
-
-      - name: Upload Test Results
+      - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: TestResults/
 
-      - name: Upload Custom HTML Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-test-report
-          path: reports/test-report.html
-
-      - name: Upload Diagnostics
+      - name: Upload diagnostics
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -343,16 +124,3 @@ jobs:
             backend.err
             Frontend/frontend/frontend.log
             Frontend/frontend/frontend.err
-
-      - name: Pipeline Summary
-        if: always()
-        shell: pwsh
-        run: |
-          Write-Host "============================="
-          Write-Host "Pipeline completed"
-          Write-Host "============================="
-          if (Test-Path test-exit-code.txt) {
-            $code = Get-Content test-exit-code.txt
-            Write-Host "Test exit code: $code"
-          }
-          Write-Host "HTML report uploaded as artifact"
