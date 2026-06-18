@@ -13,7 +13,7 @@ namespace FitnessApp.Tests
         [Fact]
         public void TestAdminDashboardAccess()
         {
-            var driverVersion = Environment.GetEnvironmentVariable("CHROMEDRIVER_VERSION") ?? "148.0.7778.168";
+            var driverVersion = "148.0.7778.168";
             var driverDir = Path.GetFullPath(Path.Combine(
                 AppContext.BaseDirectory,
                 "..",
@@ -25,7 +25,7 @@ namespace FitnessApp.Tests
                 "chromedriver-win64"));
             var options = new ChromeOptions();
 
-            options.AddArgument("--headless=new");
+           // options.AddArgument("--headless=new");
             options.AddArgument("--no-sandbox");
             options.AddArgument("--disable-dev-shm-usage");
             options.AddArgument("--window-size=1920,1080");
@@ -37,9 +37,9 @@ namespace FitnessApp.Tests
             {
                 _wait = new WebDriverWait(driver, TimeSpan.FromSeconds(20));
 
-                driver.Navigate().GoToUrl("http://127.0.0.1:5173/login");
-                driver.FindElement(By.Id("email")).SendKeys("admin.test@fitness.com");
-                driver.FindElement(By.Id("password")).SendKeys("Admin@1234");
+driver.Navigate().GoToUrl("http://localhost:5173/login");
+                driver.FindElement(By.Id("email")).SendKeys("admin1@gmail.com");
+                driver.FindElement(By.Id("password")).SendKeys("Admin12.");
                 driver.FindElement(By.Id("login-button")).Click();
 
                 _wait.Until(d =>
@@ -78,7 +78,7 @@ namespace FitnessApp.Tests
                     Assert.Fail($"Login failed before dashboard assertions. UI error: {errorText}");
                 }
 
-                driver.Navigate().GoToUrl("http://127.0.0.1:5173/admin");
+driver.Navigate().GoToUrl("http://localhost:5173/admin");
                 _wait.Until(d => !d.PageSource.Contains("Loading..."));
 
                 // titulli

@@ -46,8 +46,12 @@ export default function Login() {
       if (roles.includes("Admin")) navigate("/admin", { replace: true });
       else navigate("/user/profile", { replace: true });
     } catch (err) {
-      console.error(err);
-      setError(err?.response?.data || err?.message || JSON.stringify(err));
+  console.error(err);
+  // Extract message string nga response
+  const data = err?.response?.data;
+  const errorMsg = data?.message || data?.error || (typeof data === 'string' ? data : null) || err?.message || "Login failed";
+  setError(typeof errorMsg === 'string' ? errorMsg : "Invalid credentials");
+
     } finally {
       setLoading(false);
     }
@@ -60,11 +64,11 @@ export default function Login() {
         style={{ width: "100%", maxWidth: 420 }}
       >
         <h2 className="mb-4 text-center">Login</h2>
-        {error && (
-          <div id="login-error" className="alert alert-danger">
-            {error}
-          </div>
-        )}
+       {error && (
+  <div id="login-error" className="alert alert-danger">
+    {typeof error === 'string' ? error : 'Invalid credentials'}
+  </div>
+)}
 
         <form onSubmit={(e) => e.preventDefault()}>
           <div className="mb-3">

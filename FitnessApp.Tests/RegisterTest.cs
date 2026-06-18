@@ -16,7 +16,7 @@ namespace FitnessApp.Tests
         [Fact]
         public void RegisterWithValidCredentials()
         {
-            var driverVersion = Environment.GetEnvironmentVariable("CHROMEDRIVER_VERSION") ?? "148.0.7778.168";
+            var driverVersion = "148.0.7778.168";
             var driverDir = Path.GetFullPath(Path.Combine(
                 AppContext.BaseDirectory,
                 "..",
