@@ -56,28 +56,36 @@ jobs:
         shell: pwsh
         run: |
           $proc = Start-Process dotnet -ArgumentList @('run', '--project', 'Fitness.csproj', '--launch-profile', 'https') -PassThru -RedirectStandardOutput backend.log -RedirectStandardError backend.err
+          $ready = $false
           for ($i = 0; $i -lt 180; $i++) {
             if ($proc.HasExited) { Get-Content backend.err -ErrorAction SilentlyContinue; exit 1 }
             try {
               $r = Invoke-WebRequest -Uri https://localhost:7103/swagger -UseBasicParsing -SkipCertificateCheck -TimeoutSec 5
-              if ($r.StatusCode -eq 200) { Write-Host "Backend ready."; break }
+              if ($r.StatusCode -eq 200) { $ready = $true; Write-Host "Backend ready."; break }
             } catch { Start-Sleep -Seconds 1 }
           }
+          if (-not $ready) { Get-Content backend.err -ErrorAction SilentlyContinue; exit 1 }
 
-      - name: Start frontend
+      - name: Build frontend
+        working-directory: Frontend/frontend
         shell: pwsh
+        run: npm run build
+
+      - name: Start frontend preview
+        shell: pwsh
+        working-directory: Frontend/frontend
         run: |
-          Push-Location Frontend/frontend
-          $proc = Start-Process npm.cmd -ArgumentList @('run', 'dev', '--', '--host', 'localhost', '--strictPort', '--port', '5173') -PassThru -RedirectStandardOutput frontend.log -RedirectStandardError frontend.err
-          for ($i = 0; $i -lt 120; $i++) {
-            if ($proc.HasExited) { Get-Content frontend.err -ErrorAction SilentlyContinue; exit 1 }
+          Start-Process pwsh -ArgumentList @('-Command', 'npx vite preview --port 5173 2>&1 | Tee-Object -FilePath frontend.log') -NoNewWindow
+          for ($i = 0; $i -lt 30; $i++) {
             try {
-              $r = Invoke-WebRequest -Uri http://localhost:5173 -UseBasicParsing -TimeoutSec 5
-              if ($r.StatusCode -eq 200) { Write-Host "Frontend ready."; break }
-            } catch { }
-            Start-Sleep -Seconds 1
+              $null = Invoke-WebRequest -Uri http://localhost:5173/ -UseBasicParsing -TimeoutSec 2
+              Write-Host "Frontend ready after $i seconds."
+              break
+            } catch {
+              if ($i -eq 29) { Get-Content frontend.log -ErrorAction SilentlyContinue; exit 1 }
+              Start-Sleep -Seconds 1
+            }
           }
-          Pop-Location
 
       - name: Seed test admin user
         shell: pwsh
