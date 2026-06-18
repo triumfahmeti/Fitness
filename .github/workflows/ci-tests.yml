@@ -33,14 +33,18 @@ jobs:
 
       - name: Prepare ChromeDriver
         shell: pwsh
-        env:
-          DRIVER_VERSION: "148.0.7778.168"
         run: |
-          $dest = Join-Path $PWD "tools\chromedriver\$env:DRIVER_VERSION\chromedriver-win64"
-          New-Item -ItemType Directory -Force -Path $dest | Out-Null
-          $url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$env:DRIVER_VERSION/win64/chromedriver-win64.zip"
+          $chromePath = "C:\Program Files\Google\Chrome\Application\chrome.exe"
+          $chromeVersion = (Get-Item $chromePath).VersionInfo.FileVersion
+          Write-Host "Chrome detected: $chromeVersion"
+          $env:CHROMEDRIVER_VERSION = $chromeVersion
+          "CHROMEDRIVER_VERSION=$chromeVersion" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          # extract to FitnessApp.Tests\tools\chromedriver\{version}\ so zip creates chromedriver-win64\ inside
+          $extractDest = Join-Path $PWD "FitnessApp.Tests\tools\chromedriver\$chromeVersion"
+          New-Item -ItemType Directory -Force -Path $extractDest | Out-Null
+          $url = "https://storage.googleapis.com/chrome-for-testing-public/$chromeVersion/win64/chromedriver-win64.zip"
           Invoke-WebRequest -Uri $url -OutFile chromedriver.zip
-          Expand-Archive chromedriver.zip -DestinationPath $dest -Force
+          Expand-Archive chromedriver.zip -DestinationPath $extractDest -Force
           Remove-Item chromedriver.zip -Force
 
       - name: Configure database and apply migrations
@@ -79,14 +83,25 @@ jobs:
         shell: pwsh
         working-directory: Frontend/frontend
         run: |
-          Start-Process pwsh -ArgumentList @('-Command', 'npx vite preview --port 5173 2>&1 | Tee-Object -FilePath frontend.log') -NoNewWindow
+          $frontendDir = (Get-Location).Path
+          $proc = Start-Process npm.cmd `
+            -ArgumentList @('run', 'preview', '--', '--port', '5173', '--host', 'localhost') `
+            -WorkingDirectory $frontendDir `
+            -PassThru `
+            -RedirectStandardOutput "$frontendDir\frontend.log" `
+            -RedirectStandardError "$frontendDir\frontend.err"
           for ($i = 0; $i -lt 30; $i++) {
+            if ($proc.HasExited) {
+              Write-Host "Frontend exited early (code $($proc.ExitCode)):"
+              Get-Content "$frontendDir\frontend.err" -ErrorAction SilentlyContinue
+              exit 1
+            }
             try {
               $null = Invoke-WebRequest -Uri http://localhost:5173/ -UseBasicParsing -TimeoutSec 2
               Write-Host "Frontend ready after $i seconds."
               break
             } catch {
-              if ($i -eq 29) { Get-Content frontend.log -ErrorAction SilentlyContinue; exit 1 }
+              if ($i -eq 29) { Get-Content "$frontendDir\frontend.err" -ErrorAction SilentlyContinue; exit 1 }
               Start-Sleep -Seconds 1
             }
           }

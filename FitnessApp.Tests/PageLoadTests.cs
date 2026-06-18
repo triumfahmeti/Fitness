@@ -11,7 +11,7 @@ namespace FitnessApp.Tests
     {
         private static IWebDriver CreateDriver()
         {
-            var driverVersion = "148.0.7778.168";
+            var driverVersion = Environment.GetEnvironmentVariable("CHROMEDRIVER_VERSION") ?? "148.0.7778.168";
             var driverDir = Path.GetFullPath(Path.Combine(
                 AppContext.BaseDirectory,
                 "..",
