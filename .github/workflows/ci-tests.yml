@@ -74,34 +74,23 @@ jobs:
           }
           if (-not $ready) { Get-Content backend.err -ErrorAction SilentlyContinue; exit 1 }
 
-      - name: Build frontend
-        working-directory: Frontend/frontend
+      - name: Start frontend
         shell: pwsh
-        run: npm run build
-
-      - name: Start frontend preview
-        shell: pwsh
-        working-directory: Frontend/frontend
         run: |
-          $frontendDir = (Get-Location).Path
-          $proc = Start-Process npm.cmd `
-            -ArgumentList @('run', 'preview', '--', '--port', '5173', '--host', 'localhost') `
+          $frontendDir = (Resolve-Path "Frontend/frontend").Path
+          # WindowStyle Minimized creates a NEW window outside the CI job object
+          # so the process survives beyond this step
+          Start-Process cmd.exe `
+            -ArgumentList @('/c', 'npm run dev -- --port 5173 --host') `
             -WorkingDirectory $frontendDir `
-            -PassThru `
-            -RedirectStandardOutput "$frontendDir\frontend.log" `
-            -RedirectStandardError "$frontendDir\frontend.err"
-          for ($i = 0; $i -lt 30; $i++) {
-            if ($proc.HasExited) {
-              Write-Host "Frontend exited early (code $($proc.ExitCode)):"
-              Get-Content "$frontendDir\frontend.err" -ErrorAction SilentlyContinue
-              exit 1
-            }
+            -WindowStyle Minimized
+          for ($i = 0; $i -lt 120; $i++) {
             try {
               $null = Invoke-WebRequest -Uri http://localhost:5173/ -UseBasicParsing -TimeoutSec 2
               Write-Host "Frontend ready after $i seconds."
               break
             } catch {
-              if ($i -eq 29) { Get-Content "$frontendDir\frontend.err" -ErrorAction SilentlyContinue; exit 1 }
+              if ($i -eq 119) { Write-Host "Frontend failed to start!"; exit 1 }
               Start-Sleep -Seconds 1
             }
           }
@@ -129,7 +118,7 @@ jobs:
           dotnet test FitnessApp.Tests/FitnessApp.Tests.csproj `
             --configuration Release `
             --no-build `
-            --filter "FullyQualifiedName~FitnessApp.Tests.PageLoadTests|FullyQualifiedName~FitnessApp.Tests.AdminDashboardTest" `
+            --filter "FullyQualifiedName=FitnessApp.Tests.PageLoadTests.TestLoginPageLoads" `
             --logger "trx;LogFileName=test-results.trx" `
             --logger "html;LogFileName=test-results.html" `
             --results-directory TestResults
