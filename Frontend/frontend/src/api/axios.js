@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:7103",
+  baseURL: "https://localhost:7103",
   // withCredentials: true, // only if you plan to use cookies
 });
 
