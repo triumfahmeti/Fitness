@@ -47,11 +47,7 @@ jobs:
         shell: pwsh
         run: |
           sqllocaldb start MSSQLLocalDB
-          $connStr = "Server=(localdb)\MSSQLLocalDB;Database=Fitness;Trusted_Connection=True;TrustServerCertificate=True"
-          # set for current step so dotnet-ef can use it immediately
-          $env:ConnectionStrings__DefaultConnection = $connStr
-          # set for subsequent steps (backend run)
-          "ConnectionStrings__DefaultConnection=$connStr" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "ConnectionStrings__DefaultConnection=Server=(localdb)\MSSQLLocalDB;Database=Fitness;Trusted_Connection=True;TrustServerCertificate=True" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           dotnet tool update --global dotnet-ef --version 9.*
           $ef = Join-Path $env:USERPROFILE '.dotnet\tools\dotnet-ef.exe'
           & $ef database update --project Fitness.csproj --startup-project Fitness.csproj
